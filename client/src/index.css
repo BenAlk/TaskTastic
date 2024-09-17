@@ -1,0 +1,16 @@
+html {
+    background: var(--tertiary-color);
+}
+
+body {
+    margin: 0 auto;
+    font-family: 'Inter', 'Helvetica Neue';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

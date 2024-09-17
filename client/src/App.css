@@ -1,0 +1,76 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+
+:root {
+    --primary-color: #071731;
+    --secondary-color: #ffffff;
+    --tertiary-color: lightgray;
+
+    --primary-alternate: #159BFF;
+
+}
+* {
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+.main-container {
+	background-color: var(--secondary-color);
+	position: fixed;
+	top: 60px;
+	left: 225px;
+	width: calc(100vw - 240px);
+	height: calc(100vh - 77px);
+	border-radius: 10px 0 10px 10px;
+	transition: left 0.5s ease-in-out, width 0.5s ease-in-out;
+	z-index: 10;
+}
+
+.main-container.slide {
+	left: 95px;
+	width: calc(100vw - 110px);
+	transition: left 1s ease-in-out, width 1s ease-in-out;
+}

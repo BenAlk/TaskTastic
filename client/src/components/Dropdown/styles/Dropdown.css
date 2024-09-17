@@ -1,0 +1,118 @@
+.dropdown {
+    display: flex;
+    overflow:visible;
+    font-size: 1.4rem;
+    position: fixed;
+    left: 280px;
+    top: 16px;
+    transition: left 0.5s ease-in-out;
+    z-index: 20;
+}
+
+.dropdown.slide {
+    left: 160px;
+    transition: left 1s ease-in-out;
+}
+
+.dropdown-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 180px;
+    border-width: 1px 0 1px 1px;
+    border-style: solid;
+    border-color: var(--primary-color);
+    border-radius: 10px 0 0 10px;
+    cursor: pointer;
+    color: var(--secondary-color);
+    font-weight: 700;
+    max-height: 28px;
+    background-color: var(--primary-color);
+}
+
+.dropdown-list {
+    width: 300px;
+    border: 1px solid var(--primary-color);
+    max-height: 28px;
+    overflow: hidden;
+}
+
+.dropdown-list.open {
+    transition: max-height 0.4s ease-in-out;
+    max-height: 700px;
+}
+
+.dropdown-list .dropdown-item:last-of-type {
+    border-bottom: none;
+}
+
+.dropdown-placeholder {
+    text-align: left;
+    padding-left: 30px;
+    font-style: italic;
+    height: 28px;
+    border-bottom: 1px solid var(--primary-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    font-weight: 400;
+}
+
+.dropdown-item {
+    border-bottom: 1px solid var(--primary-color);
+    text-align: left;
+    padding-left: 5px;
+    cursor:pointer;
+    font-size: 1.4rem;
+    max-height: 28px;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    font-weight: 400;
+}
+
+
+.dropdown-item:hover {
+    color: var(--primary-alternate);
+    background-color: var(--primary-color);
+}
+
+
+.dropdown-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--primary-color);
+    border-left: none;
+    border-radius: 0px 10px 10px 0px;
+    max-height: 28px;
+    width: 25px;
+    cursor: pointer;
+    background-color: var(--primary-color);
+}
+
+.dropdown-arrow:hover .arrow-image path{
+    stroke-width: 10;
+    filter: invert(45%) sepia(100%) saturate(0%) hue-rotate(143deg) brightness(100%) contrast(101%);
+}
+
+.arrow-image {
+    padding: 0 3px;
+    transition: transform 0.1s linear;
+    fill: var(--secondary-color);
+    stroke-width: 5;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+}
+
+.dropdown-arrow .arrow-image.rotate180 {
+    transform: rotate(180deg);
+    transition: transform 0.3s linear
+}
+
+.create-new-project {
+    background-color: lightgreen;
+}

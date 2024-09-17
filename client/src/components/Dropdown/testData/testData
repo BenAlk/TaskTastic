@@ -1,0 +1,165 @@
+const testData = [
+    {
+        id: '1',
+        name: 'Project Alpha',
+        status: 'active',
+        tasks: {
+            '1': {
+                id: 'task1',
+                title: 'Task 1',
+                status: 'completed',
+                urgency: true,
+                importance: true
+            },
+            '2': {
+                id: 'task2',
+                title: 'Task 2',
+                status: 'in progress',
+                urgency: true,
+                importance: false
+            },
+            '3': {
+                id: 'task3',
+                title: 'Task 3',
+                status: 'pending',
+                urgency: false,
+                importance: true
+            },
+            '4': {
+                id: 'task4',
+                title: 'Task 4',
+                status: 'pending',
+                urgency: false,
+                importance: false
+            },
+            '5': {
+                id: 'task5',
+                title: 'Task 5',
+                status: 'pending',
+                urgency: false,
+                importance: true
+            },
+            '6': {
+                id: 'task6',
+                title: 'Task 6',
+                status: 'archived',
+                urgency: false,
+                importance: true
+            }
+        }
+    },
+    {
+        id: '2',
+        name: 'Project Beta',
+        status: 'on hold',
+        tasks: {
+            '1': {
+                id: 'task1',
+                title: 'Initial Research',
+                status: 'completed',
+                urgency: false,
+                importance: true
+            },
+            '2': {
+                id: 'task2',
+                title: 'Design Prototype',
+                status: 'in progress',
+                urgency: true,
+                importance: true
+            },
+            '3': {
+                id: 'task3',
+                title: 'User Testing',
+                status: 'pending',
+                urgency: false,
+                importance: false
+            }
+        }
+    },
+    {
+        id: '3',
+        name: 'Project Gamma',
+        status: 'completed',
+        tasks: {
+            '1': {
+                id: 'task1',
+                title: 'Setup Infrastructure',
+                status: 'completed',
+                urgency: false,
+                importance: true
+            },
+            '2': {
+                id: 'task2',
+                title: 'Deploy App',
+                status: 'completed',
+                urgency: true,
+                importance: true
+            },
+            '3': {
+                id: 'task3',
+                title: 'Run Final Tests',
+                status: 'completed',
+                urgency: true,
+                importance: true
+            }
+        }
+    },
+    {
+        id: '4',
+        name: 'Project Delta',
+        status: 'in progress',
+        tasks: {
+            '1': {
+                id: 'task1',
+                title: 'Gather Requirements',
+                status: 'completed',
+                urgency: false,
+                importance: true
+            },
+            '2': {
+                id: 'task2',
+                title: 'Develop MVP',
+                status: 'in progress',
+                urgency: true,
+                importance: true
+            },
+            '3': {
+                id: 'task3',
+                title: 'Internal Review',
+                status: 'pending',
+                urgency: false,
+                importance: true
+            }
+        }
+    },
+    {
+        id: '5',
+        name: 'Project Epsilon',
+        status: 'active',
+        tasks: {
+            '1': {
+                id: 'task1',
+                title: 'Kickoff Meeting',
+                status: 'completed',
+                urgency: false,
+                importance: true
+            },
+            '2': {
+                id: 'task2',
+                title: 'Sprint Planning',
+                status: 'in progress',
+                urgency: true,
+                importance: true
+            },
+            '3': {
+                id: 'task3',
+                title: 'Develop Features',
+                status: 'pending',
+                urgency: true,
+                importance: true
+            }
+        }
+    }
+];
+
+export default testData;

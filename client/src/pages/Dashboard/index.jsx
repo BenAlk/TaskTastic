@@ -7,7 +7,7 @@ const Dashboard = () => {
     console.log(isSideBarOpen)
     return (
         <div className={`main-container ${isSideBarOpen ? "" : "slide"}`}>
-            <h1>Dashboard</h1>
+            <h1></h1>
         </div>
     )
 }

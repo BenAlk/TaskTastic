@@ -2,6 +2,7 @@ import { UserIcon, SettingsIcon, TeamIcon, KanbanIcon, TrophyIcon, ProjectsIcon,
 import NavBarLink from "./NavBarLink"
 import "./styles/NavBar.css"
 import PropTypes from "prop-types"
+import { Link } from "react-router-dom"
 
 const user = {
     name: "Ben Alkureishi",
@@ -15,6 +16,9 @@ const NavBar = ({isOpen, handleMenuToggle}) => {
             <div className="collapse-container" onClick={handleMenuToggle} title={isOpen ? "Collapse Menu" : "Expand Menu"}>
             <CollapseIcon className={`collapse-icon ${isOpen ? "" : "rotate180"}`} />
             </div>
+            <Link to="/" className={`title-link ${isOpen ? "expanded" : "disabled"}`}>
+                    <h1>TaskTastic</h1>
+            </Link>
             <div className="navbar-head">
                 <UserIcon className={`user-icon ${isOpen ? "" : "scaled"}`}/>
                 <h2 className={`user-name ${isOpen ? "" : "disabled"}`}>{user.name}</h2>

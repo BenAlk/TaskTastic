@@ -1,0 +1,92 @@
+.dashboard-project-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2.5rem;
+    background-color: var(--primary-color);
+    position: relative;
+}
+
+.project-list {
+    display: flex;
+    align-items: center;
+    height: 2rem;
+    width: calc(100% - 5rem);  /* Subtracting space for arrows */
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.project-list::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+}
+
+.project-selector-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 25px;
+    padding: 0 10px;
+    white-space: nowrap;
+    color: var(--tertiary-color);
+    transition: background-color 0.3s linear, color 0.3s linear;
+    cursor: pointer;
+    border-radius: 5px;
+    flex-shrink: 0;
+    width: 148px;
+    overflow: hidden;
+    margin-right: 0.5rem;
+}
+
+.project-selector-name.active,
+.project-selector-name.active:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+.project-selector-name.active:hover {
+    cursor: default;
+}
+
+.project-selector-name:hover {
+    background-color: var(--tertiary-color);
+    color: var(--primary-color);
+}
+
+.project-selector-name h2 {
+    margin: 0;
+    font-size: 0.7rem;
+}
+
+.project-selector-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--tertiary-color);
+}
+
+.arrow-left {
+    transform: rotate(90deg);
+}
+
+.arrow-right {
+    transform: rotate(-90deg);
+}
+
+.project-selector-arrow:hover {
+    color: var(--primary-alternate);
+}
+
+.project-selector-arrow-icon {
+    height: 15px;
+    width: 15px;
+}
+
+.no-projects-message {
+    color: var(--tertiary-color);
+}

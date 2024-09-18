@@ -9,7 +9,6 @@ const user = {
     position: "Front-End Developer"
 }
 
-
 const NavBar = ({isOpen, handleMenuToggle}) => {
     return (
         <div className={`navbar-container ${isOpen ? "" : "collapsed"}`}>

@@ -45,7 +45,7 @@ table {
 :root {
     --primary-color: #071731;
     --secondary-color: #ffffff;
-    --tertiary-color: lightgray;
+    --tertiary-color: rgb(238, 237, 237);
 
     --primary-alternate: #159BFF;
 
@@ -57,12 +57,16 @@ table {
 
 .main-container {
 	border-radius: 0 0 10px 0;
-	background-color: var(--secondary-color);
+	background-color: var(--tertiary-color);
 	margin-left: 208px;
 	width: calc(100vw - 225px);
 	height: calc(100vh - 112px);
 	transition: margin-left 0.5s ease-in-out, width 0.5s ease-in-out;
-	z-index: 10;
+	z-index: 1;
+	border-right: 1px solid var(--primary-color);
+	border-bottom: 1px solid var(--primary-color);
+	position: relative;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .main-container.slide {

@@ -4,6 +4,7 @@ import { useOutletContext } from "react-router-dom"
 import { projects } from "./testData/testData"
 import ProjectSelector from '../../components/ProjectSelector/ProjectSelector'
 import Card from "../../components/Card/Card"
+import BarChartKanBan from "../../components/BarChartKanBan/BarChartKanBan"
 
 import "./styles/Dashboard.css"
 
@@ -18,12 +19,12 @@ const Dashboard = () => {
     return (
         <div className={`main-container ${isSideBarOpen ? "" : "slide"}`}>
             <ProjectSelector 
-                projects={projects.projectList} 
+                projectList={projects.projectList} 
                 onProjectSelect={handleProjectSelect}
                 chosenProject={chosenProject}
             />
             <div className="dashboard-container">
-                <Card>Card 1</Card>
+                <Card className="barchart-kanban">{chosenProject ? <BarChartKanBan project={chosenProject} /> : null}</Card>
                 <Card>Card 2</Card>
                 <Card>Card 3</Card>
                 <Card>Card 4</Card>

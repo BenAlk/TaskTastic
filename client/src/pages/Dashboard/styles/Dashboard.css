@@ -4,3 +4,7 @@
     grid-gap: 2rem;
     padding: 2rem;
 }
+
+.barchart-kanban {
+    flex-direction: column;
+}

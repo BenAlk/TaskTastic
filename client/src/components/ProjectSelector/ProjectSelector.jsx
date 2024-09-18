@@ -3,9 +3,11 @@ import PropTypes from "prop-types";
 import { ArrowIcon } from "../../assets/icons";
 import "./styles/ProjectSelector.css";
 
-const ProjectSelector = ({ projects, onProjectSelect, chosenProject }) => {
+const ProjectSelector = ({ projectList, onProjectSelect, chosenProject }) => {
     const containerRef = useRef(null);
     const [projectWidth, setProjectWidth] = useState(0);
+
+console.log(projectList)
 
     const updateVisibleProjectsCount = () => {
         if (containerRef.current) {
@@ -32,7 +34,7 @@ const ProjectSelector = ({ projects, onProjectSelect, chosenProject }) => {
         window.addEventListener('resize', updateVisibleProjectsCount, handleResize);
 
         return () => window.removeEventListener('resize', updateVisibleProjectsCount, handleResize);
-    }, [projects]);
+    }, [projectList]);
 
     const handleNext = () => {
         if (containerRef.current) {
@@ -63,7 +65,7 @@ const ProjectSelector = ({ projects, onProjectSelect, chosenProject }) => {
         }
     };
 
-    if (projects === null || projects.length === 0) {
+    if (projectList === null || projectList.length === 0) {
         return (
         <div className="dashboard-project-selector">
             <div className="no-projects-message">No projects available, create your first project!</div>
@@ -73,23 +75,29 @@ const ProjectSelector = ({ projects, onProjectSelect, chosenProject }) => {
 
     return (
         <div className="dashboard-project-selector">
-                {projects.length > 1 ?
-                <div
-                    className="project-selector-arrow arrow-left"
-                    onClick={handlePrevious}
-                >
-                    <ArrowIcon className="project-selector-arrow-icon"/>
-                </div>  : null}
+                {projectList.length > 1 ? (
+                <>
+                    <div className="project-selector-title">
+                        Select a Project
+                    </div>
+                    <div
+                        className="project-selector-arrow arrow-left"
+                        onClick={handlePrevious}
+                    >
+                        <ArrowIcon className="project-selector-arrow-icon"/>
+                    </div>
+                </>)  
+                : null}
 
             <div className="project-list" ref={containerRef}>
-                {(projects.length > 0) && projects.map((project, index) => (
-                    <div className={`project-selector-name ${chosenProject?.name === project.name ? "active" : ""}`} key={index} onClick={() => handleProjectClick(project)}>
-                        <h2>{project.name}</h2>
+                {(projectList.length > 0) && projectList.map((project, index) => (
+                    <div className={`project-selector-name ${chosenProject?.projectName === project.projectName ? "active" : ""}`} key={index} onClick={() => handleProjectClick(project)}>
+                        <h2>{project.projectName}</h2>
                     </div>
                 ))}
             </div>
 
-            {projects.length > 1 ? 
+            {projectList.length > 1 ? 
             <div
                 className="project-selector-arrow arrow-right"
                 onClick={handleNext}
@@ -101,9 +109,9 @@ const ProjectSelector = ({ projects, onProjectSelect, chosenProject }) => {
 };
 
 ProjectSelector.propTypes = {
-    projects: PropTypes.oneOfType([
+    projectList: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.shape({
-            name: PropTypes.string.isRequired,
+            projectName: PropTypes.string.isRequired,
         })),
         PropTypes.oneOf([null])
     ]),

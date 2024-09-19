@@ -44,7 +44,7 @@ const PieChartTasks = ({project}) => {
     const finalOverdueLabel = overdueLabel ? overdueLabel : 'Overdue: None';
 
     const data = [
-        { id: 0, value: overdueTasks.length, label: finalOverdueLabel, color: '#ff0000' },
+        { id: 0, value: overdueTasks.length, label: overdueLabel, color: '#ff0000' },
         { id: 1, value: dueSoonTasks, label: 'Due Soon', color: '#add8e6' },
         { id: 2, value: completedThisWeek, label: 'Completed This Week', color: '#00ff00' },
         // { id: 3, value: null, label: finalOverdueLabel, color: '#ffffff' }

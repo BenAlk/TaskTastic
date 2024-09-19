@@ -8,3 +8,7 @@
 .barchart-kanban {
     flex-direction: column;
 }
+
+.piechart-tasks {
+    flex-direction: column;
+}

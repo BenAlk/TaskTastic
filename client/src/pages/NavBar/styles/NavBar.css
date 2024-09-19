@@ -9,8 +9,8 @@
     width: 12rem;
     border-radius: 10px 0 0 10px;
     padding-top: 1.7rem;
-    height: calc(100vh - 2rem);
-    min-height: calc(100vh -2rem);
+    height: calc((100vh - 2rem) + 1px );
+    min-height: calc((100vh - 2rem) + 1px );
     margin: 0 0 1rem 1rem;
     position: fixed;
     transition: width 0.5s ease-in-out;

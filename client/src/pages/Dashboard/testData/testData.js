@@ -286,49 +286,52 @@ export const projects = {
             {
             "id": 1,
             "name": "Design homepage mockup",
-            "kanbanColumn": "Backlog",
+            "kanbanColumn": "In Progress",
             "urgent": true,
-            "targetDate": "2024-09-30",
-            "assignedTo": "Bob Smith"
+            "targetDate": "2024-09-25",
+            "assignedTo": "Bob Smith",
+            "completedDate": "",
             },
             {
             "id": 2,
             "name": "Implement responsive layout",
-            "kanbanColumn": "Backlog",
+            "kanbanColumn": "In Progress",
             "urgent": false,
-            "targetDate": "2024-10-15",
-            "assignedTo": "Charlie Brown"
+            "targetDate": "2023-10-15",
+            "assignedTo": "Charlie Brown",
+            "completedDate": "",
             },
             {
             "id": 3,
             "name": "Optimize database queries",
-            "kanbanColumn": "Review",
+            "kanbanColumn": "In Progress",
             "urgent": true,
-            "targetDate": "2024-09-20",
-            "assignedTo": "Diana Prince"
+            "targetDate": "2023-10-15",
+            "assignedTo": "Charlie Brown",
+            "completedDate": "",
             }
         ],
         "kanban": {
             "columns": [
                 {
                     "name": "Backlog",
-                    "color": "red"
+                    "color": "crimson"
                 },
                 {
                     "name": "To Do",
-                    "color": "orange"
+                    "color": "lightsalmon"
                 },
                 {
                     "name": "In Progress",
-                    "color": "yellow"
+                    "color": "moccasin"
                 },
                 {
                     "name": "Review",
-                    "color": "black"
+                    "color": "lightblue"
                 },
                 {
                     "name": "Done",
-                    "color": "green"
+                    "color": "lightgreen"
                 },
             ]
         },
@@ -338,28 +341,32 @@ export const projects = {
                 "name": "Bob Smith",
                 "role": "UI/UX Designer",
                 "activity": {
-                "completedTasks": 12
+                "completedTasks": 12,
+                "completeTasksInLast3Days": "1"
                 }
             },
             {
                 "name": "Charlie Brown",
                 "role": "Frontend Developer",
                 "activity": {
-                "completedTasks": 8
+                "completedTasks": 8,
+                "completeTasksInLast3Days": "0"
                 }
             },
             {
                 "name": "Diana Prince",
                 "role": "Backend Developer",
                 "activity": {
-                "completedTasks": 15
+                "completedTasks": 15,
+                "completeTasksInLast3Days": "5"
                 }
             },
             {
                 "name": "Eve Taylor",
                 "role": "Project Manager",
                 "activity": {
-                "completedTasks": 5
+                "completedTasks": 5,
+                "completeTasksInLast3Days": "7"
                 }
             }
             ]

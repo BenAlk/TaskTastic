@@ -1,16 +1,13 @@
 import { BarChart } from '@mui/x-charts/BarChart';
 import PropTypes from "prop-types";
 
-const BarChartKanBan = ({ project }) => {
+const BarChartKanBan = ({ project}) => {
   // Extract Kanban columns and count tasks
   const columnNames = project.kanban.columns.map(column => column.name);
   const columnColors = project.kanban.columns.map(column => column.color);
   const taskCounts = columnNames.map(columnName => 
     project.tasks.filter(task => task.kanbanColumn === columnName).length
   );
-
-  console.log(columnNames, columnColors, taskCounts)
-
   // Find the maximum task count to set the y-axis max value
   const maxTaskCount = Math.max(...taskCounts);
   const yAxisMax = Math.max(maxTaskCount, 1);
@@ -29,17 +26,21 @@ const BarChartKanBan = ({ project }) => {
     <>
       <h2>{project.projectName} - Task Distribution</h2>
       <BarChart
-        width={500}
-        height={300}
         series={series}
         xAxis={[{ scaleType: 'band', data: [''] }]}
         yAxis={[{ min: 0, max: yAxisMax, tickInterval: yAxisTicks }]}
         slotProps={{
+          loadingOverLay: {message: 'Select a project for data to display.'},
           legend: {
             direction: 'row',
             position: { vertical: 'bottom', horizontal: 'middle' },
             padding: 0,
-          }
+            labelStyle: { fontSize: 12 },
+            itemMarkWidth: 5,
+            itemMarkHeight: 5,
+            itemGap: 15
+          },
+          
         }}
         tooltip={{ trigger: 'none' }}
     // tooltip={{ trigger: 'item', position: {vertical: 'bottom', horizontal: 'middle'}}}
@@ -51,5 +52,5 @@ const BarChartKanBan = ({ project }) => {
 export default BarChartKanBan
 
 BarChartKanBan.propTypes = {
-    project: PropTypes.object.isRequired
+    project: PropTypes.object,
 };

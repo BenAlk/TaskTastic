@@ -4,7 +4,9 @@ import "./styles/Card.css"
 const Card = ({children, className}) => {
     return (
         <div className={`card-container ${className}`}>
-            {children}
+            <div className="card-content">
+                {children}
+            </div>
         </div>
     )
 }

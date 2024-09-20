@@ -4,7 +4,7 @@ import "./styles/ActivityTile.css"
 import { ComposedChart, Bar, XAxis, YAxis, Line, CartesianGrid, Tooltip, ResponsiveContainer, Area } from 'recharts'
 import getProjectTeamTaskStats from '../../utils/getProjectTeamTaskStats'
 
-    const ActivityTile = ({ project }) => {
+    const ActivityTile = ({ project, height, width }) => {
         const chartData = useMemo(() => {
             return getProjectTeamTaskStats(project);
         }, [project]);
@@ -12,15 +12,15 @@ import getProjectTeamTaskStats from '../../utils/getProjectTeamTaskStats'
 console.log(chartData)
 
     return (
-        <ResponsiveContainer>
+        <ResponsiveContainer height={height} width={width}>
             <h2 className="tile-title">Team Activity</h2>
             <ComposedChart
                 data={chartData}
                 margin={{
-                    top: 20,
-                    right: 20,
-                    left: 20,
-                    bottom: 20,
+                    top: 25,
+                    right: 50,
+                    left: -20,
+                    bottom: -40,
                 }}
                 >
                 <CartesianGrid strokeDasharray="3 3" />
@@ -29,6 +29,7 @@ console.log(chartData)
                     tick={{ fill: '#666', fontSize: 14 }} 
                     tickLine={false} 
                     axisLine={{ stroke: '#666' }} 
+                    height={60}
                 />
                 <YAxis 
                     tickCount={3} 
@@ -42,37 +43,42 @@ console.log(chartData)
                 <Tooltip cursor={{ fill: 'transparent' }} />
                 <Area 
                     type="monotone" 
-                    dataKey="tasksDueNextThreeDays" 
+                    dataKey="Tasks Due Next Three Days"
                     fill="#8884d8" 
                     stroke="#8884d8"
                     fillOpacity={0.3} 
                 />
-                <Bar dataKey="tasksCompletedLastSevenDays"  activeBar={false} barSize={20} fill="#90EE90" />
+                <Bar dataKey="Tasks Completed Last Seven Days"  activeBar={false} barSize={20} fill="#006400" />
                 <Line
                     type="monotone" 
-                    dataKey="overdueTaskCount"
+                    dataKey="Overdue Tasks"
                     stroke="#ff0000"
+                    strokeWidth={2}
                 />
                 </ComposedChart>
         </ResponsiveContainer>
     )
 }
 
+ActivityTile.propTypes = {
+    project: PropTypes.shape({
+        projectName: PropTypes.string.isRequired,
+        team: PropTypes.shape({
+            members: PropTypes.arrayOf(PropTypes.shape({
+                name: PropTypes.string.isRequired,
+                role: PropTypes.string.isRequired,
+            })).isRequired
+        }).isRequired,
+        tasks: PropTypes.arrayOf(PropTypes.shape({
+            assignedTo: PropTypes.string.isRequired,
+            targetDate: PropTypes.string.isRequired,
+            completedDate: PropTypes.string,
+        }))
+    }),
+    height: PropTypes.number,
+    width: PropTypes.number
+    }
+
 export default ActivityTile
 
-ActivityTile.propTypes = {
-project: PropTypes.shape({
-    projectName: PropTypes.string.isRequired,
-    team: PropTypes.shape({
-        members: PropTypes.arrayOf(PropTypes.shape({
-            name: PropTypes.string.isRequired,
-            role: PropTypes.string.isRequired,
-        })).isRequired
-    }).isRequired,
-    tasks: PropTypes.arrayOf(PropTypes.shape({
-        assignedTo: PropTypes.string.isRequired,
-        targetDate: PropTypes.string.isRequired,
-        completedDate: PropTypes.string,
-    })).isRequired,
-})
-}
+

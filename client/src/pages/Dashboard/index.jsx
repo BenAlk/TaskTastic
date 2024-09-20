@@ -4,8 +4,6 @@ import { useOutletContext } from "react-router-dom"
 import { projects } from "./testData/testData"
 import ProjectSelector from '../../components/ProjectSelector/ProjectSelector'
 import Card from "../../components/Card/Card"
-// import BarChartKanBan from "../../components/BarChartKanBan/BarChartKanBan"
-// import PieChartTasks from "../../components/PieChartTasks/PieChartTasks"
 import TaskTile from "../../components/TaskTile/TaskTile"
 import ActivityTile from "../../components/ActivityTile/ActivityTile"
 import "./styles/Dashboard.css"
@@ -26,10 +24,8 @@ const Dashboard = () => {
                 chosenProject={chosenProject}
             />
             <div className="dashboard-container">
-                {/* <Card className="barchart-kanban" >{chosenProject ? <BarChartKanBan project={chosenProject} /> : "Choose a project above to display data."}</Card>
-                <Card className="piechart-tasks" >{chosenProject ? <PieChartTasks project={chosenProject}/>: "Choose a project above to display data."}</Card> */}
-                <Card className="barchart-kanban" >{chosenProject ? <TaskTile project={chosenProject} /> : "Choose a project above to display data."}</Card>
-                <Card className="activity-tile" >{chosenProject ? <ActivityTile project={chosenProject} /> : "Choose a project above to display data."}</Card>
+                <Card className="barchart-kanban" >{chosenProject ? <TaskTile project={chosenProject} height={"90%"} width={"100%"} /> : "Choose a project above to display data."}</Card>
+                <Card className="activity-tile" >{chosenProject ? <ActivityTile project={chosenProject} height={"90%"} width={"100%"} /> : "Choose a project above to display data."}</Card>
                 <Card >Card 3</Card>
                 <Card >Card 4</Card>
             </div>

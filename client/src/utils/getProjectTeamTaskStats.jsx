@@ -25,9 +25,9 @@ const teamStats = project.team.members.map(member => {
 
     return {
         name: member.name,
-        overdueTaskCount,
-        tasksDueNextThreeDays,
-        tasksCompletedLastSevenDays
+        "Overdue Tasks": overdueTaskCount,
+        "Tasks Due Next Three Days": tasksDueNextThreeDays,
+        "Tasks Completed Last Seven Days": tasksCompletedLastSevenDays
     };
 });
 

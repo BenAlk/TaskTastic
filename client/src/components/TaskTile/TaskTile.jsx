@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import "./styles/TaskTile.css";
 import { BarChart, Tooltip, XAxis, YAxis, CartesianGrid, Bar, ResponsiveContainer } from 'recharts';
 
-const TaskTile = ({ project }) => {
+const TaskTile = ({ project, height, width }) => {
 const chartData = useMemo(() => {
     const columnCounts = Object.fromEntries(
     project.kanban.columns.map(column => [column.name, 0])
@@ -23,15 +23,15 @@ const chartData = useMemo(() => {
 }, [project]);
 
 return (
-    <ResponsiveContainer>
+    <ResponsiveContainer height={height} width={width}>
         <h2 className="tile-title">Task Activity</h2>
     <BarChart
         data={chartData}
         margin={{
-        top: 70,
-        right: 90,
-        left: 0,
-        bottom: -20,
+        top: 25,
+        right: 50,
+        left: -20,
+        bottom: -40,
         }}
     >
     <CartesianGrid strokeDasharray="3 3" />
@@ -71,7 +71,9 @@ project: PropTypes.shape({
     tasks: PropTypes.arrayOf(PropTypes.shape({
     kanbanColumn: PropTypes.string.isRequired
     })).isRequired
-}).isRequired
+}),
+height: PropTypes.number,
+width: PropTypes.number
 }
 
 export default TaskTile;

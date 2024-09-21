@@ -1,6 +1,7 @@
 export const projects = {
     projectList: [
         {
+            "projectId": 1,
             "projectName": "Website Redesign",
             "projectOwner": "Alice Johnson",
             "projectStartDate": "2024-09-01",
@@ -124,6 +125,12 @@ export const projects = {
             "team": {
                 "members": [
                     {
+                        "id": 1,
+                        "name": "Alice Johnson",
+                        "role": "Project Manager",
+                    },
+                    {
+                        "id": 2,
                         "name": "Bob Smith",
                         "role": "UI/UX Designer",
                         "activity": {
@@ -132,6 +139,7 @@ export const projects = {
                         }
                     },
                     {
+                        "id": 3,
                         "name": "Charlie Brown",
                         "role": "Frontend Developer",
                         "activity": {
@@ -140,6 +148,7 @@ export const projects = {
                         }
                     },
                     {
+                        "id": 4,
                         "name": "Diana Prince",
                         "role": "Backend Developer",
                         "activity": {
@@ -148,6 +157,7 @@ export const projects = {
                         }
                     },
                     {
+                        "id": 5,
                         "name": "Eve Taylor",
                         "role": "Project Manager",
                         "activity": {
@@ -160,37 +170,105 @@ export const projects = {
             "messages": {
                 "directMessages": [
                     {
-                        "from": "Bob Smith",
-                        "to": "Charlie Brown",
+                        "from": 2,
+                        "to": 3,
                         "content": "Hey, can you review the homepage design?",
-                        "timestamp": "2024-09-15T14:30:00Z"
+                        "timestamp": "2024-09-15T14:30:00Z",
+                        "markedRead": false
                     },
                     {
-                        "from": "Diana Prince",
-                        "to": "Eve Taylor",
+                        "from": 4,
+                        "to": 5,
                         "content": "Database optimization is complete. Moving to the next task.",
-                        "timestamp": "2024-09-20T11:15:00Z"
+                        "timestamp": "2024-09-20T11:15:00Z",
+                        "markedRead": false
+                    },
+                    {
+                        "from": 1,
+                        "to": 5,
+                        "content": "Database optimization is complete. Moving to the next task.",
+                        "timestamp": "2024-09-20T11:15:00Z",
+                        "markedRead": true
                     }
                 ],
                 "projectChatBoard": [
                     {
-                        "author": "Alice Johnson",
+                        "author": 1,
                         "content": "Team meeting scheduled for tomorrow at 10 AM.",
                         "timestamp": "2024-09-17T16:00:00Z"
                     },
                     {
-                        "author": "Eve Taylor",
+                        "author": 5,
                         "content": "Great progress everyone! We're on track to meet our first milestone.",
                         "timestamp": "2024-09-21T09:45:00Z"
                     }
                 ]
-            }
+            },
+            "risks": [
+                {
+                    "id": 1,
+                    "userFlag": 3,
+                    "riskLevel": "Critical",
+                    "riskFactors": 
+                        {
+                        "timeline": 5,
+                        "budget": 4,
+                        "dependencies": 5,
+                        "resources": 4,
+                        "complexity": 5,
+                        "total": 23
+                        }
+                },
+                {
+                    "id": 4,
+                    "userFlag": 1,
+                    "riskLevel": "High",
+                    "riskFactors": 
+                        {
+                        "timeline": 5,
+                        "budget": 3,
+                        "dependencies": 5,
+                        "resources": 3,
+                        "complexity": 2,
+                        "total": 18
+                        }
+                },
+                {
+                    "id": 8,
+                    "userFlag": 1,
+                    "riskLevel": "Medium",
+                    "riskFactors": 
+                        {
+                        "timeline": 2,
+                        "budget": 4,
+                        "dependencies": 2,
+                        "resources": 4,
+                        "complexity": 0,
+                        "total": 12
+                        }
+                },
+                {
+                    "id": 9,
+                    "userFlag": 2,
+                    "riskLevel": "Low",
+                    "riskFactors": 
+                        {
+                        "timeline": 1,
+                        "budget": 2,
+                        "dependencies": 2,
+                        "resources": 1,
+                        "complexity": 1,
+                        "total": 7
+                        }
+                },
+            ]
         },
         {
+            "projectId": 2,
             "projectName": "Mobile App Development",
             "projectOwner": "Frank Miller",
-            "projectStartDate": "2024-10-01",
-            "projectTargetDate": "2025-03-31",
+            "projectStartDate": "2024-08-01",
+            "projectTargetDate": "2024-09-15",
             "tasks": [
                 {
                     "id": 1,
@@ -307,9 +385,11 @@ export const projects = {
                         "timestamp": "2024-11-10T16:20:00Z"
                     }
                 ]
-            }
+            },
+            "risks": []
         },
         {
+            "projectId": 3,
             "projectName": "Data Analytics Platform",
             "projectOwner": "Karen Martinez",
             "projectStartDate": "2024-11-01",
@@ -430,7 +510,8 @@ export const projects = {
                         "timestamp": "2024-12-15T11:45:00Z"
                     }
                 ]
-            }
+            },
+            "risks": []
         }
     ]
 }

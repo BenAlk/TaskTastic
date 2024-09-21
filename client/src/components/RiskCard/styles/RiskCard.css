@@ -1,0 +1,36 @@
+.risk-item {
+    display: flex;
+    justify-content: space-between;
+    min-width: 100%;
+    border: 1px solid var(--tertiary-color);
+    padding: 0.25rem;
+    margin-bottom: 1rem;
+    background-color: var(--secondary-color);
+    border-radius: 8px;
+}
+
+.risk-task-info-container,
+.risk-indicator-container  {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+}
+
+.risk-task-info-container {
+    align-items: flex-start;
+    gap: 0.2rem;
+}
+
+.risk-task-info-container p {
+    color: #666;
+}
+
+.risk-indicator-container {
+    align-items: center;
+    margin-right: 10px;
+}
+
+.risk-indicator-label {
+    padding: 0.2rem;
+    border-radius: 4px;
+}

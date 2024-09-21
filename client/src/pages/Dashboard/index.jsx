@@ -6,6 +6,8 @@ import ProjectSelector from '../../components/ProjectSelector/ProjectSelector'
 import Card from "../../components/Card/Card"
 import TaskTile from "../../components/TaskTile/TaskTile"
 import ActivityTile from "../../components/ActivityTile/ActivityTile"
+import TimeLineTile from "../../components/TimeLineTile/TimeLineTile"
+import MessageTile from "../../components/MessageTile/MessageTile"
 import "./styles/Dashboard.css"
 
 const Dashboard = () => {
@@ -26,8 +28,8 @@ const Dashboard = () => {
             <div className="dashboard-container">
                 <Card className="barchart-kanban" >{chosenProject ? <TaskTile project={chosenProject} height={"90%"} width={"100%"} /> : "Choose a project above to display data."}</Card>
                 <Card className="activity-tile" >{chosenProject ? <ActivityTile project={chosenProject} height={"90%"} width={"100%"} /> : "Choose a project above to display data."}</Card>
-                <Card >Card 3</Card>
-                <Card >Card 4</Card>
+                <Card >{chosenProject ? <TimeLineTile project={chosenProject} /> : "Choose a project above to display data."}</Card>
+                <Card >{chosenProject ? <MessageTile project={chosenProject} /> : "Choose a project above to display data."}</Card>
             </div>
             
         </div>

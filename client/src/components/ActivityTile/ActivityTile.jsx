@@ -43,12 +43,12 @@ console.log(chartData)
                 <Tooltip cursor={{ fill: 'transparent' }} />
                 <Area 
                     type="monotone" 
-                    dataKey="Tasks Due Next Three Days"
+                    dataKey="Tasks Due Next 3 Days"
                     fill="#8884d8" 
                     stroke="#8884d8"
                     fillOpacity={0.3} 
                 />
-                <Bar dataKey="Tasks Completed Last Seven Days"  activeBar={false} barSize={20} fill="#006400" />
+                <Bar dataKey="Tasks Completed Last 7 Days"  activeBar={false} barSize={20} fill="#006400" />
                 <Line
                     type="monotone" 
                     dataKey="Overdue Tasks"
@@ -75,8 +75,8 @@ ActivityTile.propTypes = {
             completedDate: PropTypes.string,
         }))
     }),
-    height: PropTypes.number,
-    width: PropTypes.number
+    height: PropTypes.string,
+    width: PropTypes.string
     }
 
 export default ActivityTile

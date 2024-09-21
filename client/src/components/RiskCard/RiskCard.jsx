@@ -15,6 +15,12 @@ const RiskCard = ({ risk, index, project }) => {
         return userFlagId
     }
 
+    const riskFactors = `${risk.riskFactors.timeline}/5 Timeline Factors,
+${risk.riskFactors.budget}/5 Budget Factors,
+${risk.riskFactors.dependencies}/5 Dependencies Factors,
+${risk.riskFactors.resources}/5 Resources Factors,
+${risk.riskFactors.complexity}/5 Complexity Factors`;
+
     return (
         <div className="risk-item" key={index}>
             <div className="risk-task-info-container">
@@ -22,7 +28,7 @@ const RiskCard = ({ risk, index, project }) => {
                 <p>Due: {matchRiskTask(risk.id).targetDate} | Assigned : {matchRiskTask(risk.id).assignedTo}</p>
                 <p>Flagged by: {matchUserFlagId(risk.userFlag).name} ({matchUserFlagId(risk.userFlag).role})</p>
             </div>
-            <div className="risk-indicator-container">
+            <div className="risk-indicator-container" title={riskFactors}>
                 <div className="risk-indicator-label" style={{backgroundColor: getRiskColor(risk.riskLevel)}}>{risk.riskLevel}</div>
                 <div className="risk-indicator-squares">
                     <RiskSquares total={risk.riskFactors.total} risk={risk} />

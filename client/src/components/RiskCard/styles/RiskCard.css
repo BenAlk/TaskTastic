@@ -28,6 +28,7 @@
 .risk-indicator-container {
     align-items: center;
     margin-right: 10px;
+    cursor: pointer;
 }
 
 .risk-indicator-label {

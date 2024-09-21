@@ -1,13 +1,33 @@
 .quick-dm-container {
-display: flex;
-flex-direction: column;
-align-items: start;
-gap: 0.5rem;
-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.5rem;
+    width: 90%;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 0.5rem 1rem 1rem;
+}
+
+.quick-dm-container.no-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+}
+
+.quick-dm-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    width: 100%;
+    padding-bottom: 0.5rem;
 }
 
 .quick-dm-container h3 {
     font-size: 0.8rem;
+    color: var(--primary-color);
 }
 
 .dm-message-container {
@@ -25,6 +45,19 @@ height: 100%;
     overflow-y: scroll;
     width: 100%;
     white-space: nowrap;
+    cursor: pointer;
+}
+
+.dm-message-container:hover {
+    background-color: #888;
+}
+
+.dm-message-container:hover .dm-message-author {
+    color: var(--secondary-color);
+}
+
+.dm-message-container:hover .dm-message-content {
+    color: var(--tertiary-color);
 }
 
 .dm-message-container-left {
@@ -63,6 +96,7 @@ height: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    transition: all 0.5s ease-in-out;
 }
 
 
@@ -72,10 +106,11 @@ height: 100%;
     align-items: center;
     color: var(--secondary-color);
     background-color: #999;
+    border: 1px solid var(--tertiary-color);
     width: 15px;
     height: 15px;
     border-radius: 50%;
-    transition: all 0.5s ease-in-out;
+    transition: all 0.3s ease-in-out;
     flex-shrink: 0;
     cursor: pointer;
     font-size: 0.7rem;

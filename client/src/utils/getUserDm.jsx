@@ -5,7 +5,7 @@ const getUserDm = (userId, project) => {
     }
 
     // Filter messages received by the user
-    const dmsForUser = project.messages.directMessages.filter(dm => dm.to === userId);
+    const dmsForUser = project.messages.directMessages.filter(dm => dm.to === userId && dm.markedRead !== true);
     return dmsForUser;
 };
 

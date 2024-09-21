@@ -194,12 +194,14 @@ export const projects = {
                 "projectChatBoard": [
                     {
                         "author": 1,
+                        "summary": "Team Meeting",
                         "content": "Team meeting scheduled for tomorrow at 10 AM.",
                         "timestamp": "2024-09-17T16:00:00Z"
                     },
                     {
                         "author": 5,
-                        "content": "Great progress everyone! We're on track to meet our first milestone.",
+                        "summary": "Meeting Notes",
+                        "content": "Great progress everyone! We're on track to meet our first milestone.Great progress everyone! We're on track to meet our first milestone.Great progress everyone! We're on track to meet our first milestone.",
                         "timestamp": "2024-09-21T09:45:00Z"
                     }
                 ]

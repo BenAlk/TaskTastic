@@ -43,9 +43,6 @@ const TimeLineTile = ({ project}) => {
         return () => clearTimeout(timer);
     }, [project]);
 
-
-
-    console.log(daysLeft)
     return (
         <div className="timeline-risk-container">
             <div className="project-timeline">
@@ -57,7 +54,7 @@ const TimeLineTile = ({ project}) => {
                 <div className="progress-container">
                     <div className="progress-bar-background"></div>
                     <div className="progress-bar-tasks" style={{width: `${taskProgress}%`}} title={`${taskProgress}% Complete`}></div>
-                    <div className="progress-bar-timeline" style={{width: `${timelineProgress}%`, backgroundColor: `${timelineProgress >= 70 ? "#ff0000" : (timelineProgress >= 40 ? "#F59E0B" : "#006400")}`} } title={`${timelineProgress}% Complete`}></div>
+                    <div className="progress-bar-timeline" style={{width: `${timelineProgress}%`, backgroundColor: `${timelineProgress >= 70 ? "#ff0000" : (timelineProgress >= 40 ? "#F59E0B" : "#66e352")}`} } title={`${timelineProgress}% `}></div>
                 </div>
                 <div className="progress-label-container">
                         <span className="progress-label">{taskProgress}% Complete</span>

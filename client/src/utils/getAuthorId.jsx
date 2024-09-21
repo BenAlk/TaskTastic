@@ -4,7 +4,10 @@ const  getAuthorId = (userId, project) => {
     }
 
     const author = project.team.members.find(member => member.id === userId)?.name;
-    return author;
+    return author
+    .split(' ')
+    .map(name => name[0].toUpperCase())
+    .join('');
 }
 
 export default getAuthorId;

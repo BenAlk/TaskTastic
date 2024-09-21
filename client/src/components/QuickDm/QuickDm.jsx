@@ -12,15 +12,15 @@ const QuickDm = ({ project, userId }) => {
     
     if (userMessages.length === 0) {
         return (
-            <div className="quick-dm-container">
-                <div className="no-messages-message">No messages yet.</div>
+            <div className="quick-dm-container no-message">
+                <div className="no-messages-message">No unread direct messages.</div>
             </div>
         )
     }
 
     return (
         <div className="quick-dm-container">
-            <div>
+            <div className="quick-dm-header">
                 <h3>Unread Direct Messages</h3>
             </div>
             {userMessages.map((message, index) => {
@@ -32,7 +32,13 @@ const QuickDm = ({ project, userId }) => {
                         <div className="dm-message-container-left">
                             <div className="dm-icon"></div>
                             <div className="dm-details">
-                                <div className="dm-message-author">{senderName}</div>
+                                <div className="dm-message-author">{senderName} : {new Date(message.timestamp).toLocaleString(undefined, {
+                                    day: 'numeric',
+                                    month: 'short',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                    
+                                })}</div>
                                 <div className="dm-message-content">{message.content}</div>
                             </div>
                         </div>

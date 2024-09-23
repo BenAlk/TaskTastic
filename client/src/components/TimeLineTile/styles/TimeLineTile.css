@@ -3,15 +3,19 @@ display : flex;
 flex-direction: column;
 align-items: center;
 height: 100%;
+gap: 1rem;
 }
 
 .project-timeline {
-    padding: 10px;
+    padding: 10px 10px 30px;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     width: 75%;
     margin: 0 auto;
     transition: all 0.3s ease-in-out;
+    position: relative;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .project-title {
@@ -75,21 +79,38 @@ height: 100%;
     justify-content: space-evenly;
 }
 
-.progress-label, .timeline-label {
+.task-label, .timeline-label {
     font-size: 12px;
     font-weight: bold;
     transition: all 0.3s ease-in-out;
-    bottom: -20px;
+    bottom: 10%;
+    cursor: pointer;
 }
 
-.progress-label {
-    left: 0;
+.task-label {
+    left: 20%;
     color: #4a90e2;
+    position: absolute;
 }
 
 .timeline-label {
-    right: 0;
+    right: 20%;
     color: #ff4136;
+    position: absolute;
+}
+
+.task-label:hover {
+    color: var(--primary-color);
+}
+
+.task-label:hover ~ .progress-container > .progress-bar-timeline {
+    display: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.task-label:hover ~ .progress-container > .progress-bar-tasks {
+    background-color: var(--primary-color);
+    transition: all 0.3s ease-in-out;
 }
 
 /* Enter/exit animations for transition group */

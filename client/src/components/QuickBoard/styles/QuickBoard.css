@@ -27,14 +27,15 @@
     flex-direction: row;
     justify-content: start;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.7rem;
     width: 90%;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
 
 }
 
 .quick-board-message-container {
     display: flex;
+    position: relative;
     flex-direction: column;
     align-items: center;
     justify-content: start;
@@ -42,7 +43,7 @@
     max-width: 25%;
     height: 80%;
     padding: 0.25rem 0.5rem;
-    overflow: hidden;
+    /* overflow: hidden; */
     background-color: #e0e0e0;
     border-radius: 8px;
     cursor: pointer;
@@ -57,8 +58,8 @@
 }
 
 .quick-board-message-container:hover .message-author {
-    color: var(--secondary-color);
-    border: 1px solid var(--secondary-color);
+    color: var(--primary-alternate);
+    border: 1px solid var(--primary-alternate);
 }
 
 .quick-board-message-container:hover .message-summary {
@@ -103,22 +104,30 @@
     justify-content: space-between;
 }
 
-.message-author,
 .message-summary {
     color: var(--primary-color);
-    transition: all 0.5s ease-in-out;
+
 }
 
 .message-author {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--primary-color);
+    border: 1px solid var(--secondary-color);
+    background-color: var(--primary-color);
     border-radius: 50%;
     width: 20px;
     height: 20px;
-    padding: 0.3rem;
+    padding: 0.8rem;
+    position: absolute;
+    top: -7px;
+    left: -7px;
+    z-index: 5;
+    transition: all 0.5s ease-in-out;
+    color: var(--secondary-color);
+    font-weight: 700;
 }
+
 .message-content {
     font-size: 0.6rem;
     font-weight: 600;

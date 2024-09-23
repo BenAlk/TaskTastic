@@ -4,10 +4,9 @@ import { ArrowIcon } from "../../assets/icons";
 import "./styles/ProjectSelector.css";
 
 const ProjectSelector = ({ projectList, onProjectSelect, chosenProject }) => {
+
     const containerRef = useRef(null);
     const [projectWidth, setProjectWidth] = useState(0);
-
-console.log(projectList)
 
     const updateVisibleProjectsCount = () => {
         if (containerRef.current) {
@@ -15,10 +14,8 @@ console.log(projectList)
 
             const project = container.querySelector('.project-selector-name');
             if (project) {
-                console.log(project.offsetWidth)
                 const width = project.offsetWidth + parseFloat(getComputedStyle(project).marginRight);
                 setProjectWidth(width);
-                console.log(width)
             }
         }
     };

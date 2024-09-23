@@ -6,6 +6,7 @@
     background-color: var(--primary-color);
     position: relative;
     border-right: 2px solid var(--primary-color);
+    width: 100%;
 }
 
 .project-selector-title {

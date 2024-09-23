@@ -60,7 +60,7 @@ table {
 	background-color: var(--tertiary-color);
 	margin-left: 208px;
 	width: calc(100vw - 225px);
-	height: calc(100vh - 111px);
+	height: calc(100vh - 151px);
 	transition: all 0.5s ease-in-out;
 	z-index: 1;
 	border-right: 1px solid var(--primary-color);

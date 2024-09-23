@@ -4,8 +4,6 @@ import PropTypes from "prop-types";
 const RiskSquares = ({ total, risk  }) => {
 
     const totalComparison = total < 10 ? 1 : total < 15 ? 2 : total < 20 ? 3 : 4
-
-    console.log(total)
     return (
     <div className="risk-indicator-squares">
         {[...Array(5)].map((_, i) => (

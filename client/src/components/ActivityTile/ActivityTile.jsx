@@ -9,7 +9,7 @@ import getProjectTeamTaskStats from '../../utils/getProjectTeamTaskStats'
             return getProjectTeamTaskStats(project);
         }, [project]);
 
-console.log(chartData)
+
 
     return (
         <ResponsiveContainer height={height} width={width}>

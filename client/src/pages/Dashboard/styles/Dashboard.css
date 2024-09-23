@@ -6,10 +6,8 @@
     height: calc(100vh - 200px);
 }
 
-.barchart-kanban {
-    flex-direction: column;
-}
-
-.piechart-tasks {
-    flex-direction: column;
+.dashboard-card.placeholder-card  .card-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

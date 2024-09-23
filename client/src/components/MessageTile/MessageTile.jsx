@@ -3,11 +3,7 @@ import QuickDm from "../QuickDm/QuickDm"
 import QuickBoard from "../QuickBoard/QuickBoard"
 import "./styles/MessageTile.css"
 
-
-
 const loggedInUser = 5
-
-
 
 const MessageTile = ({ project }) => {
 
@@ -27,6 +23,7 @@ export default MessageTile
 MessageTile.propTypes = {
     project: PropTypes.shape({
         messages: PropTypes.shape({
+            
             directMessages: PropTypes.arrayOf(PropTypes.shape({
                 from: PropTypes.number,
                 to: PropTypes.number,

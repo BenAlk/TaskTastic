@@ -17,8 +17,8 @@ const QuickBoard = ({project}) => {
             <div className="quick-board">
             {sortedMessages.map((message, index) => (
                     <div key={index} className="quick-board-message-container">
+                        <div className="message-author">{getAuthorId(message.author, project)}</div>
                         <div className="message-header"> 
-                            <div className="message-author">{getAuthorId(message.author, project)}</div>
                             <div className="message-summary">{message.summary}</div>
                         </div>
                         <div className="message-body">

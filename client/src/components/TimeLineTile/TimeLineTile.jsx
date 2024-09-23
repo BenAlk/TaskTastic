@@ -45,8 +45,8 @@ const TimeLineTile = ({ project}) => {
 
     return (
         <div className="timeline-risk-container">
+            <h2 className="project-title">Timeline</h2>
             <div className="project-timeline">
-                <h2 className="project-title">{project.projectName} Timeline</h2>
                 <div className="date-container">
                     <span>Start: {project.projectStartDate}</span>
                     <span>Target: {project.projectTargetDate}</span>
@@ -57,9 +57,9 @@ const TimeLineTile = ({ project}) => {
                     <div className="progress-bar-timeline" style={{width: `${timelineProgress}%`, backgroundColor: `${timelineProgress >= 70 ? "#ff0000" : (timelineProgress >= 40 ? "#F59E0B" : "#66e352")}`} } title={`${timelineProgress}% `}></div>
                 </div>
                 <div className="progress-label-container">
-                        <span className="progress-label">{taskProgress}% Complete</span>
-                        <span className="timeline-label" style={{color: `${timelineProgress >= 70 ? "#ff0000" : timelineProgress >= 40 ? "#F59E0B" : "#006400"}`}}>{daysLeft} days left.</span>
-                    </div>
+                    <span className="progress-label">{taskProgress}% Complete</span>
+                    <span className="timeline-label" style={{color: `${timelineProgress >= 70 ? "#ff0000" : timelineProgress >= 40 ? "#F59E0B" : "#006400"}`}}>{daysLeft} days left.</span>
+                </div>
             </div>
             <div className="risk-container">
                 { !project.risks || project.risks.length < 1 ? 

@@ -22,42 +22,42 @@ const TaskTile = ({ project, height, width }) => {
         }));
     }, [project]);
 
-    return (
+        return (
         <ResponsiveContainer height={height} width={width}>
             <h2 className="tile-title">Task Progress</h2>
-        <BarChart
+            <BarChart
             data={chartData}
             margin={{
-            top: 25,
-            right: 50,
-            left: -20,
-            bottom: -40,
+                top: 25,
+                right: 50,
+                left: -20,
+                bottom: -40,
             }}
-        >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis 
-            dataKey="name" 
-            height={60}
-            tick={{fill: '#666', fontSize: 14}}
-            tickLine={false}
-            axisLine={{stroke: '#666'}}
-        />
-        <YAxis 
-            domain={[0, maxTasks => Math.max(Math.ceil(maxTasks * 1))]}
-            tickCount={3}
-            allowDecimals={false}
-            width={80}
-            tick={{fill: '#666', fontSize: 14}}
-            tickLine={false}
-            axisLine={{stroke: '#666'}}
-            tickFormatter={(value) => `${value}`}
-        />
-        <Tooltip cursor={{ fill: 'transparent' }} />
-        <Bar dataKey="tasks" activeBar={false} />
-        </BarChart>
+            >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+                dataKey="name"
+                tick={{ fill: '#666', fontSize: 14 }}
+                tickLine={false}
+                axisLine={{ stroke: '#666' }}
+                height={60}
+            />
+            <YAxis
+                tickCount={3}
+                allowDecimals={false}
+                width={80}
+                tick={{ fill: '#666', fontSize: 14 }}
+                tickLine={false}
+                axisLine={{ stroke: '#666' }}
+                tickFormatter={(value) => `${value}`}
+            />
+            <Tooltip cursor={{ fill: 'transparent' }} />
+            <Bar dataKey="tasks" activeBar={false} />
+            </BarChart>
         </ResponsiveContainer>
-    );
-}
+        );
+    
+};
 
 TaskTile.propTypes = {
 project: PropTypes.shape({

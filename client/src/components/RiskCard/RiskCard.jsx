@@ -1,4 +1,4 @@
-import getRiskColor from '../../utils/getRiskcolor';
+import getRiskColor from '../../utils/getRiskColor';
 import RiskSquares from '../RiskSquares/RiskSquares';
 import PropTypes from "prop-types"
 import "./styles/RiskCard.css"

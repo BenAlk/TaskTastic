@@ -83,17 +83,17 @@
     border: 1px solid var(--primary-color);
     background-color: #666;
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    padding: 0.9rem;
+    padding: 0.3rem;
     position: absolute;
-    top: -10px;
-    left: -10px;
+    height: 20px;
+    width: 20px;
+    top: -8px;
+    left: -8px;
     z-index: 5;
     transition: all 0.5s ease-in-out;
     color: var(--secondary-color);
     font-weight: 700;
-    font-size: 0.8rem;
+    font-size: 0.6rem;
 }
 
 .message-content {

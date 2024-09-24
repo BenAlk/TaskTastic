@@ -24,17 +24,17 @@
     justify-content: center;
     align-items: center;
     top: 0rem;
-    right: -1rem;
+    right: -2rem;
     border-radius: 0 5px 5px 0;
     background-color: var(--primary-color);
-    width: 20px;
-    height: 20px;
+    width: 40px;
+    height: 40px;
 }
 
 .collapse-icon {
     color: var(--secondary-color);
-    height: 20px;
-    width: 20px;
+    height: 35px;
+    width: 35px;
     cursor: pointer;
     transition: transform 0.5s ease-in-out;
 }

@@ -1,13 +1,17 @@
 import PropTypes from "prop-types"
 import getAuthorId from "../../utils/getAuthorId"
 import "./styles/QuickBoard.css"
-import { ThumbsUpIcon } from "../../assets/icons"
+import { ImportantIcon } from "../../assets/icons"
 
 const QuickBoard = ({project}) => {
 
     const sortedMessages = [...project.messages.projectChatBoard].sort((a, b) => 
         new Date(b.timestamp) - new Date(a.timestamp)
     );
+
+    const handleAcknowledgeMessage = (message) => {
+        message.acknowledged = true;
+    }
 
     return (
         <div className="quick-board-container">
@@ -22,7 +26,9 @@ const QuickBoard = ({project}) => {
                             <div className="message-summary">{message.summary}</div>
                         </div>
                         <div className="message-body">
-                            <div className="message-content slim-scroll">{message.content}</div>
+                            <div className="message-content slim-scroll"><p>{message.content}</p></div>
+                            </div>
+                        <div className="message-foot">
                             <div className="message-timestamp">{new Date(message.timestamp).toLocaleString(undefined, {
                                         day: 'numeric',
                                         month: 'short',
@@ -30,7 +36,10 @@ const QuickBoard = ({project}) => {
                                         minute: '2-digit'
                                     })
                                 }
-                                <div className="thumbs-up-icon" title="Acknowledge Message"><ThumbsUpIcon /></div>
+                                <div className="message-foot-icons">
+                                    {message.important &&<div className="important-icon" title="Important Message"><ImportantIcon height="15px" width="15px" /></div>}
+                                    <div className={`thumbs-up-icon ${message.acknowledged && "acknowledged"}`} title="Acknowledge Message" onClick={handleAcknowledgeMessage}>✔</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -49,7 +58,9 @@ QuickBoard.propTypes = {
                 author: PropTypes.number,
                 summary: PropTypes.string,
                 content: PropTypes.string,
-                timestamp: PropTypes.string
+                timestamp: PropTypes.string,
+                important: PropTypes.bool,
+                acknowledged: PropTypes.bool
             }))
         }),
         team: PropTypes.shape({

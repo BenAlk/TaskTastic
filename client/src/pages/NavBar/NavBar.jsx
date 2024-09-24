@@ -1,4 +1,4 @@
-import { UserIcon, SettingsIcon, TeamIcon, KanbanIcon, TrophyIcon, ProjectsIcon, EnvelopeIcon, EisenhowerIcon, HomeIcon, CollapseIcon } from "../../assets/icons"
+import { UserIcon, SettingsIcon, TeamIcon, KanbanIcon, TrophyIcon, ProjectsIcon, EnvelopeIcon, EisenhowerIcon, HomeIcon, CollapseIcon, TasksIcon } from "../../assets/icons"
 import NavBarLink from "./NavBarLink"
 import "./styles/NavBar.css"
 import PropTypes from "prop-types"
@@ -26,6 +26,7 @@ const NavBar = ({isOpen, handleMenuToggle}) => {
             <div className={`navbar-links ${isOpen ? "" : "slide-up"}`}>
                 <NavBarLink isOpen={isOpen} icon={<HomeIcon className="nav-link-icon" />}>Dashboard</NavBarLink>
                 <NavBarLink isOpen={isOpen} icon={<ProjectsIcon className="nav-link-icon" />}>Projects</NavBarLink>
+                <NavBarLink isOpen={isOpen} icon={<TasksIcon className="nav-link-icon" />}>Tasks</NavBarLink>
                 <NavBarLink isOpen={isOpen} icon={<KanbanIcon className="nav-link-icon" />}>Kanban</NavBarLink>
                 <NavBarLink isOpen={isOpen} icon={<EisenhowerIcon className="nav-link-icon" />}>Projects</NavBarLink>
                 <NavBarLink isOpen={isOpen} icon={<TeamIcon className="nav-link-icon"/>}>Team</NavBarLink>

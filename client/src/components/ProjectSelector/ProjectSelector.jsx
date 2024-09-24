@@ -1,61 +1,48 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from "prop-types";
-import { ArrowIcon } from "../../assets/icons";
+import { ArrowIcon, EditIcon, CreateIcon, TrashIcon } from "../../assets/icons";
 import "./styles/ProjectSelector.css";
 
 const ProjectSelector = ({ projectList, onProjectSelect, chosenProject }) => {
-
     const containerRef = useRef(null);
-    const [projectWidth, setProjectWidth] = useState(0);
+    const [showArrows, setShowArrows] = useState(false);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-    const updateVisibleProjectsCount = () => {
+    const updateArrowVisibility = () => {
         if (containerRef.current) {
             const container = containerRef.current;
-
-            const project = container.querySelector('.project-selector-name');
-            if (project) {
-                const width = project.offsetWidth + parseFloat(getComputedStyle(project).marginRight);
-                setProjectWidth(width);
-            }
+            setShowArrows(container.scrollWidth > container.clientWidth);
         }
     };
 
     useEffect(() => {
-        const handleResize = () => {
-            if (containerRef.current) {
-                containerRef.current.scrollLeft = 0; // Optionally reset scroll position on resize
-            }
-        }
+        updateArrowVisibility();
+        window.addEventListener('resize', updateArrowVisibility);
 
-        updateVisibleProjectsCount();
-        window.addEventListener('resize', updateVisibleProjectsCount, handleResize);
-
-        return () => window.removeEventListener('resize', updateVisibleProjectsCount, handleResize);
+        return () => window.removeEventListener('resize', updateArrowVisibility);
     }, [projectList]);
 
-    const handleNext = () => {
-        if (containerRef.current) {
-            const container = containerRef.current;
-            const scrollAmount = (projectWidth * 6)
-            container.scrollBy({
-                left: scrollAmount,
-                behavior: 'smooth'
-            });
+    const handleScroll = (direction) => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const itemWidth = container.offsetWidth / 3;
+        const totalItems = projectList.length;
+
+        let newIndex;
+        if (direction === 'next') {
+            newIndex = Math.min(currentIndex + 3, totalItems - 1);
+        } else {
+            newIndex = Math.max(currentIndex - 3, 0);
         }
+
+        setCurrentIndex(newIndex);
+        container.scrollTo({
+            left: newIndex * itemWidth,
+            behavior: 'smooth'
+        });
     };
 
-    const handlePrevious = () => {
-        if (containerRef.current) {
-            const container = containerRef.current;
-            const scrollAmount = (-projectWidth * 6);
-            container.scrollBy({
-                left: scrollAmount,
-                behavior: 'smooth'
-            });
-        }
-    };
-
-    
     const handleProjectClick = (project) => {
         if (onProjectSelect) {
             onProjectSelect(project);
@@ -64,54 +51,75 @@ const ProjectSelector = ({ projectList, onProjectSelect, chosenProject }) => {
 
     if (projectList === null || projectList.length === 0) {
         return (
-        <div className="dashboard-project-selector">
-            <div className="no-projects-message">No projects available, create your first project!</div>
-        </div>
+            <div className="dashboard-project-selector no-projects">
+                <div className="no-projects-message">No projects available, create your first project!
+                </div>
+                <div className="create-new-project-button no-active-projects" >
+                <CreateIcon backgroundFill="rgb(8, 175, 8)" />
+                </div>
+            </div>
         )
     }
 
     return (
         <div className="dashboard-project-selector">
-                {projectList.length > 1 ? (
-                <>
-                    <div className="project-selector-title">
-                        Select a Project
-                    </div>
-                    <div
-                        className="project-selector-arrow arrow-left"
-                        onClick={handlePrevious}
-                    >
-                        <ArrowIcon className="project-selector-arrow-icon"/>
-                    </div>
-                </>)  
-                : null}
+            {projectList.length > 0 && (
+                <div className="project-selector-title">
+                    Select a Project
+                </div>
+            )}
+            <div className="project-selector-arrow-container">
+            {showArrows && currentIndex > 0 && (
+                <div
+                    className="project-selector-arrow arrow-left"
+                    onClick={() => handleScroll('previous')}
+                >
+                    <ArrowIcon className="project-selector-arrow-icon"/>
+                </div>
+            )}
+            </div>
 
-            <div className="project-list" ref={containerRef}>
-                {(projectList.length > 0) && projectList.map((project, index) => (
-                    <div className={`project-selector-name ${chosenProject?.projectName === project.projectName ? "active" : ""}`} key={index} onClick={() => handleProjectClick(project)}>
+            <div className={`project-list ${projectList.length < 3 ? "no-scroll" : ""}`} ref={containerRef}>
+                {projectList.map((project, index) => (
+                    <div 
+                        className={`project-selector-name ${chosenProject?.projectName === project.projectName ? "active" : ""}`}
+                        key={index} 
+                        onClick={() => handleProjectClick(project)}
+                    >
                         <h2>{project.projectName}</h2>
                     </div>
                 ))}
             </div>
+            <div className="project-selector-arrow-container">
+            {showArrows && currentIndex < projectList.length - 3 && (
+                <div
+                    className="project-selector-arrow arrow-right"
+                    onClick={() => handleScroll('next')}
+                >
+                    <ArrowIcon className="project-selector-arrow-icon"/>
+                </div>
+            )}
+            </div>
 
-            {projectList.length > 1 ? 
-            <div
-                className="project-selector-arrow arrow-right"
-                onClick={handleNext}
-            >
-                <ArrowIcon className="project-selector-arrow-icon"/>
-            </div>  : null}
+            <div className="project-button-container">
+                <div className="create-new-project-button" title="Create New Project">
+                    <CreateIcon backgroundFill="rgb(8, 175, 8)"/>
+                </div>
+                <div className="edit-current-project-button" title="Edit Current Project">
+                    <EditIcon />
+                </div>
+                <div className="delete-current-project-button" title="Delete Current Project">
+                    <TrashIcon />
+                </div>
+            </div>
         </div>
     );
 };
 
 ProjectSelector.propTypes = {
-    projectList: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.shape({
-            projectName: PropTypes.string.isRequired,
-        })),
-        PropTypes.oneOf([null])
-    ]),
+    projectList: PropTypes.arrayOf(PropTypes.shape({
+        projectName: PropTypes.string.isRequired,
+    })),
     onProjectSelect: PropTypes.func,
     chosenProject: PropTypes.object
 };

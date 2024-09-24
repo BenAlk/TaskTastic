@@ -18,7 +18,7 @@ const TaskTile = ({ project, height, width }) => {
         return project.kanban.columns.map(column => ({
         name: column.name,
         tasks: columnCounts[column.name],
-        fill: column.color  // Changed 'color' to 'fill' to match Recharts expectations
+        fill: column.color
         }));
     }, [project]);
 
@@ -27,7 +27,7 @@ const TaskTile = ({ project, height, width }) => {
             <h2 className="tile-title">Task Progress</h2>
             <BarChart
             data={chartData}
-            margin={{
+                margin={{
                 top: 25,
                 right: 50,
                 left: -20,

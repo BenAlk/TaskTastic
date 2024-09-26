@@ -7,8 +7,8 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
 	margin: 0;
@@ -16,8 +16,12 @@ time, mark, audio, video {
 	border: 0;
 	font-size: 100%;
 }
+input {
+    all: unset;
+}
+
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
+article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
@@ -81,26 +85,26 @@ table {
 .slim-scroll {
 	/* Enable custom scrollbar */
 	overflow-y: auto;
-	
+
 	/* Webkit-based browsers (Chrome, Safari, newer Edge) */
 	&::-webkit-scrollbar {
 	  width: 2px;  /* width of the entire scrollbar */
 	}
-	
+
 	&::-webkit-scrollbar-track {
 	  background: #f1f1f1;  /* color of the tracking area */
 	  border-radius: 10px;
 	}
-	
+
 	&::-webkit-scrollbar-thumb {
 	  background: #888;  /* color of the scroll thumb */
 	  border-radius: 5px;  /* roundness of the scroll thumb */
 	}
-	
+
 	&::-webkit-scrollbar-thumb:hover {
 	  background: #555;  /* color of the scroll thumb on hover */
 	}
-  
+
 	/* For Firefox */
 	scrollbar-width: thin;
 	scrollbar-color: var(--primary-color) #f1f1f1;

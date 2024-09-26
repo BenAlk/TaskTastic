@@ -2,7 +2,7 @@ import { UserIcon, SettingsIcon, TeamIcon, KanbanIcon, TrophyIcon, EnvelopeIcon,
 import NavBarLink from "./NavBarLink"
 import "./styles/NavBar.css"
 import PropTypes from "prop-types"
-import { Link } from "react-router-dom"
+import { Link, NavLink } from "react-router-dom"
 
 const user = {
     name: "Ben Alkureishi",
@@ -24,7 +24,7 @@ const NavBar = ({isOpen, handleMenuToggle}) => {
                 <h3 className={`user-position ${isOpen ? "" : "disabled"}`}>{user.position}</h3>
             </div>
             <div className={`navbar-links ${isOpen ? "" : "slide-up"}`}>
-                <NavBarLink isOpen={isOpen} icon={<HomeIcon className="nav-link-icon" />}>Dashboard</NavBarLink>
+                <NavLink to="/"><NavBarLink isOpen={isOpen} icon={<HomeIcon className="nav-link-icon" />}>Dashboard</NavBarLink></NavLink>
                 <NavBarLink isOpen={isOpen} icon={<TasksIcon className="nav-link-icon" />}>Tasks</NavBarLink>
                 <NavBarLink isOpen={isOpen} icon={<KanbanIcon className="nav-link-icon" />}>Kanban</NavBarLink>
                 <NavBarLink isOpen={isOpen} icon={<EisenhowerIcon className="nav-link-icon" />}>Projects</NavBarLink>

@@ -122,6 +122,8 @@ title-link.expanded {
     height: 25px;
 }
 
+
+
 .navbar-link-container:hover .nav-link-icon{
     color: var(--primary-alternate);
 }
@@ -131,7 +133,8 @@ title-link.expanded {
     padding-top: 3px;
 }
 
-.navbar-link-container:hover{
+.navbar-link-container:hover,
+.active .navbar-link-container{
     color: var(--primary-alternate);
     border-right: 2px solid var(--primary-alternate);
 }
@@ -181,4 +184,9 @@ title-link.expanded {
 .slide-up {
     transform: translateY(-35%);
     transition: transform 1s ease-in-out;
+}
+
+
+.navbar-links a {
+  text-decoration: none;
 }

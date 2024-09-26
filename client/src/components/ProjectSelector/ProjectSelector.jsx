@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { ArrowIcon, EditIcon, CreateIcon, TrashIcon } from '../../assets/icons';
 import './styles/ProjectSelector.css';
@@ -111,12 +112,13 @@ const ProjectSelector = ({ projectList, onProjectSelect, chosenProject }) => {
 			</div>
 
 			<div className='project-button-container'>
-				<div
+				<Link
+                    to="/NewProject"
 					className='create-new-project-button'
 					title='Create New Project'
 				>
 					<CreateIcon backgroundFill='rgb(8, 175, 8)' />
-				</div>
+				</Link>
 				<div
 					className='edit-current-project-button'
 					title='Edit Current Project'

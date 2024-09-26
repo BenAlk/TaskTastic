@@ -1,0 +1,75 @@
+.new-project-container {
+    margin: 1.5em;
+    padding: 1.5em;
+    height: calc(100% - 3rem);
+    background-color: var(--secondary-color);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.new-project-header {
+    height: 4em;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.new-project-name{
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.new-project-owner,
+.new-project-created-date {
+    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.25);
+}
+
+.new-project-name,
+.new-project-owner,
+.new-project-created-date {
+    border-radius: 5px;
+    display: flex;
+    display: flex;
+    align-items: center;
+}
+
+
+.new-project-name-label,
+.new-project-owner-label,
+.new-project-created-date-label {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    border: 1px solid var(--primary-color);
+    padding: 0.35em;
+    border-right: none;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.new-project-name-input,
+.new-project-owner-input,
+.new-project-created-date-input {
+    border: 1px solid var(--primary-color);
+    padding: 0.23em 1em;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
+.new-project-name-input{
+    width: 20em;
+    color: var(--primary-color);
+}
+
+.new-project-owner-input,
+.new-project-created-date-input {
+    text-align: center;
+    width: 10em;
+    cursor:default;
+    color: grey;
+}
+
+/*.project-body {
+    border: 1px solid green;
+} */

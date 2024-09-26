@@ -1,4 +1,4 @@
-import getRiskColor from '../../utils/getRiskcolor';
+import getRiskColor from '../../utils/getRiskColor';
 import PropTypes from "prop-types";
 
 const RiskSquares = ({ total, risk  }) => {

@@ -15,9 +15,9 @@ const Dashboard = () => {
         <div className={`main-container ${isSideBarOpen ? "" : "slide"}`}>
 
             <div className="dashboard-container">
+                <Card className={`dashboard-card ${chosenProject ? "" : "placeholder-card"}`}>{chosenProject ? <TimeLineTile project={chosenProject} /> : <h3>Choose a project above to display data.</h3>}</Card>
                 <Card className={`dashboard-card ${chosenProject ? "" : "placeholder-card"}`}>{chosenProject ? <TaskTile project={chosenProject} height={"90%"} width={"100%"} /> : <h3>Choose a project above to display data.</h3>}</Card>
                 <Card className={`dashboard-card ${chosenProject ? "" : "placeholder-card"}`}>{chosenProject ? <ActivityTile project={chosenProject} height={"90%"} width={"100%"} /> : <h3>Choose a project above to display data.</h3>}</Card>
-                <Card className={`dashboard-card ${chosenProject ? "" : "placeholder-card"}`}>{chosenProject ? <TimeLineTile project={chosenProject} /> : <h3>Choose a project above to display data.</h3>}</Card>
                 <Card className={`dashboard-card ${chosenProject ? "" : "placeholder-card"}`}>{chosenProject ? <MessageTile project={chosenProject} /> : <h3>Choose a project above to display data.</h3>}</Card>
             </div>
             

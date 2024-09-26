@@ -22,6 +22,7 @@ const Header = ({isSideBarOpen, onProjectSelect, chosenProject}) => {
                 projectList={projects.projectList} 
                 onProjectSelect={onProjectSelect}
                 chosenProject={chosenProject}
+                isSideBarOpen={isSideBarOpen}
                 />
         </div>
     )

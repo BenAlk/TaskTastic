@@ -25,7 +25,7 @@ ${risk.riskFactors.complexity}/5 Complexity Factors`;
         <div className="risk-item" key={index}>
             <div className="risk-task-info-container">
                 <h3>{matchRiskTask(risk.id).name}</h3>
-                <p>Due: {matchRiskTask(risk.id).targetDate} | Assigned : {matchRiskTask(risk.id).assignedTo}</p>
+                <p>Due: {matchRiskTask(risk.id).targetDate} | Assigned: {matchRiskTask(risk.id).assignedTo}</p>
                 <p>Flagged by: {matchUserFlagId(risk.userFlag).name} ({matchUserFlagId(risk.userFlag).role})</p>
             </div>
             <div className="risk-indicator-container" title={riskFactors}>

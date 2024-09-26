@@ -55,8 +55,16 @@ const TimeLineTile = ({ project}) => {
                     <div className="progress-bar-timeline" style={{width: `${timelineProgress}%`, backgroundColor: `${timelineProgress >= 70 ? "#ff0000" : (timelineProgress >= 40 ? "#F59E0B" : "#66e352")}`} } title={`${timelineProgress}% `}></div>
                 </div>
                 <div className="date-container">
-                    <span>Start: {project.projectStartDate}</span>
-                    <span>Target: {project.projectTargetDate}</span>
+                    <span>Start: {new Date(project.projectStartDate).toLocaleString(undefined, {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric'
+                    })}</span>
+                    <span>Target: {new Date(project.projectTargetDate).toLocaleString(undefined, {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric'
+                    })}</span>
                 </div>
             </div>
             <div className="risk-container">

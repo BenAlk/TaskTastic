@@ -36,6 +36,10 @@ gap: 1rem;
     padding: 0 20px;
 }
 
+.date-container span {
+    color: var(--primary-color);
+}
+
 .progress-container {
     position: relative;
     height: 20px;

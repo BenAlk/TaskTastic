@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { ArrowIcon, EditIcon, CreateIcon, TrashIcon } from '../../assets/icons';
 import './styles/ProjectSelector.css';
 
 const ProjectSelector = ({ projectList, onProjectSelect, chosenProject }) => {
+    const navigate = useNavigate();
+    const location = useLocation();
 	const containerRef = useRef(null);
 	const [showArrows, setShowArrows] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -48,8 +50,15 @@ const ProjectSelector = ({ projectList, onProjectSelect, chosenProject }) => {
 	const handleProjectClick = (project) => {
 		if (onProjectSelect) {
 			onProjectSelect(project);
+            if(location.pathname === "/NewProject") {
+                navigate("/");
+            }
 		}
 	};
+
+    const createNewProject = () => {
+        onProjectSelect(null)
+    }
 
 	if (projectList === null || projectList.length === 0) {
 		return (
@@ -114,6 +123,7 @@ const ProjectSelector = ({ projectList, onProjectSelect, chosenProject }) => {
 			<div className='project-button-container'>
 				<Link
                     to="/NewProject"
+                    onClick={createNewProject}
 					className='create-new-project-button'
 					title='Create New Project'
 				>

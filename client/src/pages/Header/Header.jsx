@@ -3,12 +3,12 @@ import "./styles/Header.css"
 import { Link } from "react-router-dom"
 import PropTypes from "prop-types"
 import ProjectSelector from "../../components/ProjectSelector/ProjectSelector"
-import { projects } from "../Dashboard/testData/testData"
+
 const user = {
     name: "Ben"
 }
 
-const Header = ({isSideBarOpen, onProjectSelect, chosenProject}) => {
+const Header = ({isSideBarOpen, onProjectSelect, chosenProject, projects}) => {
 
     return (
         <div className={`header-container ${isSideBarOpen ? "" : "slide"}`}>
@@ -18,8 +18,8 @@ const Header = ({isSideBarOpen, onProjectSelect, chosenProject}) => {
                     <img src={logo} alt="logo" />
                 </Link>
             </div>
-            <ProjectSelector 
-                projectList={projects.projectList} 
+            <ProjectSelector
+                projectList={projects.projectList}
                 onProjectSelect={onProjectSelect}
                 chosenProject={chosenProject}
                 isSideBarOpen={isSideBarOpen}
@@ -33,5 +33,6 @@ export default Header
 Header.propTypes = {
     isSideBarOpen: PropTypes.bool,
     onProjectSelect: PropTypes.func,
-    chosenProject: PropTypes.object
+    chosenProject: PropTypes.object,
+    projects: PropTypes.object
 }

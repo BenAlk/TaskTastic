@@ -6,12 +6,13 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
-
+/*---------- New ProjectHeader ----------*/
 .new-project-header {
     height: 4em;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    padding-bottom: 1.5em;
 }
 
 .new-project-name{
@@ -50,7 +51,7 @@
 .new-project-owner-input,
 .new-project-created-date-input {
     border: 1px solid var(--primary-color);
-    padding: 0.23em 1em;
+    padding: 0.25em 1em;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     font-size: 1.2rem;
@@ -60,16 +61,145 @@
 .new-project-name-input{
     width: 20em;
     color: var(--primary-color);
+
 }
 
 .new-project-owner-input,
 .new-project-created-date-input {
     text-align: center;
-    width: 10em;
+    width: 12em;
     cursor:default;
     color: grey;
 }
+/*------------ New Project Body ---------*/
+.project-body {
+    display: flex;
+    height: calc(100% - 4em);
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    padding: 1.5em;
+    gap: 1.5em;
+    flex-wrap: wrap;
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); */
+    background-color: var(--tertiary-color);
+}
 
-/*.project-body {
-    border: 1px solid green;
-} */
+
+.new-project-details,
+.new-project-team,
+.new-project-kanban {
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    height: calc(50% - 0.7em);
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
+    padding: 1em;
+    background-color: var(--secondary-color);
+}
+
+/*---------- New Project Team ----------*/
+
+.new-project-team {
+    width: calc((100% - 30em) - 1.5em);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5em;
+    gap: 1.5em;
+}
+
+.new-project-team-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: var(--primary-color);
+    border-radius: 5px;
+}
+
+.new-project-team-title h3 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--secondary-color);
+    padding: 0.2em;
+}
+
+.new-project-team-container {
+    border: 1px solid #e0e0e0;
+    display: flex;
+    width: 100%;
+    height: 80% ;
+    border-radius: 20px;
+}
+.new-project-team-card-container {
+    display: flex;
+    padding: 0.75rem 1.83rem;
+    /* align-items: center;
+    justify-content: center; */
+    flex-wrap: wrap;
+    height: 100%;
+    width: 100%;
+    column-gap: 2.78rem;
+    row-gap: 1rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.new-project-team-member-information {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 35%;
+    height: 100%;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    border-left: 1px solid #e0e0e0;
+}
+
+.new-project-team-member-card {
+    border:1px solid var(--primary-color);
+    height: 90px;
+    width: 90px;
+    border-radius: 50%;
+    position: relative;
+    border-color: var(--tertiary-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.new-project-team-member-card.active-card {
+    border-color: #e0e0e0;
+}
+
+.new-project-team-member-card.added-card {
+    border-color: var(--primary-color);
+}
+
+.new-project-team-member-card.added-card:hover,
+.new-project-team-member-card.highlighted-card {
+    border-color: var(--primary-alternate);
+}
+
+.add-member-icon {
+    display: none;
+}
+
+.add-member-icon.active-icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    border-radius: 50%;
+    display:block;
+    transition: all 0.3s ease;
+}
+
+.add-member-icon.active-icon:hover {
+    color: var(--primary-alternate);
+}
+/*---------- New Project Kanban ----------*/
+
+.new-project-kanban {
+    width: 100%;
+}

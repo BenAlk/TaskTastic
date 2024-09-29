@@ -27,7 +27,7 @@ const NavBar = ({isOpen, handleMenuToggle}) => {
                 <NavLink to="/"><NavBarLink isOpen={isOpen} icon={<HomeIcon className="nav-link-icon" />}>Dashboard</NavBarLink></NavLink>
                 <NavBarLink isOpen={isOpen} icon={<TasksIcon className="nav-link-icon" />}>Tasks</NavBarLink>
                 <NavBarLink isOpen={isOpen} icon={<KanbanIcon className="nav-link-icon" />}>Kanban</NavBarLink>
-                <NavBarLink isOpen={isOpen} icon={<EisenhowerIcon className="nav-link-icon" />}>Projects</NavBarLink>
+                <NavBarLink isOpen={isOpen} icon={<EisenhowerIcon className="nav-link-icon" />}>Eisenhower</NavBarLink>
                 <NavBarLink isOpen={isOpen} icon={<TeamIcon className="nav-link-icon"/>}>Team</NavBarLink>
                 <NavBarLink isOpen={isOpen} icon={<EnvelopeIcon className="nav-link-icon" />}>Messages</NavBarLink>
                 <NavBarLink isOpen={isOpen} icon={<TrophyIcon className="nav-link-icon" />}>Achievements</NavBarLink>

@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Outlet } from "react-router-dom"
 import Header from "../Header/Header"
 import NavBar from "../NavBar/NavBar"
-
+import { projects } from "../Dashboard/testData/testData"
 
 const Layout = () => {
 
@@ -21,8 +21,8 @@ const Layout = () => {
     return (
         <div className="layout-container">
             <NavBar isOpen={isOpen} handleMenuToggle={handleMenuToggle} />
-            <Header isSideBarOpen={isOpen} onProjectSelect={handleProjectSelect} chosenProject={chosenProject} />
-            <Outlet context={{isSideBarOpen: isOpen, chosenProject: chosenProject,}}/>
+            <Header isSideBarOpen={isOpen} onProjectSelect={handleProjectSelect} chosenProject={chosenProject} projects={projects} />
+            <Outlet context={{isSideBarOpen: isOpen, chosenProject: chosenProject, projects: projects}}/>
         </div>
     )
 }

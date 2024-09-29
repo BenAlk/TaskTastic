@@ -3,7 +3,11 @@ import { useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import dayjs from 'dayjs'
 import NewProjectDetails from '../../components/NewProjectDetails/NewProjectDetails'
-import { AddIcon } from '../../assets/icons'
+import { NewTeamMemberTile, TeamMember } from '../../components/NewTeamMemberTile/NewTeamMemberTile'
+import { createMemberTemplate, isValidMember } from '../../components/NewTeamMemberTile/memberTemplate'
+import ChoiceSelector from '../../components/ChoiceSelector/ChoiceSelector'
+import Modal from '../../components/Modal/Modal'
+import { activeTeamMember } from '../../components/NewProjectDetails/testData/testData'
 import "./styles/CreateProject.css"
 
 const CreateProject = () => {
@@ -15,17 +19,12 @@ const CreateProject = () => {
         startDate: dayjs(),
         targetDate: dayjs().add(1, 'month'),
         team: {
-            members:[{
-                name: "",
-                role: "",
-                email: "",
-                customColor: "",
-                added: "false", // true or false or pending is team member is not an account holder.
-                avatar: ""
-                }
-            ]
+            members:[]
         }
     })
+    const [selectedMember, setSelectedMember] = useState(null)
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [displayTeamMember, setDisplayTeamMember] = useState(null)
 
     const handleInputChange = (e) => {
         const {id, value} = e.target
@@ -49,6 +48,37 @@ const CreateProject = () => {
         }))
     }
 
+    // const handleAddTeamMember = () => {
+    //     const newMember = createMemberTemplate();
+    //     setProjectData(prevData => ({
+    //     ...prevData,
+    //     team: {
+    //         ...prevData.team,
+    //         members: [...prevData.team.members, newMember]
+    //     }
+    //     }));
+    //     console.log(projectData.team.members);
+    // };
+
+    const handleAddTeamMember = () => {
+        setIsModalOpen(true); // Open the modal when clicking on NewTeamMemberTile
+    };
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleModalSubmit = (newMember) => {
+        setProjectData(prevData => ({
+            ...prevData,
+            team: {
+                ...prevData.team,
+                members: [...prevData.team.members, newMember]
+            }
+        }));
+        setIsModalOpen(false);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log({
@@ -70,6 +100,10 @@ const CreateProject = () => {
             border: '1px solid var(--primary-color)',
             boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
         },
+    }
+
+    const handleSetDisplayTeamMember = (member) => {
+        setDisplayTeamMember(member)
     }
 
     return (
@@ -108,22 +142,45 @@ const CreateProject = () => {
                             <h3>Select Team Members</h3>
                         </div>
                         <div className="new-project-team-container">
-                            <div className="new-project-team-card-container">
-                                <div className="new-project-team-member-card added-card">
-                                    <div className="add-member-icon "><AddIcon width="28px" height="28px" /></div>
-                                </div>
-                                <div className="new-project-team-member-card active-card">
-                                    <AddIcon width="28px" height="28px" className="add-member-icon active-icon" />
-                                </div>
-
+                            <div className="new-project-team-tile-container">
+                            {projectData.team.members.map((member, index) => (
+                                    <TeamMember key={index} member={member} onClick={handleSetDisplayTeamMember} />
+                                ))}
+                                <NewTeamMemberTile onAddTeamMember={handleAddTeamMember} />
                             </div>
                             <div className="new-project-team-member-information">
+                                <div className="team-member-selectors">
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div className="new-project-kanban"></div>
                 </div>
             </form>
+            <Modal isOpen={isModalOpen} onClose={handleModalClose} className={"new-team-member-modal"}>
+                <h2>Add Team Member</h2>
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                    const newMember = createMemberTemplate();
+                    handleModalSubmit(newMember);
+                }}>
+                    <div className="existing-team-members">
+                    <p>Select an existing team member:</p>
+                    <select
+                            className="active-members"
+                            value={selectedMember}
+                            onChange={(e) => setSelectedMember(e.target.value)}
+                        >
+                            <option value="">Select a member</option>
+                            {activeTeamMember.activeTeam.map((member) => (
+                                <option key={member.id} value={member.id}>
+                                    {member.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </form>
+            </Modal>
         </div>
     )
 }

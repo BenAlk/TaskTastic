@@ -76,8 +76,33 @@ const ProjectSelector = ({ projectList, onProjectSelect, chosenProject }) => {
 	return (
 		<div className='dashboard-project-selector'>
 			{projectList.length > 0 && (
-				<div className='project-selector-title'>Projects</div>
+				<>
+                <div className='project-selector-title'>Projects</div>
+                <div className='project-button-container'>
+				<Link
+                    to="/NewProject"
+                    onClick={createNewProject}
+					className='create-new-project-button'
+					title='Create New Project'
+				>
+					<CreateIcon backgroundFill='rgb(8, 175, 8)' />
+				</Link>
+				<div
+					className='edit-current-project-button'
+					title='Edit Current Project'
+				>
+					<EditIcon />
+				</div>
+				<div
+					className='delete-current-project-button'
+					title='Delete Current Project'
+				>
+					<TrashIcon />
+				</div>
+			</div>
+            </>
 			)}
+            <>
 			<div className='project-selector-arrow-container'>
 				{showArrows && currentIndex > 0 && (
 					<div
@@ -119,29 +144,9 @@ const ProjectSelector = ({ projectList, onProjectSelect, chosenProject }) => {
 					</div>
 				)}
 			</div>
+            </>
 
-			<div className='project-button-container'>
-				<Link
-                    to="/NewProject"
-                    onClick={createNewProject}
-					className='create-new-project-button'
-					title='Create New Project'
-				>
-					<CreateIcon backgroundFill='rgb(8, 175, 8)' />
-				</Link>
-				<div
-					className='edit-current-project-button'
-					title='Edit Current Project'
-				>
-					<EditIcon />
-				</div>
-				<div
-					className='delete-current-project-button'
-					title='Delete Current Project'
-				>
-					<TrashIcon />
-				</div>
-			</div>
+
 		</div>
 	);
 };

@@ -70,3 +70,26 @@
     border-radius: 5px;
     padding: 0.5em;
 }
+
+.modal-content.new-team-member-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 20em;
+    gap: 2em;
+}
+
+.modal-content.new-team-member-modal select {
+    background-color: white;
+}
+
+.modal-content.new-team-member-modal option {
+    height: 1rem;
+}
+
+.existing-team-members {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2em;
+}

@@ -1,6 +1,6 @@
 .dashboard-project-selector {
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
     align-items: center;
     height: 2.5rem;
     background-color: var(--primary-color);
@@ -155,9 +155,9 @@
     height: 100%;
     align-items: center;
     justify-content: space-between;
-    padding-right: 1.5rem;
     gap: 0.5rem;
-    
+    margin-right: 1em;
+
 }
 
 .create-new-project-button,

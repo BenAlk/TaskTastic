@@ -3,7 +3,7 @@ const  getAuthorId = (userId, project) => {
         return null;
     }
 
-    const author = project.team.members.find(member => member.id === userId)?.name;
+    const author = project.team.find(member => member.id === userId)?.name;
     return author
     .split(' ')
     .map(name => name[0].toUpperCase())

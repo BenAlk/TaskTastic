@@ -5,9 +5,9 @@ const today = new Date();
 const threeDaysFromNow = subDays(today, -3);
 const sevenDaysAgo = subDays(today, 7);
 
-const teamStats = project.team.members.map(member => {
+const teamStats = project.team.map(member => {
     const memberTasks = project.tasks.filter(task => task.assignedTo === member.name);
-    
+
     const overdueTaskCount = memberTasks.filter(task => {
     const targetDate = parseISO(task.targetDate);
         return isBefore(targetDate, today) && !task.completedDate;

@@ -1,0 +1,113 @@
+/*-------- Type of Team Member (Existing or Create New) --------*/
+
+.add-team-member-modal-container {
+    justify-content: center;
+    height: 100%;
+}
+
+.add-team-member-modal-buttons-container {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    height: 100%;
+}
+
+/* ---------- Existing Team Member ---------- */
+
+.existing-team-members-modal-container {
+    justify-content: space-between;
+    gap: 1em;
+}
+
+.existing-team-members-modal-list-container {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1em;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: var(--tertiary-color);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.member {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.member-name,
+.member-role {
+    overflow: hidden;
+    color: var(--primary-color);
+    text-overflow: ellipsis;
+}
+
+/*---------- New Team Member ----------*/
+
+.new-team-member-modal-container {
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.new-team-member-modal-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.new-team-member-modal-input-container input {
+    all: unset;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 0.25em;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 400;
+    width: 100%;
+    background-color: var(--secondary-color);
+}
+
+/*------------ General Button Styles ------------*/
+
+.add-team-member-modal-container,
+.existing-team-members-modal-container,
+.new-team-member-modal-container {
+    width: 90%;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1em;
+}
+
+.add-team-member-modal-title-container h2,
+.existing-team-members-modal-title h2,
+.new-team-member-modal-title h2 {
+    font-size: 1.5em;
+    color: var(--primary-color);
+}
+
+.add-team-member-modal-buttons-container button,
+.existing-team-member-modal-buttons-container button,
+.new-team-member-modal-buttons-container button {
+    all: unset;
+    color: var(--secondary-color);
+    background-color: var(--primary-color);
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    white-space: nowrap;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-team-member-modal-buttons-container button:hover,
+.existing-team-member-modal-buttons-container button:hover {
+    color: var(--primary-alternate);
+    background-color: var(--primary-color);
+}

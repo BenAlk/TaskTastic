@@ -1,8 +1,8 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Layout from './pages/Layout/index'
-import Dashboard from './pages/Dashboard/index'
-import CreateProject from './pages/CreateProject';
+import Dashboard from './features/Dashboard/index'
+import CreateProject from './features/CreateProject/index';
 function App() {
     return (
         <div className="App">

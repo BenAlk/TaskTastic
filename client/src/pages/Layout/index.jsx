@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Outlet } from "react-router-dom"
 import Header from "../Header/Header"
 import NavBar from "../NavBar/NavBar"
-import { projects } from "../Dashboard/testData/testData"
+import { projects } from "../../features/Dashboard/testData/testData"
 
 const Layout = () => {
 

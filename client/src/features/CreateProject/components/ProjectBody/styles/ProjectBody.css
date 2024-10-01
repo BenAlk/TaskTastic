@@ -1,0 +1,22 @@
+.project-body {
+    display: flex;
+    height: calc(100% - 4em);
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    padding: 1.5em;
+    gap: 1.5em;
+    flex-wrap: wrap;
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); */
+    background-color: var(--tertiary-color);
+}
+
+.new-project-details,
+.new-project-team,
+.new-project-kanban {
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    height: calc(50% - 0.7em);
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
+    padding: 1.5em;
+    background-color: var(--secondary-color);
+}

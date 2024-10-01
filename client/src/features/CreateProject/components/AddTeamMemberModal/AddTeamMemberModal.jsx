@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Modal from '../../../../components/Modal/Modal'
 import { createMemberTemplate, isValidMember } from '../../utils/memberTemplateUtils'
 import { activeTeamMember } from '../NewProjectDetails/testData/testData'
+import { getContrastTextColor } from '../../utils/getContrastTextColor'
 import "./styles/AddTeamMemberModal.css"
 
 const AddTeamMemberModal = ({ isOpen, onClose, onAddMember, existingTeam }) => {
@@ -30,7 +31,7 @@ const AddTeamMemberModal = ({ isOpen, onClose, onAddMember, existingTeam }) => {
             )
             newMembers.forEach(onAddMember)
         } else if (modalMode === 'new' && isValidMember(newMemberData)) {
-            const avatarUrl = `https://ui-avatars.com/api/?background=${newMemberData.color}&color=fff&name=${encodeURIComponent(newMemberData.name)}`
+            const avatarUrl = `https://ui-avatars.com/api/?background=${newMemberData.color}&color=${getContrastTextColor(newMemberData.color)}&name=${encodeURIComponent(newMemberData.name)}`
             const newMember = {
                 ... newMemberData,
                 avatar: avatarUrl,

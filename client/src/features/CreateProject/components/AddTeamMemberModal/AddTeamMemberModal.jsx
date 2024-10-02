@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import PropTypes from 'prop-types'
 import Modal from '../../../../components/Modal/Modal'
 import { createMemberTemplate, isValidMember } from '../../utils/memberTemplateUtils'
 import { activeTeamMember } from '../NewProjectDetails/testData/testData'
 import { getContrastTextColor } from '../../utils/getContrastTextColor'
+import { useProjectContext } from '../../ProjectContext'
+import ChooseTeamMemberColor from '../ChooseTeamMemberColor/ChooseTeamMemberColor'
 import "./styles/AddTeamMemberModal.css"
 
-const AddTeamMemberModal = ({ isOpen, onClose, onAddMember, existingTeam }) => {
+const AddTeamMemberModal = () => {
     const [modalMode, setModalMode] = useState('choose')
     const [newMemberData, setNewMemberData] = useState(createMemberTemplate())
     const [selectedExistingMembers, setSelectedExistingMembers] = useState([])
+    const { projectData, handleAddTeamMember, isModalOpen, setIsModalOpen } = useProjectContext()
 
     const handleExistingMemberToggle = (memberId) => {
         setSelectedExistingMembers(prev =>
@@ -29,33 +31,33 @@ const AddTeamMemberModal = ({ isOpen, onClose, onAddMember, existingTeam }) => {
             const newMembers = activeTeamMember.activeTeam.filter(member =>
                 selectedExistingMembers.includes(member.id)
             )
-            newMembers.forEach(onAddMember)
+            newMembers.forEach(handleAddTeamMember)
         } else if (modalMode === 'new' && isValidMember(newMemberData)) {
             const avatarUrl = `https://ui-avatars.com/api/?background=${newMemberData.color}&color=${getContrastTextColor(newMemberData.color)}&name=${encodeURIComponent(newMemberData.name)}`
             const newMember = {
-                ... newMemberData,
+                ...newMemberData,
                 avatar: avatarUrl,
                 pending: true,
                 admin: false
             }
-            onAddMember(newMember)
+            handleAddTeamMember(newMember)
         }
         handleModalClose()
     }
 
     const handleModalClose = () => {
-        onClose()
+        setIsModalOpen(false)
         setModalMode('choose')
         setNewMemberData(createMemberTemplate())
         setSelectedExistingMembers([])
     }
 
     const isTeamMemberChosen = (memberId) => {
-        return existingTeam.some(member => member.id === memberId)
+        return projectData.team.some(member => member.id === memberId)
     }
 
     return (
-        <Modal isOpen={isOpen} onClose={handleModalClose} className="new-team-member-modal">
+        <Modal isOpen={isModalOpen} onClose={handleModalClose} className="new-team-member-modal">
             {modalMode === 'choose' && (
                 <div className="add-team-member-modal-container">
                     <div className="add-team-member-modal-title-container">
@@ -83,8 +85,8 @@ const AddTeamMemberModal = ({ isOpen, onClose, onAddMember, existingTeam }) => {
                                 disabled={isTeamMemberChosen(member.id)}
                             />
                             <div className="member-name">
-                            <label htmlFor={`member-${member.id}`}>{member.name}</label>
-                                </div>
+                                <label htmlFor={`member-${member.id}`}>{member.name}</label>
+                            </div>
                             <div className="member-role">
                                 <label htmlFor={`member-${member.id}`}>{member.role}</label>
                             </div>
@@ -123,12 +125,9 @@ const AddTeamMemberModal = ({ isOpen, onClose, onAddMember, existingTeam }) => {
                             value={newMemberData.email}
                             onChange={handleNewMemberInputChange}
                         />
-                        <input
-                            type="text"
-                            name="color"
-                            placeholder="Hex Color - No #"
-                            value={newMemberData.color}
-                            onChange={handleNewMemberInputChange}
+                        <ChooseTeamMemberColor
+                        value={newMemberData.color}
+                        onChange={handleNewMemberInputChange}
                         />
                     </div>
                     <div className="new-team-member-modal-buttons-container">
@@ -138,13 +137,6 @@ const AddTeamMemberModal = ({ isOpen, onClose, onAddMember, existingTeam }) => {
             )}
         </Modal>
     )
-}
-
-AddTeamMemberModal.propTypes = {
-    isOpen: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired,
-    onAddMember: PropTypes.func.isRequired,
-    existingTeam: PropTypes.array.isRequired,
 }
 
 export default AddTeamMemberModal

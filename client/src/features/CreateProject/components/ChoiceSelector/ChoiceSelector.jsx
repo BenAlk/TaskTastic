@@ -1,24 +1,35 @@
-import { useState } from "react"
-import "./styles/ChoiceSelector.css"
-import PropTypes from "prop-types"
 import { Checkbox } from '@mui/material'
+import PropTypes from "prop-types"
+import "./styles/ChoiceSelector.css"
 
-const ChoiceSelector = ({ order = false, active, children, id, initialChecked = false, onChange, className }) => {
-    const [isChecked, setIsChecked] = useState(initialChecked)
-
+const ChoiceSelector = ({ order = false, active = true, children, id, checked, onChange, className, disabled = false }) => {
     const handleChange = (event) => {
-        const newCheckedState = event.target.checked
-        setIsChecked(newCheckedState)
         if (onChange) {
-            onChange(id, newCheckedState)
+            onChange(event.target.checked);
         }
     }
 
     return (
         <div className={`choice-selector selector-${className}`}>
-            {order === false ? <Checkbox id={id} checked={isChecked} onChange={handleChange} disabled={!active} /> : null}
+            {order === false ? (
+                <Checkbox
+                    id={id}
+                    checked={checked}
+                    onChange={handleChange}
+                    disabled={disabled || !active}
+                    inputProps={{ 'aria-label': children }}
+                />
+            ) : null}
             <label htmlFor={id} className="new-project-choice-label">{children}</label>
-            {order === true ? <Checkbox id={id} checked={isChecked} onChange={handleChange} disabled={!active} /> : null}
+            {order === true ? (
+                <Checkbox
+                    id={id}
+                    checked={checked}
+                    onChange={handleChange}
+                    disabled={disabled || !active}
+                    inputProps={{ 'aria-label': children }}
+                />
+            ) : null}
         </div>
     )
 }
@@ -27,10 +38,11 @@ ChoiceSelector.propTypes = {
     order: PropTypes.bool,
     active: PropTypes.bool,
     children: PropTypes.node,
-    id: PropTypes.string,
-    initialChecked: PropTypes.bool,
-    onChange: PropTypes.func,
-    className: PropTypes.string
+    id: PropTypes.string.isRequired,
+    checked: PropTypes.bool.isRequired,
+    onChange: PropTypes.func.isRequired,
+    className: PropTypes.string,
+    disabled: PropTypes.bool
 }
 
 export default ChoiceSelector

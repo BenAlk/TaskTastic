@@ -17,9 +17,6 @@ NewTeamMemberTile.propTypes = {
 }
 
 export const TeamMember = ({member, clickMember}) => {
-
-    const teamMember = member
-    console.log("Team member:", teamMember)
     return (
     <div className="new-project-team-member-tile added-tile" onClick={clickMember}>
         <img src={member.avatar} alt={`${member.name} avatar`} />

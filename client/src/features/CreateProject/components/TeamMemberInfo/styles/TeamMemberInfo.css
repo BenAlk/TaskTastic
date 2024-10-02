@@ -38,3 +38,30 @@
 .team-member-info button:hover {
     color: var(--primary-alternate);
 }
+
+.delete-team-member-stage-one {
+    position: relative;
+}
+
+.delete-team-member-stage-two {
+    position: absolute;
+    bottom: 0;
+    right: -2em;
+    height: 100%;
+    width: 1.75em;
+    border-radius: 10px;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    transition: all 0.3s ease-in-out;
+    background-color: red;
+    cursor: pointer;
+}
+
+.delete-team-member-stage-two:hover {
+    border-color: 1px solid var(--primary-alternate);
+    color: var(--primary-alternate);
+}

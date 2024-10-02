@@ -1,7 +1,10 @@
-import PropTypes from 'prop-types'
+import { useContext } from 'react'
+import { ProjectContext } from '../../ProjectContext'
 import "./styles/ProjectHeader.css"
 
-const ProjectHeader = ({ projectData, handleInputChange }) => {
+const ProjectHeader = () => {
+    const { projectData, handleInputChange } = useContext(ProjectContext)
+
     return (
         <div className="new-project-header">
             <div className="new-project-name">
@@ -31,11 +34,6 @@ const ProjectHeader = ({ projectData, handleInputChange }) => {
             <button type="submit" className="new-project-submit-button">Submit</button>
         </div>
     )
-}
-
-ProjectHeader.propTypes = {
-    projectData: PropTypes.object.isRequired,
-    handleInputChange: PropTypes.func.isRequired
 }
 
 export default ProjectHeader

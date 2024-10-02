@@ -1,15 +1,21 @@
-import { useState } from 'react'
+import React, { useState, useContext, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { NewTeamMemberTile, TeamMember } from '../NewTeamMemberTile/NewTeamMemberTile'
 import TeamMemberInfo from '../TeamMemberInfo/TeamMemberInfo'
+import { ProjectContext } from '../../ProjectContext'
 import "./styles/TeamDetails.css"
 
-const TeamDetails = ({ team, onAddTeamMember }) => {
-    const [displayedMember, setDisplayedMember] = useState(null)
+const TeamDetails = ({ onAddTeamMember }) => {
+    const [displayedMemberId, setDisplayedMemberId] = useState(null)
+    const { projectData } = useContext(ProjectContext)
+    const [, forceUpdate] = useState()
 
-    const handleMemberTileClick = (member) => {
-        setDisplayedMember(member)
-    }
+    const handleMemberTileClick = useCallback((memberId) => {
+        setDisplayedMemberId(memberId)
+        forceUpdate({})  // Force a re-render when switching members
+    }, [])
+
+    const displayedMember = projectData.team.find(member => member.id === displayedMemberId)
 
     return (
         <div className="new-project-team">
@@ -18,17 +24,22 @@ const TeamDetails = ({ team, onAddTeamMember }) => {
             </div>
             <div className="new-project-team-container">
                 <div className="new-project-team-tile-container">
-                    {team.map((member, index) => (
+                    {projectData.team.map((member) => (
                         <TeamMember
-                            key={index}
+                            key={member.id}
                             member={member}
-                            clickMember={() => handleMemberTileClick(member)}
+                            clickMember={() => handleMemberTileClick(member.id)}
                         />
                     ))}
                     <NewTeamMemberTile onAddTeamMember={onAddTeamMember} />
                 </div>
                 <div className="new-project-team-member-information">
-                    {displayedMember && <TeamMemberInfo member={displayedMember} />}
+                    {displayedMember && (
+                        <TeamMemberInfo
+                            key={`${displayedMember.id}-${displayedMember.admin}`}
+                            member={displayedMember}
+                        />
+                    )}
                 </div>
             </div>
         </div>
@@ -36,7 +47,6 @@ const TeamDetails = ({ team, onAddTeamMember }) => {
 }
 
 TeamDetails.propTypes = {
-    team: PropTypes.array.isRequired,
     onAddTeamMember: PropTypes.func.isRequired
 }
 

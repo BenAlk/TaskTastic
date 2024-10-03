@@ -75,6 +75,7 @@ table {
 .main-container.slide {
 	margin-left: 79px;
 	width: calc(100vw - 96px);
+    transition: all 0.5s ease-in-out;
 }
 
 /* ------------ Slim Scroll Bars ------------ */

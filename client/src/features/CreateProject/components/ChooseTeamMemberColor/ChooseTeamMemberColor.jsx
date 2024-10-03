@@ -22,8 +22,8 @@ const ChooseTeamMemberColor = ({ value = "#000000", onChange }) => {
         <input
             type="text"
             name="color"
-            placeholder="Hex Color - No #"
-            value={value}
+            placeholder="Identifying Color"
+            value={value ? `${value}` : null}
             onChange={onChange}
             readOnly
         />

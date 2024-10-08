@@ -10,7 +10,7 @@ const columnHeaderColors = [
   "#ffffff", "#000000"
 ];
 
-const ChooseColumnHeaderColor = ({ value = '#000000', onChange}) => {
+const ChooseColumnHeaderColor = ({ value , onChange, error}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleColorSelect = (color) => {
@@ -19,11 +19,11 @@ const ChooseColumnHeaderColor = ({ value = '#000000', onChange}) => {
     };
 
     const triggerContent = (
-        <div className="column-color-input-container">
+        <div className={`column-color-input-container ${error ? 'input-error' : ''}`}>
         <input
             type="text"
             name="headerColor"
-            placeholder="Column Header Color"
+            placeholder="Title Colour"
             value={value}
             onChange={onChange}
             readOnly
@@ -59,6 +59,7 @@ const ChooseColumnHeaderColor = ({ value = '#000000', onChange}) => {
 ChooseColumnHeaderColor.propTypes = {
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
+    error: PropTypes.string
 };
 
 export default ChooseColumnHeaderColor;

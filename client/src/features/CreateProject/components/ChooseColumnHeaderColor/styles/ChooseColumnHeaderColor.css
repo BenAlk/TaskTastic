@@ -47,3 +47,10 @@
 .column-color-option:hover {
     transform: scale(1.1);
 }
+
+
+/*------------- Error Highlighting -------------*/
+.column-color-input-container.input-error {
+    border: 2px solid red;
+    background-color: #fff0f0;
+}

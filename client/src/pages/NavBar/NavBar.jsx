@@ -3,6 +3,8 @@ import NavBarLink from "./NavBarLink"
 import "./styles/NavBar.css"
 import PropTypes from "prop-types"
 import { Link, NavLink } from "react-router-dom"
+import { useContext, useEffect, useState } from "react"
+import { LayoutContext } from "../Layout/index"
 
 const user = {
     name: "Ben Alkureishi",
@@ -10,6 +12,34 @@ const user = {
 }
 
 const NavBar = ({isOpen, handleMenuToggle}) => {
+    const { errors, setErrors } = useContext(LayoutContext);
+    const [localErrors, setLocalErrors] = useState({})
+
+    useEffect(() => {
+        setLocalErrors(errors);
+    }, [errors]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            const updatedErrors = { ...localErrors };
+            let hasChanges = false;
+
+            Object.keys(updatedErrors).forEach(key => {
+                if (!errors[key]) {
+                    delete updatedErrors[key];
+                    hasChanges = true;
+                }
+            });
+
+            if (hasChanges) {
+                setLocalErrors(updatedErrors);
+                setErrors(updatedErrors);
+            }
+        }, 100);  // Small delay to ensure all updates have processed
+
+        return () => clearTimeout(timer);
+    }, [errors, localErrors, setErrors]);
+
     return (
         <div className={`navbar-container ${isOpen ? "" : "collapsed"}`}>
             <div className="collapse-container" onClick={handleMenuToggle} title={isOpen ? "Collapse Menu" : "Expand Menu"}>
@@ -33,6 +63,15 @@ const NavBar = ({isOpen, handleMenuToggle}) => {
                 <NavBarLink isOpen={isOpen} icon={<TrophyIcon className="nav-link-icon" />}>Achievements</NavBarLink>
                 <NavBarLink isOpen={isOpen} icon={<SettingsIcon className="nav-link-icon"/>}>Settings</NavBarLink>
             </div>
+            {Object.keys(localErrors).length > 0 && (
+                <div className="errors-container">
+                    {Object.entries(localErrors).map(([key, value]) => (
+                        <div key={key} className="error-item">
+                            {value}
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }

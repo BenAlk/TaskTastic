@@ -52,7 +52,7 @@ const NewProjectDetails = ({ datePickerStyles }) => {
                     {Object.entries(projectData.options).map(([key, value]) => (
                         <ChoiceSelector
                             key={key}
-                            active={true}
+                            active={key === "tbd1" || key === "tbd2" || key === "tbd3" || key === "tbd4" ? false : true}
                             id={key}
                             checked={value}
                             onChange={handleOptionChange(key)}

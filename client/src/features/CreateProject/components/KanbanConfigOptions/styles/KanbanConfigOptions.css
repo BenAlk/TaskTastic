@@ -16,69 +16,31 @@
     cursor: pointer;
 }
 
+.new-project-kanban-options-tabs .not-active:hover {
+    background-color: var(--primary-alternate);
+    transition: all 0.3s ease-in-out;
+}
 .new-project-kanban-options-tabs .column-tab {
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: .8rem;
     padding: 0.5rem;
-    border: 1px solid var(--primary-color);
+    border-bottom: 1px solid var(--primary-color);
     width: 100%;
 }
 
 .new-project-kanban-add-column {
-    border-radius: 10px 0 0 0;
+    border-radius: 9px 0 0 0;
 }
+
+.new-project-kanban-adjust-column,
+.new-project-kanban-add-column {
+    border-right: 1px solid var(--primary-color);
+}
+
 
 .active-tab {
     background-color: var(--primary-color);
     color: var(--secondary-color);
-}
-
-/*--------------- Add Kanban Column Options ---------------*/
-
-.new-project-kanban-add-column-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    gap: 0.5rem;
-    padding: 1rem;
-    background-color: var(--primary-color);
-    border-radius: 0 0 0 10px;
-}
-
-.new-project-kanban-add-column-container input {
-    all: unset;
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-    padding: 0.25em;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-weight: 400;
-    width: 96%;
-    background-color: var(--secondary-color);
-}
-
-.kanban-column-number-inputs {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    gap : 0.5rem;
-}
-
-.add-kanban-column-button {
-    background-color: var(--secondary-color);
-    color: var(--primary-color);
-    border-radius: 5px;
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-}
-
-.add-kanban-column-button:hover {
-    background-color: var(--primary-alternate);
 }

@@ -1,81 +1,75 @@
+import { useContext } from "react"
 import PropTypes from "prop-types"
-import ChooseColumnHeaderColor from '../ChooseColumnHeaderColor/ChooseColumnHeaderColor'
 import "./styles/KanbanConfigOptions.css"
+import AddKanbanConfig from "../AddKanbanConfig/AddKanbanConfig"
+import AdjustKanbanColumnDetails from "../AdjustKanbanColumnDetails/AdjustKanbanColumnDetails"
+import { LayoutContext } from "../../../../pages/Layout/index"
 
-const KanbanConfigOptions = ({activeTab, setActiveTab, newColumn, handleColumnInputChange, handleAddColumn, setSelectedColumnId}) => {
+const KanbanConfigOptions = ({
+    activeTab,
+    setActiveTab,
+    handleAddColumn,
+    handleUpdateColumn,
+    selectedColumnId,
+    setSelectedColumnId,
+    kanbanColumns,
+    activeColumn,
+    setActiveColumn,
+    handleMoveColumn,
+}) => {
+    const { errors, setErrors } = useContext(LayoutContext);
 
     const handleAddColumnClick = () => {
         setSelectedColumnId(null);
         setActiveTab('add');
+        setActiveColumn(null);
     }
 
     return (
         <div className="new-project-kanban-options">
-                    <div className="new-project-kanban-options-tabs">
-                        <div
-                            className={`new-project-kanban-add-column column-tab ${activeTab === 'add' ? 'active-tab' : ''}`}
-                            onClick={() => handleAddColumnClick()}
-                        >
-                            Add Column
-                        </div>
-                        <div
-                            className={`new-project-kanban-adjust-column column-tab ${activeTab === 'adjust' ? 'active-tab' : ''}`}
-                            onClick={() => setActiveTab('adjust')}
-                        >
-                            Adjust Column
-                        </div>
-                    </div>
-                    {activeTab === 'add' && (
-                        <div className="new-project-kanban-add-column-container">
-                            <input
-                                type="text"
-                                name="name"
-                                className="add-kanban-input"
-                                placeholder="Column Name"
-                                value={newColumn.name}
-                                onChange={handleColumnInputChange}
-                            />
-                            <ChooseColumnHeaderColor
-                                value={newColumn.headerColor}
-                                onChange={handleColumnInputChange}
-                            />
-                            <div className="kanban-column-number-inputs">
-                            <input
-                                type="number"
-                                name="maxDays"
-                                className="add-kanban-input max-days"
-                                placeholder="Max Days"
-                                value={newColumn.maxDays}
-                                onChange={handleColumnInputChange}
-                            />
-                            <input
-                                type="number"
-                                name="maxTasks"
-                                className="add-kanban-max-tasks"
-                                placeholder="Max Tasks"
-                                value={newColumn.maxTasks}
-                                onChange={handleColumnInputChange}
-                            />
-                            </div>
-                            <div className="add-kanban-column-button" onClick={handleAddColumn}>Confirm Column</div>
-                        </div>
-                    )}
-                    {activeTab === 'adjust' && (
-                        <div className="new-project-kanban-adjust-column-container">
-                            {/* Add content for adjusting columns here */}
-                        </div>
-                    )}
+            <div className="new-project-kanban-options-tabs">
+                <div
+                    className={`new-project-kanban-add-column column-tab ${activeTab === 'add' ? 'active-tab' : 'not-active'}`}
+                    onClick={handleAddColumnClick}
+                >
+                    Add Column
                 </div>
+                <div
+                    className={`new-project-kanban-adjust-column column-tab ${activeTab === 'adjust' ? 'active-tab' : 'not-active'}`}
+                    onClick={() => setActiveTab('adjust')}
+                >
+                    Adjust Column
+                </div>
+            </div>
+            {activeTab === 'add' &&
+                <AddKanbanConfig handleAddColumn={handleAddColumn} errors={errors} setErrors={setErrors} />
+            }
+            {activeTab === 'adjust' && (
+                <AdjustKanbanColumnDetails
+                    selectedId={selectedColumnId}
+                    kanbanColumns={kanbanColumns}
+                    handleUpdateColumn={handleUpdateColumn}
+                    setActiveTab={setActiveTab}
+                    activeColumn={activeColumn}
+                    setActiveColumn={setActiveColumn}
+                    handleMoveColumn={handleMoveColumn}
+                />
+            )}
+        </div>
     )
 }
 
 KanbanConfigOptions.propTypes = {
     activeTab: PropTypes.string.isRequired,
     setActiveTab: PropTypes.func.isRequired,
-    newColumn: PropTypes.object.isRequired,
-    handleColumnInputChange: PropTypes.func.isRequired,
     handleAddColumn: PropTypes.func.isRequired,
-    setSelectedColumnId: PropTypes.func.isRequired
+    handleUpdateColumn: PropTypes.func.isRequired,
+    selectedColumnId: PropTypes.string,
+    setSelectedColumnId: PropTypes.func.isRequired,
+    kanbanColumns: PropTypes.array.isRequired,
+    activeColumn: PropTypes.object,
+    setActiveColumn: PropTypes.func.isRequired,
+    handleMoveColumn: PropTypes.func.isRequired,
 }
 
 export default KanbanConfigOptions

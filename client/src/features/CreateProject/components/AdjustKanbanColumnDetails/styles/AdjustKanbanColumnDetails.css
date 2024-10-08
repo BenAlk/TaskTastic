@@ -1,0 +1,67 @@
+.kanban-info-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: 400;
+    border-radius: 0 0 0 9px;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 0.5em;
+    text-align: center;
+}
+
+.new-project-kanban-adjust-column-container-inputs {
+    color: var(--secondary-color);
+    font-size: 0.8rem;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.kanban-column-number-inputs .input-container {
+    flex-direction: row;
+}
+
+.input-container-numbers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.column-order-controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 0.5rem;
+}
+
+.adjust-column-order-button {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    border-radius: 5px;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    width: 100%;
+    text-align: center;
+}
+
+.adjust-column-order-button.disabled-button {
+    color: var(--tertiary-color);
+    cursor: not-allowed;
+}
+
+.adjust-column-order-button:hover {
+    background-color: var(--primary-alternate);
+}
+
+.adjust-column-order-button.disabled-button:hover {
+    background-color: var(--secondary-color);
+}

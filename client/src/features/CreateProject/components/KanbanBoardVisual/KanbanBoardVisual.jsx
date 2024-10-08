@@ -1,43 +1,50 @@
+import { useContext } from "react"
 import PropTypes from "prop-types"
 import "./styles/KanbanBoardVisual.css"
+import KanbanVisualColumn from "../KanbanVisualColumn/KanbanVisualColumn";
+import { LayoutContext } from "../../../../pages/Layout/index"
 
-const   KanbanBoardVisual = ({setActiveTab, kanbanData, selectedColumn, handleSelectedColumn}) => {
-    console.log(kanbanData)
+const KanbanBoardVisual = ({
+    setActiveTab,
+    kanbanColumns,
+    selectedColumnId,
+    setSelectedColumnId,
+    setActiveColumn,
+}) => {
 
-    const handleColumnClick = (columnId) => {
-        handleSelectedColumn(columnId);
+    const { errors } = useContext(LayoutContext);
+
+    const handleColumnClick = (columnId, column) => {
+        setSelectedColumnId(columnId);
         setActiveTab('adjust');
+        setActiveColumn(column);
     };
 
     return (
         <div className="new-project-kanban-board-visual">
-            <div className="kanban-board-visual-container">
-                {kanbanData?.map((column, index) => (
-                <div className={`kanban-board-visual-column ${selectedColumn === column.id ? "selected-kanban-config" : ""}`} key={index} onClick={() => handleColumnClick(column.id)}>
-                    <div className="kanban-board-visual-column-title" style={{backgroundColor: column.headerColor}}>
-                        <h3>{column.name}</h3>
-                    </div>
-                    <div className="kanban-board-visual-column-content">
-                        <div className="kanban-board-visual-column-content-card">
-                            card1
-                        </div>
-                        <div className="kanban-board-visual-column-content-card">
-                            card2
-                        </div>
-                    </div>
-                </div>
+            <div className={`kanban-board-visual-container`}>
+                {kanbanColumns.map((column, index) => (
+                    <KanbanVisualColumn
+                        key={column.id}
+                        column={column}
+                        selectedColumnId={selectedColumnId}
+                        handleColumnClick={handleColumnClick}
+                        index={index}
+                        kanbanColumns={kanbanColumns}
+                    />
                 ))}
             </div>
+            {errors.kanban && <p className="kanban-board-visual-error">{errors.kanban}</p>}
         </div>
     )
 }
 
 KanbanBoardVisual.propTypes = {
     setActiveTab: PropTypes.func.isRequired,
-    kanbanData: PropTypes.array.isRequired,
-    selectedColumn: PropTypes.string,
-    handleSelectedColumn: PropTypes.func.isRequired
+    kanbanColumns: PropTypes.array.isRequired,
+    selectedColumnId: PropTypes.string,
+    setSelectedColumnId: PropTypes.func.isRequired,
+    setActiveColumn: PropTypes.func,
 }
-
 
 export default KanbanBoardVisual

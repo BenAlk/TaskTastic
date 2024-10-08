@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from 'react'
+import { useState, useContext, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { NewTeamMemberTile, TeamMember } from '../NewTeamMemberTile/NewTeamMemberTile'
 import TeamMemberInfo from '../TeamMemberInfo/TeamMemberInfo'

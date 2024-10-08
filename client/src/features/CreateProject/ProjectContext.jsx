@@ -7,6 +7,8 @@ const ProjectContext = createContext();
 export const ProjectProvider = ({ children }) => {
     const [projectData, setProjectData] = useState(createInitialProjectData());
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [errors, setErrors] = useState({})
+
 
     const handleInputChange = (e) => {
         const { id, value } = e.target;
@@ -61,6 +63,7 @@ export const ProjectProvider = ({ children }) => {
     return (
         <ProjectContext.Provider value={{
         projectData,
+        setProjectData,
         isModalOpen,
         setIsModalOpen,
         handleInputChange,
@@ -68,7 +71,9 @@ export const ProjectProvider = ({ children }) => {
         handleDateChange,
         handleAddTeamMember,
         handleToggleAdmin,
-        handleDeleteMember
+        handleDeleteMember,
+        errors,
+        setErrors
         }}>
         {children}
         </ProjectContext.Provider>

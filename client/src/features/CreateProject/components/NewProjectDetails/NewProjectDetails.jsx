@@ -4,11 +4,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import ChoiceSelector from '../ChoiceSelector/ChoiceSelector'
 import { ProjectContext } from '../../ProjectContext'
+import { LayoutContext } from "../../../../pages/Layout/index"
 import PropTypes from 'prop-types'
 import "./styles/NewProjectDetails.css"
 
 const NewProjectDetails = ({ datePickerStyles }) => {
     const { projectData, handleDateChange, handleOptionsChange } = useContext(ProjectContext)
+    const { errors } = useContext(LayoutContext)
 
     const handleOptionChange = useCallback((id) => (isChecked) => {
         handleOptionsChange({ [id]: isChecked })
@@ -23,7 +25,7 @@ const NewProjectDetails = ({ datePickerStyles }) => {
                 <div className="new-project-dates-container">
                     <div className="new-project-start-date">
                         <label htmlFor="newProjectStartDate" className="new-project-start-date-label">Start Date</label>
-                        <div className="new-project-start-date-picker" id="newProjectStartDate">
+                        <div className={`new-project-start-date-picker ${errors.startDate ? "input-error" : ""}`} id="newProjectStartDate">
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     value={projectData.startDate}
@@ -36,7 +38,7 @@ const NewProjectDetails = ({ datePickerStyles }) => {
                     </div>
                     <div className="new-project-target-date">
                         <label htmlFor="newProjectTargetDate" className="new-project-target-date-label">Target Date</label>
-                        <div className="new-project-target-date-picker" id="newProjectTargetDate">
+                        <div className={`new-project-target-date-picker ${errors.targetDate ? "input-error" : ""}`} id="newProjectTargetDate">
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     value={projectData.targetDate}

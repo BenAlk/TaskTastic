@@ -5,7 +5,7 @@ import "./styles/AddKanbanConfig.css"
 import { generateRandomId } from '../../utils/generateRandomId'
 import { LayoutContext } from "../../../../pages/Layout/index"
 
-const AddKanbanConfig = ({ handleAddColumn}) => {
+const AddKanbanConfig = ({ handleAddColumn }) => {
 
     const { errors, setErrors } = useContext(LayoutContext);
     const [newColumn, setNewColumn] = useState({
@@ -65,7 +65,7 @@ const AddKanbanConfig = ({ handleAddColumn}) => {
             handleAddColumn(newColumn);
             setNewColumn({
                 id: generateRandomId(),
-                name: '',
+                columnName: '',
                 headerColor: '',
                 maxDays: '',
                 maxTasks: ''
@@ -136,7 +136,7 @@ const AddKanbanConfig = ({ handleAddColumn}) => {
 }
 
 AddKanbanConfig.propTypes = {
-    handleAddColumn: PropTypes.func.isRequired,
+    handleAddColumn: PropTypes.func
 }
 
 export default AddKanbanConfig

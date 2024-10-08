@@ -20,7 +20,7 @@ const AdjustKanbanColumnDetails = ({
             setActiveColumn({...column})
             if (initialRenderRef.current) {
                 setOriginalValues({
-                    name: column.columnName || '',
+                    columnName: column.columnName || '',
                     maxDays: column.maxDays || '',
                     maxTasks: column.maxTasks || ''
                 })
@@ -73,7 +73,7 @@ const AdjustKanbanColumnDetails = ({
                 <div className="new-project-kanban-adjust-column-container-inputs">Column Name</div>
                 <input
                     type="text"
-                    name="name"
+                    name="columnName"
                     className="add-kanban-input"
                     placeholder="Column Name"
                     value={activeColumn.columnName}

@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import "./styles/KanbanDetails.css";
 import KanbanConfigOptions from '../KanbanConfigOptions/KanbanConfigOptions';
 import KanbanBoardVisual from '../KanbanBoardVisual/KanbanBoardVisual';
@@ -14,8 +14,33 @@ const KanbanDetails = () => {
     const [selectedColumnId, setSelectedColumnId] = useState(null);
     const [activeColumn, setActiveColumn] = useState(null);
 
+    useEffect(() => {
+        console.log('activeTab', activeTab)
+    },[activeTab]);
+
     const handleAddColumn = (newColumn) => {
         setKanbanColumns(prevColumns => [...prevColumns, newColumn]);
+    };
+
+    const handleDeleteColumn = (columnId) => {
+        setKanbanColumns(prevColumns => prevColumns.filter(column => column.id !== columnId));
+        setSelectedColumnId(null);
+        setActiveTab('add');
+        setActiveColumn(null);
+
+
+        // Check if there are less than 2 columns after deletion
+        if (kanbanColumns.length <= 2) {
+            setErrors(prev => ({
+                ...prev,
+                kanban: 'Please add at least two kanban columns.'
+            }));
+        } else {
+            setErrors(prev => ({
+                ...prev,
+                kanban: null
+            }));
+        }
     };
 
     const handleUpdateColumn = (updatedColumn) => {
@@ -75,6 +100,8 @@ const KanbanDetails = () => {
                     setSelectedColumnId={setSelectedColumnId}
                     activeColumn={activeColumn}
                     setActiveColumn={setActiveColumn}
+                    handleDeleteColumn={handleDeleteColumn}
+
                 />
                 <div className="confirm-kanban-setup">
                     <div className="confirm-kanban-setup-button"  onClick={handleConfirmKanbanSetup}>Confirm Kanban</div>

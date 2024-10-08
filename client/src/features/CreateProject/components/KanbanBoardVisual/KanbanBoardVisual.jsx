@@ -10,6 +10,7 @@ const KanbanBoardVisual = ({
     selectedColumnId,
     setSelectedColumnId,
     setActiveColumn,
+    handleDeleteColumn
 }) => {
 
     const { errors } = useContext(LayoutContext);
@@ -18,6 +19,11 @@ const KanbanBoardVisual = ({
         setSelectedColumnId(columnId);
         setActiveTab('adjust');
         setActiveColumn(column);
+    };
+
+    const handleDeleteClick = (e, columnId) => {
+        e.stopPropagation(); // Prevent the click from bubbling up to the column
+        handleDeleteColumn(columnId);
     };
 
     return (
@@ -30,7 +36,7 @@ const KanbanBoardVisual = ({
                         selectedColumnId={selectedColumnId}
                         handleColumnClick={handleColumnClick}
                         index={index}
-                        kanbanColumns={kanbanColumns}
+                        handleDeleteClick={handleDeleteClick}
                     />
                 ))}
             </div>
@@ -45,6 +51,7 @@ KanbanBoardVisual.propTypes = {
     selectedColumnId: PropTypes.string,
     setSelectedColumnId: PropTypes.func.isRequired,
     setActiveColumn: PropTypes.func,
+    handleDeleteColumn: PropTypes.func.isRequired
 }
 
 export default KanbanBoardVisual

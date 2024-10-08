@@ -92,3 +92,11 @@
     align-items: center;
     gap: 2em;
 }
+
+
+.new-project-start-date-picker.input-error,
+.new-project-target-date-picker.input-error {
+    border: 2px solid red;
+    border-radius: 5px;
+    background-color: #fff0f0;
+}

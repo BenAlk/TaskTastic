@@ -10,7 +10,7 @@ const AddKanbanConfig = ({ handleAddColumn}) => {
     const { errors, setErrors } = useContext(LayoutContext);
     const [newColumn, setNewColumn] = useState({
         id: generateRandomId(),
-        name: '',
+        columnName: '',
         headerColor: '',
         maxDays: '',
         maxTasks: ''
@@ -24,7 +24,7 @@ const AddKanbanConfig = ({ handleAddColumn}) => {
                 return 'Please enter a valid number'
             }
         }
-        if (name === 'name' && !value.trim()) {
+        if (name === 'columnName' && !value.trim()) {
             return 'Please enter a name for the column'
         }
         if (name === 'headerColor' && !value) {
@@ -80,10 +80,10 @@ const AddKanbanConfig = ({ handleAddColumn}) => {
         <div className="new-project-kanban-add-column-container">
             <input
                 type="text"
-                name="name"
-                className={`add-kanban-input ${errors.name ? 'input-error' : ''}`}
+                name="columnName"
+                className={`add-kanban-input ${errors.columnName ? 'input-error' : ''}`}
                 placeholder="Column Name"
-                value={newColumn.name}
+                value={newColumn.columnName}
                 onChange={handleColumnInputChange}
             />
 

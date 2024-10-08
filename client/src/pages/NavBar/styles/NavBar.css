@@ -194,19 +194,39 @@ title-link.expanded {
 
 /*-------- Errors --------*/
 
-.errors-container {
+.errors-container,
+.error-indicator {
     position: absolute;
     display: flex;
     flex-direction: column;
-    bottom: 10px;
+    bottom: 0;
     width: 160px;
+    margin-bottom: 1.5rem;
     gap: 5px;
+    max-height: 10rem;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .error-item {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     border-radius: 10px;
     padding: 5px;
     border: 1px solid red;
+    transition: all 0.2s ease-in-out;
     background-color: var(--secondary-color);
+}
+
+.error-item:empty {
+    max-height: 0;
+    margin-top: 0;
+}
+
+.error-indicator {
+    width:  40px;
+    color: red;
+    border: 1px solid red;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
 }

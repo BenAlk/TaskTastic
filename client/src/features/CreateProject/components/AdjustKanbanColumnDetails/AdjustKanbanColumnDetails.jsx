@@ -20,7 +20,7 @@ const AdjustKanbanColumnDetails = ({
             setActiveColumn({...column})
             if (initialRenderRef.current) {
                 setOriginalValues({
-                    name: column.name || '',
+                    name: column.columnName || '',
                     maxDays: column.maxDays || '',
                     maxTasks: column.maxTasks || ''
                 })
@@ -52,7 +52,7 @@ const AdjustKanbanColumnDetails = ({
 
     const handleInputBlur = (e) => {
         const { name, value } = e.target
-        if ((name === 'name' || name === 'maxDays' || name === 'maxTasks') && value.trim() === '' && originalValues[name] !== '') {
+        if ((name === 'columnName' || name === 'maxDays' || name === 'maxTasks') && value.trim() === '' && originalValues[name] !== '') {
             const updatedColumn = {
                 ...activeColumn,
                 [name]: originalValues[name]
@@ -76,7 +76,7 @@ const AdjustKanbanColumnDetails = ({
                     name="name"
                     className="add-kanban-input"
                     placeholder="Column Name"
-                    value={activeColumn.name}
+                    value={activeColumn.columnName}
                     onChange={handleInputChange}
                     onBlur={handleInputBlur}
                 />

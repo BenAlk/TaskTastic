@@ -63,3 +63,10 @@
     cursor:default;
     color: grey;
 }
+
+/*---------- Error Handling ---------- */
+
+.new-project-name-input.input-error {
+    border: 1px solid red;
+    background-color: #fff0f0;
+}

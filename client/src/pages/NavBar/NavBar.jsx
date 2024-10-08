@@ -1,4 +1,4 @@
-import { UserIcon, SettingsIcon, TeamIcon, KanbanIcon, TrophyIcon, EnvelopeIcon, EisenhowerIcon, HomeIcon, CollapseIcon, TasksIcon } from "../../assets/icons"
+import { UserIcon, SettingsIcon, TeamIcon, KanbanIcon, TrophyIcon, EnvelopeIcon, EisenhowerIcon, HomeIcon, CollapseIcon, TasksIcon, ImportantIcon } from "../../assets/icons"
 import NavBarLink from "./NavBarLink"
 import "./styles/NavBar.css"
 import PropTypes from "prop-types"
@@ -64,14 +64,15 @@ const NavBar = ({isOpen, handleMenuToggle}) => {
                 <NavBarLink isOpen={isOpen} icon={<SettingsIcon className="nav-link-icon"/>}>Settings</NavBarLink>
             </div>
             {Object.keys(localErrors).length > 0 && (
-                <div className="errors-container">
-                    {Object.entries(localErrors).map(([key, value]) => (
-                        <div key={key} className="error-item">
-                            {value}
-                        </div>
-                    ))}
-                </div>
-            )}
+    isOpen ? (
+        <div className="errors-container">
+            {Object.entries(localErrors).map(([key, value]) => (
+                value && <div key={key} className="error-item">{value}</div>
+            ))}
+        </div>
+    ) : (
+        <div className="error-indicator" title="Errors present: expand the navbar to inspect."><ImportantIcon height={40} width={40} /></div>
+    ))}
         </div>
     )
 }

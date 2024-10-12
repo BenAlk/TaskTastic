@@ -17,10 +17,6 @@
     border-right: 1px solid var(--primary-color);
     position: relative;
 }
-/* 
-.header-project-selector h3 {
-    font-weight: 600;
-} */
 
 .main-header {
     display: flex;
@@ -40,7 +36,7 @@
     background-color: var(--primary-color);
 }
 
-.logo-container img { 
+.logo-container img {
     height: 90%;
     width: 90%;
 }

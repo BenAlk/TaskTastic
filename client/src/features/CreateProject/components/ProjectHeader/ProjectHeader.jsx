@@ -115,7 +115,6 @@ const ProjectHeader = ({handleSubmit}) => {
                 <input type="text" className="new-project-created-date-input" id="newProjectCreatedDate" value={projectData.createdDate} disabled />
             </div>
             <div className="submit-project" onClick={onClickSubmit}>Submit</div>
-            {/* <button type="submit" className="new-project-submit-button">Submit</button> */}
         </div>
     )
 }

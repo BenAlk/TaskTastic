@@ -24,7 +24,7 @@ const QuickDm = ({ project, userId }) => {
                 <h3>Unread Direct Messages</h3>
             </div>
             {userMessages.map((message, index) => {
-                const senderName= project.team?.members?.find(member => member.id === message.from)?.name
+                const senderName= project.team?.find(member => member.id === message.from)?.name
                 return (
                     <div key={index} className="dm-message-container">
                         <div className="dm-message-container-left">

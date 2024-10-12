@@ -5,6 +5,7 @@ import "./styles/TeamMemberInfo.css"
 import { getContrastTextColor } from '../../utils/getContrastTextColor'
 import { ProjectContext } from '../../ProjectContext'
 import { TrashIcon } from '../../../../assets/icons'
+
 const TeamMemberInfo = React.memo(({ member }) => {
     const { handleToggleAdmin, handleDeleteMember, projectData } = useContext(ProjectContext)
     const [confirmDelete, setConfirmDelete] = useState(false)
@@ -12,7 +13,8 @@ const TeamMemberInfo = React.memo(({ member }) => {
 
     const textColor = getContrastTextColor(`${member.color}`)
 
-    const confirmDeletion = () => {
+    const confirmDeletion = (e) => {
+        e.preventDefault()
         !confirmDelete ? setConfirmDelete(true) : null
     }
 
@@ -27,7 +29,7 @@ const TeamMemberInfo = React.memo(({ member }) => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside)
         }
-    })
+    }, [])
 
     const onDeleteMember = () => {
         handleDeleteMember(member.id)
@@ -68,7 +70,7 @@ const TeamMemberInfo = React.memo(({ member }) => {
                 </ChoiceSelector>
             </div>
             <div className="delete-team-member-stage-one">
-                {member.name === projectData.owner ? null : <button onClick={() => confirmDeletion(member.id)}>Delete Team Member</button> }
+                {member.name === projectData.owner ? null : <button onClick={confirmDeletion}>Delete Team Member</button> }
                 {confirmDelete && <div className="delete-team-member-stage-two" onClick={() => onDeleteMember(member.id)}>
                     <TrashIcon />
                 </div>}

@@ -52,6 +52,21 @@
     gap: 1.5rem;
     padding: 1.5rem;
     border-left: 1px solid var(--primary-color);
+    position: relative;
+}
+
+.new-project-team-member-information .team-warning {
+    position: absolute;
+    top: -0.05rem;
+    border-radius: 0 19px 0 0;
+    background-color: var(--primary-color);
+    width: 100%;
+    font-size: 0.8rem;
+    color: #fff000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.1rem;
 }
 
 .new-project-team-member-tile {

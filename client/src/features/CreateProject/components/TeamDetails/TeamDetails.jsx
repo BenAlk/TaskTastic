@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { NewTeamMemberTile, TeamMember } from '../NewTeamMemberTile/NewTeamMemberTile'
 import TeamMemberInfo from '../TeamMemberInfo/TeamMemberInfo'
 import { ProjectContext } from '../../ProjectContext'
+import { WarningIcon } from "../../../../assets/icons"
 import "./styles/TeamDetails.css"
 
 const TeamDetails = ({ onAddTeamMember }) => {
@@ -34,6 +35,7 @@ const TeamDetails = ({ onAddTeamMember }) => {
                     <NewTeamMemberTile onAddTeamMember={onAddTeamMember} />
                 </div>
                 <div className="new-project-team-member-information">
+                {projectData.team.length < 2 && <div className="team-warning"><WarningIcon />You have not added anyone to your team</div>}
                     {displayedMember && (
                         <TeamMemberInfo
                             key={`${displayedMember.id}-${displayedMember.admin}`}

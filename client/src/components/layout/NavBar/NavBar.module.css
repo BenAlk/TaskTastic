@@ -1,0 +1,114 @@
+.navbar-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--primary-color);
+    color: var(--white);
+    width: 12rem;
+    border-radius: 10px 0 0 10px;
+    padding-top: 1.7rem;
+    margin: 0 0 0 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/*-------- title --------*/
+
+.title-link {
+    text-decoration: none;
+    color: yellow;
+    padding-top: 0.4rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    transition-delay: 0s;
+    user-select: none;
+}
+
+/*--------- user --------*/
+
+.navbar-head {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    max-height: 10rem;
+    margin-top: 1rem;
+}
+
+.user-icon {
+    width: 100px;
+    height: 100px;
+    color: var(--secondary-color);
+}
+
+.user-name {
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+    padding-top: 1rem;
+    user-select: none;
+}
+
+.user-position {
+    font-size: 0.8rem;
+    color: var(--tertiary-color);
+    padding-top: 1rem;
+    user-select: none;
+}
+
+/*--------- navigation links --------*/
+
+a {
+    text-decoration: none;
+}
+
+.navbar-links {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 2rem;
+    padding-top: 5rem;
+    padding-left: 1rem;
+    top: 16rem;
+    left: 1.4rem;
+    transition: transform 0.5s ease-in-out;
+}
+
+.navbar-link-container {
+    color: var(--tertiary-color);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    width: 160px;
+    height: 25px;
+}
+
+.navbar-link-container:hover .nav-link-icon{
+    color: var(--primary-alternate);
+}
+
+.navbar-link-container h2 {
+    transition: visibility 2s ease-in-out, opacity 1s ease-out;
+    padding-top: 3px;
+    user-select: none;
+}
+
+.active-link{
+    color: var(--secondary-color);
+    border-right: 2px solid var(--secondary-color);
+}
+
+.navbar-link-container:hover{
+    color: yellow;
+    border-right: 2px solid yellow;
+}
+
+.nav-link-icon {
+    height: 20px;
+    width: 20px;
+}

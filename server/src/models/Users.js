@@ -1,31 +1,34 @@
 import mongoose from 'mongoose'
 
 const UserSchema = new mongoose.Schema({
-    username: {
+    email: {
         type: String,
-        required: true
+        required: true,
+        unique: true 
     },
-    // firstName: {
-    //     type: String,
-    //     required: true
-    // },
-    // lastName: {
-    //     type: String,
-    //     required: true
-    // },
-    // email: {
-    //     type: String,
-    //     required: true,
-    //     unique: true
-    // },
+    firstName: {
+        type: String,
+        default: ''
+    },
+    lastName: {
+        type: String,
+        default: ''
+    },
     password: {
         type: String,
         required: true
+    },
+    avatar: {
+        type: String,
+        default: '',
+        validate: {
+            validator: function(v) {
+                if(!v) return true;
+                return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(v)
+            },
+            message: props => `${props.value} is not a valid URL`
+        }
     }
-    // teams: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Team'
-    // }]
-})
+}, {timestamps: true})
 
 export const UserModel = mongoose.model('users', UserSchema)

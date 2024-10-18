@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 
 import { userRouter } from './routes/users.js'
-
+import { projectRouter } from './routes/projects.js'
 dotenv.config({ path: '.env.local' })
 
 const MONGO_DB_PASSWORD = process.env.MONGO_DB_PASSWORD
@@ -14,6 +14,7 @@ app.use(express.json())
 app.use(cors())
 
 app.use("/auth", userRouter)
+app.use("/projects", projectRouter)
 
 mongoose.connect(
     `mongodb+srv://benalkureishi:${MONGO_DB_PASSWORD}@tasktastic.qyi3u.mongodb.net/tasktastic?retryWrites=true&w=majority`,

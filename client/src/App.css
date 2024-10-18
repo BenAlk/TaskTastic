@@ -45,65 +45,57 @@ table {
 
 :root {
     --primary-color: #071731;
-    --secondary-color: #ffffff;
-    --tertiary-color: rgb(238, 237, 237);
-
-    --primary-alternate: #159BFF;
+    --secondary-color: #159BFF;
+    --tertiary-color: lightgray;
+    interpolate-size: allow-keywords;
 
 }
+
 * {
     box-sizing: border-box;
     font-family: 'Inter', sans-serif;
 }
 
-.main-container {
-	border-radius: 0 0 10px 0;
-	background-color: var(--tertiary-color);
-	margin-left: 208px;
-	width: calc(100vw - 225px);
-	height: calc(100vh - 151px);
-	transition: all 0.5s ease-in-out;
-	z-index: 1;
-	border-right: 1px solid var(--primary-color);
-	border-bottom: 1px solid var(--primary-color);
-	position: relative;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-	overflow-y:auto;
-	overflow-x:hidden
+
+@property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
 }
 
-.main-container.slide {
-	margin-left: 79px;
-	width: calc(100vw - 96px);
-    transition: all 0.5s ease-in-out;
+.btn {
+    position: relative;
+    text-decoration: none;
+    text-align: center;
+    width: 6rem;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    border: 1px solid white;
+    cursor: pointer;
 }
 
-/* ------------ Slim Scroll Bars ------------ */
+.btn::before {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: -1;
+    margin: -3px;
+    border-radius: 6px;
+}
 
-.slim-scroll {
-	/* Enable custom scrollbar */
-	overflow-y: auto;
+.btn:hover::before {
+    background-image: conic-gradient(from var(--angle), yellow, transparent, yellow);
+    animation: 1.5s spin linear infinite;
+}
 
-	/* Webkit-based browsers (Chrome, Safari, newer Edge) */
-	&::-webkit-scrollbar {
-	  width: 2px;  /* width of the entire scrollbar */
-	}
-
-	&::-webkit-scrollbar-track {
-	  background: #f1f1f1;  /* color of the tracking area */
-	  border-radius: 10px;
-	}
-
-	&::-webkit-scrollbar-thumb {
-	  background: #888;  /* color of the scroll thumb */
-	  border-radius: 5px;  /* roundness of the scroll thumb */
-	}
-
-	&::-webkit-scrollbar-thumb:hover {
-	  background: #555;  /* color of the scroll thumb on hover */
-	}
-
-	/* For Firefox */
-	scrollbar-width: thin;
-	scrollbar-color: var(--primary-color) #f1f1f1;
-  }
+@keyframes spin {
+    from {
+        --angle: 0deg;
+        transform: rotate(var(--angle));
+    }
+    to {
+        --angle: 360deg;
+    }
+}

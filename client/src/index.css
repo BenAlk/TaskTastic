@@ -1,5 +1,5 @@
 html {
-    background: gray;
+    background: var(--primary-color);
 }
 
 body {

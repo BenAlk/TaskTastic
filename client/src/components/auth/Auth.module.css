@@ -1,0 +1,141 @@
+.main-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20rem;
+    color: white;
+}
+
+.logo-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.tasktastic-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    border: 1px solid white;
+    box-shadow: inset 0 0 3px 1px white;
+}
+
+.tasktastic-logo img {
+    width: 60px;
+    height: 60px;
+    border-radius: 20%;
+}
+
+.tasktastic-title {
+    font-size: 3rem;
+    color: yellow;
+    padding-left: 7rem;
+    position: absolute;
+    bottom: -10%;
+    right: 1%;
+}
+
+.error {
+    position: absolute;
+    top: -20%;
+    color: red;
+    border: 1px solid red;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.auth-container {
+    box-shadow: inset 0 0 3px 1px white;
+    border: 1px solid white;
+    border-radius: 10px;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1rem;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.form-group{
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.form-group input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: inherit;
+    background: white;
+    accent-color: yellow;
+    margin: 0.2rem 0;
+    color: var(--primary-color);
+    width: 15rem;
+}
+
+.form-group input.input-error {
+    background-color: #fff0f0;
+    border: 2px solid red;
+}
+
+.email:focus ~ .email-label,
+.password:focus ~ .password-label,
+.confirm-password:focus ~ .confirm-password-label {
+    color: yellow;
+}
+
+.form-input:-webkit-autofill,
+.form-input:-webkit-autofill:hover,
+.form-input:-webkit-autofill:focus,
+.form-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: inherit !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* For other browsers */
+.form-input:autofill,
+.form-input:autofill:hover,
+.form-input:autofill:focus,
+.form-input:autofill:active {
+  box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: inherit !important;
+}
+
+
+.login-link {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.login-link a {
+    text-decoration: none;
+    color: var(--secondary-color);
+}
+
+.login-link a:hover {
+    color: yellow;
+}

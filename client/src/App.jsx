@@ -1,21 +1,18 @@
 import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Layout from './pages/Layout/index'
-import Dashboard from './features/Dashboard/index'
-import CreateProject from './features/CreateProject/index';
-import { ProjectProvider } from "./features/CreateProject/ProjectContext";
+import {BrowserRouter as Router } from "react-router-dom"
+import { AuthProvider } from "./context/AuthContext"
+// import { ProjectProvider } from "./context/ProjectContext"
+import AppRoutes from "./routes/Routes"
+
 function App() {
     return (
-        <div className="App">
         <Router>
-            <Routes>
-            <Route path="/" element={<Layout />}>
-                <Route index element={<Dashboard />} />
-                <Route path="/NewProject" element={<ProjectProvider><CreateProject /></ProjectProvider>} />
-                </Route>
-            </Routes>
+            <AuthProvider>
+                <div className="App">
+                    <AppRoutes />
+                </div>
+            </AuthProvider>
         </Router>
-        </div>
     );
 }
 

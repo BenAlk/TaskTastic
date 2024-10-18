@@ -9,6 +9,7 @@
     width: 100%;
     overflow: hidden;
     transition: all 0.3s ease;
+
 }
 
 .dashboard-project-selector.no-projects {
@@ -182,7 +183,7 @@
 }
 
 .create-new-project-button {
-    background-color: rgb(8, 175, 8);
+
 }
 
 .edit-current-project-button {

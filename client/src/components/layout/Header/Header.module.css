@@ -1,0 +1,31 @@
+.header-container {
+    height: 9rem;
+    min-height: 6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+    background-color: var(--primary-color);
+    width: 100%;
+}
+
+.welcome-container {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    font-size: 1.4rem;
+    color: white;
+    font-weight: 700;
+    padding-top: 2.2rem;
+    padding-left: 2rem;
+}
+
+.complete-profile-link {
+    padding-left: 0.5rem;
+    text-decoration: none;
+    color: var(--secondary-color);
+}
+
+.project-selector {
+    align-self: flex-end;
+}

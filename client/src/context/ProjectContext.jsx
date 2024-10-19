@@ -54,6 +54,7 @@ export const ProjectProvider = ({ children }) => {
             const project = await projectService.fetchProject(projectId)
             setCurrentProject(project)
             setProjectData(project)
+            console.log(project)
         } catch(error) {
             console.error('Error setting project:', error)
             setErrors(prevErrors => ({ ...prevErrors, setProject: 'Failed to set project' }))

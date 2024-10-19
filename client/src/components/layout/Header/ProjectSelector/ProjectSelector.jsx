@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { ArrowIcon, EditIcon, CreateIcon, TrashIcon } from '../../../../assets/icons'
+import { DownArrowIcon, EditIcon, CreateIcon, TrashIcon } from '../../../../assets/icons'
 import styles from "./ProjectSelector.module.css"
 import { useProjectContext } from "../../../../context/ProjectContext"
 import { useAuth } from "../../../../context/AuthContext"
@@ -23,8 +23,6 @@ const ProjectSelector = () => {
         createNewProject,
     } = useProjectContext()
 
-    const { currentUser } = useAuth()
-
     const updateArrowVisibility = () => {
         if (containerRef.current) {
             const container = containerRef.current
@@ -34,6 +32,7 @@ const ProjectSelector = () => {
 
     useEffect(() => {
         fetchProjects()
+        console.log(currentProject)
     }, [])
 
     useEffect(() => {
@@ -67,7 +66,7 @@ const ProjectSelector = () => {
 
     const handleProjectClick = (project) => {
         setProject(project._id)
-        if(location.pathname === "/NewProject") {
+        if(location.pathname === "/create-project") {
             navigate("/")
         }
     }
@@ -115,6 +114,7 @@ const ProjectSelector = () => {
 
     return (
         <div className={styles['dashboard-project-selector']}>
+            <div className={styles['dashboard-project-selector-label']}>Select a project</div>
             {showArrows && (
                 <button onClick={() => handleScroll('prev')} className={styles['arrow-button']}>
                     <ArrowIcon />
@@ -127,13 +127,7 @@ const ProjectSelector = () => {
                         className={`${styles['project-item']} ${currentProject?._id === project._id ? styles['active'] : ''}`}
                         onClick={() => handleProjectClick(project)}
                     >
-                        {project.Projectname}
-                        <div className={styles['project-actions']}>
-                            <Link to={`/EditProject/${project._id}`}>
-                                <EditIcon />
-                            </Link>
-                            <TrashIcon onClick={() => {/* Add delete functionality */}} />
-                        </div>
+                        {project.projectName}
                     </div>
                 ))}
             </div>

@@ -1,14 +1,12 @@
 .dashboard-project-selector {
-    display: flex;
-    justify-content: start;
-    align-items: center;
     height: 2rem;
-    background-color: white;
-    position: relative;
-    border-right: 2px solid var(--primary-color);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: var(--tertiary-color);
     width: 100%;
-    overflow: hidden;
-    transition: all 0.3s ease;
+    border-bottom: 1px solid var(--primary-color);
+
 }
 
 .dashboard-project-selector-no-projects {
@@ -41,4 +39,25 @@
     height: 1.7rem;
     width: 3rem;
     background-color: green;
+}
+
+.project-list-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.project-item {
+    width: 300px;
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    padding: 0.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.project-item:hover {
 }

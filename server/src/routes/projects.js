@@ -48,8 +48,10 @@ router.post("/newProject", verifyToken, async (req, res) => {
     router.get("/", verifyToken, async (req, res) => {
         try {
             const userId = req.userId
-            const projects = await ProjectModel.find({'team.user': req.userId})
+            const projects = await ProjectModel.find({'team.user': userId})
+            console.log(projects)
             return res.json(projects)
+
         } catch(error) {
             return res.status(500).json({message: "Error fetching projects", error: error.message})
         }

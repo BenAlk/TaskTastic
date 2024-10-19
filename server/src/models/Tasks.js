@@ -19,9 +19,10 @@ const TaskSchema = new mongoose.Schema({
     kanbanColumn: String,
     eisenhowerQuadrent: {
         type: String,
-        enum['urgent-important, not-urgent-important, urgent-not-important, not-urgent-not-important'],
+        enum:['urgent-important, not-urgent-important, urgent-not-important, not-urgent-not-important'],
     },
     dueDate: Date,
+    completedDate: Date,
     risk: {
         isAtRisk: {
             type: Boolean,

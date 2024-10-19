@@ -24,7 +24,7 @@ export const EnvelopeIcon = ({ width = "20px", height = "20px", color = "current
 
 EnvelopeIcon.propTypes = commonPropTypes
 
-export const ArrowIcon = ({ width = "30px", height = "30px", fill = "currentColor", className = ""}) => {
+export const DownArrowIcon = ({ width = "30px", height = "30px", fill = "currentColor", className = ""}) => {
     return (
     <svg fill={fill} height={height} width={width} className={className} version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 330" xmlSpace="preserve">
         <path d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393
@@ -34,7 +34,23 @@ export const ArrowIcon = ({ width = "30px", height = "30px", fill = "currentColo
 );
 }
 
-ArrowIcon.propTypes = commonPropTypes
+DownArrowIcon.propTypes = commonPropTypes
+
+export const LeftArrowIcon = ({ width = "30px", height = "30px", fill = "currentColor", className = ""}) => {
+    return (
+        <svg width={width} height={height} viewBox="0 0 1024 1024" className={className}  version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M768 903.232l-50.432 56.768L256 512l461.568-448 50.432 56.768L364.928 512z" fill={fill} /></svg>
+);
+}
+
+LeftArrowIcon.propTypes = commonPropTypes
+
+export const RightArrowIcon = ({ width = "30px", height = "30px", fill = "currentColor", className = ""}) => {
+    return (
+        <svg width={width} height={height} viewBox="0 0 1024 1024" className={className} version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill={fill} /></svg>
+);
+}
+
+RightArrowIcon.propTypes = commonPropTypes
 
 export const SearchIcon = ({ width = "25px", height = "25px", color = "currentColor", className = "" }) => {
     return(

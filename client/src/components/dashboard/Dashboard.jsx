@@ -7,7 +7,7 @@ import { useProjectContext } from "../../context/ProjectContext"
 
 
 export const Dashboard = () => {
-
+console.log("rendering dashboard")
     const { currentProject } = useProjectContext();
     console.log("currentproject : : : ", currentProject)
     return (

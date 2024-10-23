@@ -21,11 +21,14 @@ export const ProjectProvider = ({ children }) => {
     const { currentUser, authError } = useAuth();
     const projectService = useProjectService()
 
+    console.log('ProjectProvider rendering');
+
     useEffect(() => {
         console.log(errors)
     },[errors])
 
     const fetchProjects = useCallback(async () => {
+        console.log('fetchProjects called');
         if (!currentUser || authError) {
             setProjectList([]);
             setErrors(prevErrors => ({ ...prevErrors, fetch: 'User not authenticated' }));
@@ -198,9 +201,7 @@ export const ProjectProvider = ({ children }) => {
         }));
     };
 
-    useEffect(() => {
-        fetchProjects()
-    }, [])
+
 
     const value = {
         projectData,

@@ -25,6 +25,9 @@ const ProjectSlider = () => {
         createNewProject,
     } = useProjectContext()
 
+    useEffect(() => {
+        fetchProjects()                                         // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const handleProjectClick = (project) => {
         setProject(project._id)
@@ -39,7 +42,7 @@ const ProjectSlider = () => {
         if (activeProject) {
             setProject(activeProject._id)
             scrollToProject(activeProject._id)
-        }
+        }                                                       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location])
 
     const handleCreateNewProject = async () => {

@@ -66,6 +66,7 @@ export const AuthProvider = ({ children }) => {
         if (token) {
             try {
                 const response = await api.get('/auth/me');
+                console.log(response.data)
                 setCurrentUser(response.data);
             } catch (error) {
                 console.error('Error verifying token:', error);
@@ -90,16 +91,31 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         try {
             const response = await api.post('/auth/login', { email, password });
-            if (response.data.token) {
+            if (response.data.token  && response.data.userID) {
                 localStorage.setItem('token', response.data.token);
-                setCurrentUser(response.data.user);
-                setAuthError(null);
-                return { success: true };
+                try {
+                    const userResponse = await api.get('auth/me')
+                    if(userResponse.data) {
+                        setCurrentUser(userResponse.data);
+                        console.log(userResponse.data)
+                        setAuthError(null);
+                        return { success: true };
+                    } else {
+                        throw new Error('No user data received')
+                    }
+                } catch (userError) {
+                    console.error('Error fetching user data:', userError)
+                    localStorage.removeItem('token');
+                    throw new Error('Fales to get user data after login')
+                }
+            } else {
+                throw new Error('Invalid login response structure')
             }
         } catch (error) {
-            console.error('Login error:', error);
-            setAuthError('Login failed. Please check your credentials.');
-            return { success: false, error: error.response?.data?.message || 'Login failed' };
+                console.error('Login error:', error);
+                setAuthError('Login failed. Please check your credentials.');
+                return { success: false, error: error.response?.data?.message || 'Login failed' };
+
         }
     };
 

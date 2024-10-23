@@ -25,14 +25,33 @@ import Signup from '../components/auth/Signup';
 //Welcome components
 import Welcome from '../components/welcome/Welcome';
 
-const PrivateRoute = ({ children }) => {
-    const { currentUser } = useAuth();
-    return currentUser ? children : <Navigate to="/login" />;
-};
+const PrivateRoute = ({children}) => {
+    const { currentUser, loading } = useAuth()
 
-PrivateRoute.propTypes = {
-    children: PropTypes.node.isRequired,
-};
+    if(loading) {
+        return <div>Loading...</div>
+    }
+
+    if(!currentUser) {
+        return <Navigate to="/login" />
+    }
+
+    return children
+}
+
+const PublicRoute = ({ children }) => {
+    const { currentUser, loading } = useAuth();
+
+    if(loading) {
+        return <div>Loading...</div>
+    }
+
+    if(currentUser) {
+        return <Navigate to="/dashboard" />
+    }
+
+    return children
+}
 
 const ProtectedRoutes = () => (
     <ProjectProvider>
@@ -45,13 +64,24 @@ const ProtectedRoutes = () => (
 );
 
 const AppRoutes = () => {
-    const { currentUser } = useAuth();
     return (
 
             <Routes>
-                <Route path="/" element={currentUser ? <Navigate to="/dashboard" /> : <Welcome />} />
-                <Route path="/login" element={currentUser ? <Navigate to="/dashboard" /> : <Login />} />
-                <Route path="/signup" element={currentUser ? <Navigate to="/dashboard" /> : <Signup />} />
+                <Route path="/" element={
+                    <PublicRoute>
+                        <Welcome />
+                    </PublicRoute>
+                } />
+                <Route path="/login" element={
+                    <PublicRoute>
+                        <Login />
+                    </PublicRoute>
+                } />
+                <Route path="/signup" element={
+                    <PublicRoute>
+                        <Signup />
+                    </PublicRoute>
+                } />
 
                 {/* Protected routes */}
                     <Route element={<ProtectedRoutes />}>
@@ -66,8 +96,18 @@ const AppRoutes = () => {
                         <Route path="/achievements" element={<AchievementsPage />} />
                         <Route path="/settings" element={<SettingsPage />} />
                     </Route>
+
+                    <Route path="*" element={<Navigate to="/" />} />
             </Routes>
 );
+}
+
+PrivateRoute.propTypes = {
+    children: PropTypes.node.isRequired
+}
+
+PublicRoute.propTypes = {
+    children: PropTypes.node.isRequired
 }
 
 export default AppRoutes

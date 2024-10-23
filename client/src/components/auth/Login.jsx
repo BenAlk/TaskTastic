@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import styles from "./Auth.module.css"
@@ -10,8 +10,15 @@ const Login = () => {
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
     const [errorFields, setErrorFields] = useState([]);
+    const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { login, currentUser } = useAuth();
+
+    useEffect(() => {
+        if (currentUser) {
+            navigate('/dashboard');
+        }
+    }, [currentUser, navigate]);
 
     const isValidEmail = (email) => {
         // This regex pattern checks for a basic email format
@@ -24,6 +31,7 @@ const Login = () => {
         setError('');
         setMessage('');
         setErrorFields
+        setIsLoading(true)
 
         const newErrorFields = [];
 
@@ -33,6 +41,7 @@ const Login = () => {
             setError("Please enter a valid email address");
             newErrorFields.push('email');
             setErrorFields(newErrorFields);
+            setIsLoading(false)
             return;
         }
 
@@ -41,6 +50,7 @@ const Login = () => {
         if (newErrorFields.length > 0) {
             setError("Please fill in all fields");
             setErrorFields(newErrorFields);
+            setIsLoading(false)
             return;
         }
 
@@ -48,12 +58,13 @@ const Login = () => {
             const result = await login(email, password)
             if(result.success){
                 setMessage('Login successful, Redirecting to dashboard ...')
-                navigate('/dashboard')
             }
         } catch (err) {
             console.error('Login error:', err)
             setError(err.message || 'An unexpected error occurred during login')
-        };
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
@@ -89,7 +100,7 @@ const Login = () => {
             />
             <label className={styles['password-label']} htmlFor="password">Password</label>
             </div>
-            <button type="submit" className="btn">Log In</button>
+            <button type="submit" className="btn">{isLoading ? 'Logging in...' : 'Log In'}</button>
         </form>
         </div>
         <p className={styles['login-link']}>

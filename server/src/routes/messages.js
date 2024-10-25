@@ -30,21 +30,46 @@ const router = express.Router()
     })
 
 
-    // Retrieve all messages for a project (board messages)
-    router.get("/:project/:projectId", verifyToken, async (req, res) => {
+    // // Retrieve all messages for a project (board messages)
+    // router.get("/board/:projectId", verifyToken, async (req, res) => {
+    //     try {
+    //         const project = await ProjectModel.findOne({ _id: req.params.projectId, 'team_user': req.userId })
+    //         if (!project) {
+    //             return res.status(404).json({ message: "Project not found or access denied" })
+    //         }
+    //         const messages = await MessageModel.find({ projectId: req.params.projectId, type: 'board' })
+    //             .sort('-createdAt')
+    //             .populate('sender', 'email')
+    //         res.json(messages)
+    //     } catch (error) {
+    //         res.status(500).json({ message: "Error fetching messages", error: error.message })
+    //     }
+    // })
+
+    router.get("/board/:projectId", verifyToken, async (req, res) => {
         try {
-            const project = await ProjectModel.findOne({ _id: req.params.projectId, team_user: req.userId })
+            const project = await ProjectModel.findOne({ _id: req.params.projectId, 'team.user': req.userId });
             if (!project) {
-                return res.status(404).json({ message: "Project not found or access denied" })
+                const projectExists = await ProjectModel.findById(req.params.projectId);
+                if (!projectExists) {
+                    console.log('Project does not exist');
+                    return res.status(404).json({ message: "Project not found" });
+                }
+                return res.status(403).json({ message: "Access denied" });
             }
-            const messages = await MessageModel.find({ projectId: req.params.projectId, type: 'board' })
-                .sort('-createdAt')
-                .populate('sender', 'email')
-            res.json(messages)
+            const messages = await MessageModel.find({
+                projectId: req.params.projectId,
+                type: 'board'
+            })
+            .sort('-createdAt')
+            .populate('sender', 'email firstName lastName');
+            res.json(messages);
         } catch (error) {
-            res.status(500).json({ message: "Error fetching messages", error: error.message })
+            console.error("Error fetching board messages:", error);
+            res.status(500).json({ message: "Error fetching messages", error: error.message });
         }
-    })
+    });
+
 
     // Retrieve all messages for a user (direct messages)
     router.get("/direct/:projectId", verifyToken, async (req, res) => {
@@ -101,5 +126,50 @@ const router = express.Router()
             res.status(500).json({ message: "Error deleting message", error: error.message })
         }
 })
+
+// router.get("/search", verifyToken, async (req, res) => {
+//     try {
+//         const { projectId, userId } = req.query;
+
+//         if (!projectId) {
+//             return res.status(400).json({ message: "Project ID is required" });
+//         }
+
+//         // Check project access
+//         const project = await ProjectModel.findOne({
+//             _id: projectId,
+//             'team.user': req.userId
+//         });
+
+//         if (!project) {
+//             return res.status(404).json({ message: "Project not found or access denied" });
+//         }
+
+//         // Build query
+//         const query = {
+//             projectId,
+//             $or: [
+//                 { type: 'board' },
+//                 {
+//                     type: 'direct',
+//                     $or: [
+//                         { sender: userId || req.userId },
+//                         { recipients: userId || req.userId }
+//                     ]
+//                 }
+//             ]
+//         };
+
+//         const messages = await MessageModel.find(query)
+//             .sort('-createdAt')
+//             .populate('sender', 'email firstName lastName avatar')
+//             .populate('recipients', 'email firstName lastName avatar');
+
+//         res.json(messages);
+//     } catch (error) {
+//         console.error("Error searching messages:", error);
+//         res.status(500).json({ message: "Error searching messages", error: error.message });
+//     }
+// });
 
 export { router as messageRouter }

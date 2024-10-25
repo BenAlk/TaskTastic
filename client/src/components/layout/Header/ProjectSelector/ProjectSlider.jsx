@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
-import { NavLink, useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { LeftArrowIcon, RightArrowIcon, CreateIcon, EditIcon, TrashIcon } from '../../../../assets/icons'
 import styles from "./ProjectSlider.module.css"
 import { useProjectContext } from "../../../../context/ProjectContext"
-import { useAuth } from "../../../../context/AuthContext"
 
 
 const ProjectSlider = () => {

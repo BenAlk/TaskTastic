@@ -1,26 +1,25 @@
-import { useMemo } from 'react'
-import PropTypes from "prop-types"
-import "./styles/ActivityTile.css"
-import { ComposedChart, Bar, XAxis, YAxis, Line, CartesianGrid, Tooltip, ResponsiveContainer, Area } from 'recharts'
-import getProjectTeamTaskStats from '../../../../utils/getProjectTeamTaskStats'
+import PropTypes from "prop-types";
+import { ComposedChart, Bar, XAxis, YAxis, Line, CartesianGrid, Tooltip, ResponsiveContainer, Area } from 'recharts';
+import useKanbanStats from "../../../utils/useKanbanStats"
+import { useProjectContext } from "../../../context/ProjectContext"
 
-    const ActivityTile = ({ project, height, width }) => {
-        const chartData = useMemo(() => {
-            return getProjectTeamTaskStats(project);
-        }, [project]);
+const TaskSection = ({ height, width}) => {
+    const { currentProject } = useProjectContext()
+    const { columnStats, loading, error, refreshStats } = useKanbanStats(currentProject)
 
-
+    if (loading) return <div>Loading...</div>
+    if (error) return <div>Error: {error}</div>
 
     return (
         <ResponsiveContainer height={height} width={width}>
             <h2 className="tile-title">Team Activity</h2>
             <ComposedChart
-                data={chartData}
+                data={columnStats}
                 margin={{
-                    top: 25,
+                    top: 0,
                     right: 50,
                     left: -20,
-                    bottom: -40,
+                    bottom: -20,
                 }}
                 >
                 <CartesianGrid strokeDasharray="3 3" />
@@ -60,17 +59,9 @@ import getProjectTeamTaskStats from '../../../../utils/getProjectTeamTaskStats'
     )
 }
 
-ActivityTile.propTypes = {
-    project: PropTypes.shape({
-        projectName: PropTypes.string.isRequired,
-        team: PropTypes.arrayOf(PropTypes.shape({
-                name: PropTypes.string.isRequired,
-                role: PropTypes.string.isRequired,
-            })).isRequired,
+export default TaskSection
 
-    }),
+TaskSection.propTypes = {
     height: PropTypes.string,
     width: PropTypes.string
-    }
-
-export default ActivityTile
+}

@@ -24,7 +24,6 @@ const TaskTile = ({ project, height, width }) => {
 
         return (
         <ResponsiveContainer height={height} width={width}>
-            <h2 className="tile-title">Task Progress</h2>
             <BarChart
             data={chartData}
                 margin={{

@@ -94,33 +94,4 @@ const TimelineSection = () => {
     )
 }
 
-TimelineSection.propTypes = {
-    project: PropTypes.shape({
-        projectName: PropTypes.string.isRequired,
-        startDate: PropTypes.string.isRequired,
-        targetDate: PropTypes.string.isRequired,
-        tasks: PropTypes.arrayOf(PropTypes.shape({
-            id: PropTypes.number,
-            name: PropTypes.string,
-            completedDate: PropTypes.string,
-
-        })),
-        team: PropTypes.arrayOf(PropTypes.shape({
-                id: PropTypes.number,
-                role: PropTypes.string
-            })),
-        risks: PropTypes.arrayOf(PropTypes.shape({
-            riskLevel: PropTypes.string.isRequired,
-            riskFactors: PropTypes.shape({
-                timeline: PropTypes.number.isRequired,
-                budget: PropTypes.number.isRequired,
-                dependencies: PropTypes.number.isRequired,
-                resources: PropTypes.number.isRequired,
-                complexity: PropTypes.number.isRequired,
-                total: PropTypes.number.isRequired
-            })
-        }))
-    })
-};
-
 export default TimelineSection

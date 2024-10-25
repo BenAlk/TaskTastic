@@ -11,7 +11,7 @@ const MessageSchema = new mongoose.Schema({
         ref: 'Users',
         required: true
     },
-    recipient: [{
+    recipients: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users',
         required: true
@@ -25,7 +25,6 @@ const MessageSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    timestamp: Date,
     read: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users',

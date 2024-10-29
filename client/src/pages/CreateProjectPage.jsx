@@ -1,7 +1,8 @@
+import CreateProject from '../components/create/CreateProject'
 
 const CreateProjectPage = () => {
     return (
-        <div>test</div>
+        <CreateProject />
     );
 };
 

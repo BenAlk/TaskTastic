@@ -7,9 +7,9 @@ export const createInitialProjectData = () => ({
     secondaryAdminsAllowed: false,
     eisenhowerEnabled: false,
     kanbanColumns: [
-        { name: "To Do", order: 0 },
-        { name: "In Progress", order: 1 },
-        { name: "Done", order: 2 },
+        { name: 'To Do', color: '#E2E8F0', maxDays: 0, maxTasks: 0, order: 0 },
+        { name: 'In Progress', color: '#93C5FD', maxDays: 5, maxTasks: 5, order: 1 },
+        { name: 'Done', color: '#86EFAC', maxDays: 0, maxTasks: 0, order: 2 },
     ]
 })
 

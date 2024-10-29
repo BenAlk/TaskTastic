@@ -43,7 +43,10 @@ const ProjectSchema = new mongoose.Schema({
     }],
     kanbanColumns: [{
         name:String,
-        order: Number
+        color: String,
+        maxDays: Number,
+        maxTasks: Number,
+        order: Number,
     }]
 }, {timestamps: true})
 

@@ -7,10 +7,9 @@
     padding: 1rem;
     background-color: var(--primary-color);
     color: var(--white);
-    width: 12rem;
+    width: 100%;
     border-radius: 10px 0 0 10px;
     padding-top: 1.7rem;
-    margin: 0 0 0 1rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 

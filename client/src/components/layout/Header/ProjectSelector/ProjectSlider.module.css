@@ -104,8 +104,12 @@
     white-space: nowrap;
     cursor: pointer;
     transition: background-color 1s ease;
+    border: 1px solid transparent;
 }
 
+.project-selector:hover {
+    border: 1px solid yellow;
+}
 
 .project-selector.active {
     color: var(--primary-color);
@@ -140,11 +144,10 @@
 .create-new-project-button:hover,
 .edit-current-project-button:hover,
 .delete-current-project-button:hover {
-    width: 6rem;
+    width: 3rem;
     height: 2rem;
     border-radius: 100px;
     transition: all 0.75s ease-in-out;
-    border: 1px solid yellow;
 }
 
 .create-new-project-button {

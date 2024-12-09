@@ -1,6 +1,6 @@
 .layout {
     display: grid;
-    grid-template-columns: 12.5% 1fr;
+    grid-template-columns: 12.5% auto;
 }
 
 .main-content {

@@ -9,6 +9,7 @@ const TaskSection = ({ height, width}) => {
 
     if (loading) return <div>Loading...</div>
     if (error) return <div>Error: {error}</div>
+    if (columnStats.length === 0) return <div>No tasks to display.</div>
 
     return (
         <ResponsiveContainer height={height} width={width}>

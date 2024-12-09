@@ -78,7 +78,7 @@ const QuickBoard = () => {
 
     if (loading) return <div>Loading...</div>
     if (error) return <div>Error: {error}</div>
-    if (!messages?.length) return <div>No board messages to display.</div>
+    if (!messages?.length) return <div className={styles['empty-messages']}>No board messages to display.</div>
 
     const sortedMessages = [...messages].sort((a, b) =>
         new Date(b.createdAt || b.timestamp) - new Date(a.createdAt || a.timestamp)

@@ -8,7 +8,6 @@ import Layout from '../components/layout/Layout';
 
 // Page components
 import DashboardPage from '../pages/DashboardPage';
-import CreateProjectPage from '../pages/CreateProjectPage';
 import EditProjectPage from '../pages/EditProjectPage';
 import TeamPage from '../pages/TeamPage';
 import MessagesPage from '../pages/MessagesPage';
@@ -86,7 +85,6 @@ const AppRoutes = () => {
                 {/* Protected routes */}
                     <Route element={<ProtectedRoutes />}>
                         <Route path="/dashboard" element={<DashboardPage />} />
-                        <Route path="/create-project" element={<CreateProjectPage />} />
                         <Route path="/edit-project/:projectId" element={<EditProjectPage />} />
                         <Route path="/team" element={<TeamPage />} />
                         <Route path="/messages" element={<MessagesPage />} />

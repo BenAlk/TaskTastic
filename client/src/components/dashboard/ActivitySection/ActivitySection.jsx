@@ -72,7 +72,7 @@ const ActivitySection = ({ height, width }) => {
 
     if (loading) return <div>Loading...</div>
     if (error) return <div>Error: {error}</div>
-    if (!tasks.length) return <div>No activity to display, add tasks to the project.</div>
+    if (!tasks.length) return <div>No activity to display.</div>
 
 return (
     <ResponsiveContainer height={height} width={width}>

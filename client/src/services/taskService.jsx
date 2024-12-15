@@ -6,11 +6,16 @@ const useTaskService = () => {
     return {
         fetchProjectTasks: async (projectId) => {
             try {
-                const response = await api.get(`/tasks/project/${projectId}`)
-                return response.data
+                const response = await api.get(`/tasks/project/${projectId}`);
+                return response.data;
             } catch (error) {
-                console.error('Error fetching project tasks:', error)
-                throw error
+                // Detailed error logging
+                console.error('🚨 Request failed:', {
+                    status: error.response?.status,
+                    message: error.response?.data?.message,
+                    config: error.config, // This will show what was actually sent
+                });
+                throw error;
             }
         },
         createTask: async (taskData) => {
@@ -37,6 +42,15 @@ const useTaskService = () => {
                 return response.data
             } catch (error) {
                 console.error('Error deleting task:', error)
+                throw error
+            }
+        },
+        updateTaskRisk: async (taskId, riskData) => {
+            try {
+                const response = await api.put(`/tasks/${taskId}/risk`, riskData)
+                return response.data
+            } catch (error) {
+                console.error('Error updating task risk:', error)
                 throw error
             }
         }

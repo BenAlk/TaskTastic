@@ -16,10 +16,13 @@ const TaskSchema = new mongoose.Schema({
         ref: 'Users',
         required: true
     },
-    kanbanColumn: String,
-    eisenhowerQuadrent: {
-        type: String,
-        enum:['urgent-important, not-urgent-important, urgent-not-important, not-urgent-not-important'],
+    kanbanColumnId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
+    eisenhowerStatus: {
+        important: { type: Boolean, default: false },
+        urgent: { type: Boolean, default: false }
     },
     dueDate: Date,
     completedDate: Date,

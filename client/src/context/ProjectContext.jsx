@@ -21,14 +21,7 @@ export const ProjectProvider = ({ children }) => {
     const { currentUser, authError } = useAuth();
     const projectService = useProjectService()
 
-    console.log('ProjectProvider rendering');
-
-    useEffect(() => {
-        console.log(errors)
-    },[errors])
-
     const fetchProjects = useCallback(async () => {
-        console.log('fetchProjects called');
         if (!currentUser || authError) {
             setProjectList([]);
             setErrors(prevErrors => ({ ...prevErrors, fetch: 'User not authenticated' }));
@@ -57,7 +50,6 @@ export const ProjectProvider = ({ children }) => {
             const project = await projectService.fetchProject(projectId)
             setCurrentProject(project)
             setProjectData(project)
-            console.log(project)
         } catch(error) {
             console.error('Error setting project:', error)
             setErrors(prevErrors => ({ ...prevErrors, setProject: 'Failed to set project' }))
@@ -67,24 +59,13 @@ export const ProjectProvider = ({ children }) => {
     const createNewProject = useCallback(async () => {
         try {
             const initialProjectData = createInitialProjectData();
-            console.log('Initial project data:', initialProjectData); // Log the data being sent
             const newProject = await projectService.createProject(initialProjectData);
-            console.log('New project created:', newProject); // Log the response
             setProjectList(prevList => [...prevList, newProject]);
             setCurrentProject(newProject);
             setProjectData(newProject);
             return newProject;
         } catch (error) {
             console.error('Error creating project:', error);
-            if (error.response) {
-                console.error('Error response data:', error.response.data);
-                console.error('Error response status:', error.response.status);
-                console.error('Error response headers:', error.response.headers);
-            } else if (error.request) {
-                console.error('Error request:', error.request);
-            } else {
-                console.error('Error message:', error.message);
-            }
             setErrors(prevErrors => ({ ...prevErrors, create: 'Failed to create project' }));
             return null;
         }

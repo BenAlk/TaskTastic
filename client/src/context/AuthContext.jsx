@@ -66,7 +66,6 @@ export const AuthProvider = ({ children }) => {
         if (token) {
             try {
                 const response = await api.get('/auth/me');
-                console.log(response.data)
                 setCurrentUser(response.data);
             } catch (error) {
                 console.error('Error verifying token:', error);
@@ -97,7 +96,6 @@ export const AuthProvider = ({ children }) => {
                     const userResponse = await api.get('auth/me')
                     if(userResponse.data) {
                         setCurrentUser(userResponse.data);
-                        console.log(userResponse.data)
                         setAuthError(null);
                         return { success: true };
                     } else {

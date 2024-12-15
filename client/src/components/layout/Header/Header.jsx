@@ -1,7 +1,7 @@
 import styles from "./Header.module.css"
 import { Link } from "react-router-dom"
 import {useAuth} from "../../../context/AuthContext"
-import ProjectSlider from "./ProjectSelector/ProjectSlider"
+import ProjectSlider from "./ProjectSlider/ProjectSlider"
 const Header = () => {
     const { currentUser } = useAuth()
 

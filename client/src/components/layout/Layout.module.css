@@ -1,11 +1,13 @@
 .layout {
     display: grid;
     grid-template-columns: 12.5% auto;
+    max-width: 100vw;
 }
 
 .main-content {
     display: flex;
     flex-direction: column;
+    width: 87vw;
 }
 
 .content {

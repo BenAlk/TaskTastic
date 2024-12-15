@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { LeftArrowIcon, RightArrowIcon, CreateIcon, EditIcon, TrashIcon } from '../../../../assets/icons'
 import styles from "./ProjectSlider.module.css"
 import { useProjectContext } from "../../../../context/ProjectContext"
-import CreateProjectModal from '../../../modal/CreateProjectModal'
+import CreateProjectModal from './CreateProjectModal/CreateProjectModal'
 
 const ProjectSlider = () => {
 
@@ -38,6 +38,10 @@ const ProjectSlider = () => {
     }
 
     useEffect(() => {
+        fetchProjects();
+    }, []);
+
+    useEffect(() => {
         const activeProject = location.state?.activeProject
         if (activeProject) {
             setProject(activeProject._id)
@@ -50,8 +54,6 @@ const ProjectSlider = () => {
             const newProject = await createNewProject();
             if (newProject) {
                 setIsModalOpen(true);
-                // Store tempProjectId in case we need to delete it
-                setTempProjectId(newProject._id);
             }
         } catch (error) {
             console.error("Error creating new project:", error);
@@ -149,13 +151,13 @@ const ProjectSlider = () => {
             </div>
             <div className={styles['project-selection-icons']}>
                 <div className={styles['create-new-project-button']} onClick={handleCreateNewProject} title={"Create New Project"}>
-                    <CreateIcon  height={"1.25rem"} width={"1.25rem"} backgroundFill='transparent' className={styles['icon']} />
+                    <CreateIcon  height={"1.25rem"} width={"1.25rem"} backgroundFill='transparent' className={styles['icon']} title={"Create New Project"}/>
                 </div>
                 <div className={styles['edit-current-project-button']} title={"Edit Project"} >
-                    <EditIcon  height={"1.25rem"} width={"1.25rem"} className={styles['icon']} />
+                    <EditIcon  height={"1.25rem"} width={"1.25rem"} className={styles['icon']} title={"Edit Project"}/>
                 </div>
                 <div className={styles['delete-current-project-button']} title={"Delete Project"} >
-                    <TrashIcon  height={"1.25rem"} width={"1.25rem"} className={styles['icon']} />
+                    <TrashIcon  height={"1.25rem"} width={"1.25rem"} className={styles['icon']} title={"Delete Project"}/>
                 </div>
             </div>
             <CreateProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />

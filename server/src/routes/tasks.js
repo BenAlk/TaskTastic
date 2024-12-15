@@ -8,7 +8,7 @@ const router = express.Router()
     //Create a new task
     router.post("/", verifyToken, async (req, res) => {
         try {
-            const { projectId, title, description, assignedTo, kanbanColumn, eisenhowerQuadrent, dueDate } = req.body
+            const { projectId, title, description, assignedTo, kanbanColumnId, eisenhowerStatus, dueDate } = req.body
             const project = await ProjectModel.findOne({ _id: projectId, 'team.user': req.userId })
             if (!project) {
                 return res.status(404).json({ message: "Project not found or access denied" })
@@ -18,8 +18,8 @@ const router = express.Router()
                 title,
                 description,
                 assignedTo,
-                kanbanColumn,
-                eisenhowerQuadrent,
+                kanbanColumnId,
+                eisenhowerStatus,
                 dueDate,
                 createdBy: req.userId
             })

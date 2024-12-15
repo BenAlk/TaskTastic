@@ -4,71 +4,52 @@ import PropTypes from "prop-types"
 import { ComposedChart, Bar, XAxis, YAxis, Line, CartesianGrid, Tooltip, ResponsiveContainer, Area } from 'recharts'
 import getProjectTeamTaskStats from "../../../utils/getProjectTeamTaskStats"
 import useTaskService from "../../../services/taskService"
-import useUserService from "../../../services/usersService"
 import { useProjectContext } from "../../../context/ProjectContext"
+import { useUserContext } from "../../../context/UserContext"
 
 const ActivitySection = ({ height, width }) => {
     const { currentProject } = useProjectContext()
-    console.log('ActivitySection render', {
-        projectId: currentProject?._id,
-        teamLength: currentProject?.team?.length
-    });
+    const { getMultipleUsers, userCache } = useUserContext()
     const [tasks, setTasks] = useState([]);
-    const [userMap, setUserMap] = useState({});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const taskService = useRef(useTaskService()).current;
-    const userService = useRef(useUserService()).current;
-
+    // const userService = useRef(useUserService()).current;
 
     const teamUserIds = useMemo(() => {
-        console.log('teamUserIds memo running', {
-            projectId: currentProject?._id,
-            team: currentProject?.team
-        });
+        console.log('teamUserIds memo running');
         return currentProject?.team?.map(member => member.user) ?? [];
-    }, [currentProject?._id]);
+    }, [currentProject?.team]);
 
     useEffect(() => {
-        console.log('fetch effect running', {
-            teamUserIds,
-            projectId: currentProject?._id
-        });
-        const fetchTasks = async () => {
-            if (!currentProject?._id) return
-            if(!Array.isArray(teamUserIds)) {
-                return
-            }
-            if(teamUserIds.length === 0) return
+        console.log('fetch effect running');
+        const fetchData = async () => {
+            if (!currentProject?._id || !teamUserIds.length) return;
+
             try {
-                setLoading(true)
-                const [projectTasks, users] = await Promise.all([
+                setLoading(true);
+                // Fetch tasks and users in parallel
+                const [projectTasks] = await Promise.all([
                     taskService.fetchProjectTasks(currentProject._id),
-                    userService.fetchMultipleUsers(teamUserIds)
-                ])
+                    getMultipleUsers(teamUserIds)  // This will update userCache for us
+                ]);
 
-                const userDetailsMap = users.reduce((acc, user) => ({
-                    ...acc,
-                    [user._id]: user
-                }), {})
-
-                setTasks(projectTasks)
-                setUserMap(userDetailsMap)
-                setError(null)
+                setTasks(projectTasks);
+                setError(null);
             } catch (error) {
-                console.error('Error fetching project tasks:', error)
-                setError(error)
+                console.error('Error fetching data:', error);
+                setError(error);
             } finally {
-                setLoading(false)
+                setLoading(false);
             }
-        }
-        fetchTasks()
-    }, [currentProject?._id, teamUserIds])
+        };
+        fetchData();
+    }, [currentProject?._id, teamUserIds, getMultipleUsers]);
 
     const chartData = useMemo(() => {
-        if (!currentProject.team || !tasks.length || !Object.keys(userMap).length) return []
-        return getProjectTeamTaskStats(currentProject.team, tasks, userMap)
-    }, [currentProject?.team, tasks, userMap])
+        if (!currentProject?.team || !tasks.length) return [];
+        return getProjectTeamTaskStats(currentProject.team, tasks, userCache);
+    }, [currentProject?.team, tasks, userCache]);
 
     if (loading) return <div>Loading...</div>
     if (error) return <div>Error: {error}</div>

@@ -9,20 +9,16 @@ export const useUserContext = () => {
 };
 
 export const UserProvider = ({ children }) => {
-    // Think of userCache like a phone book - once we look someone up, we remember their details
     const [userCache, setUserCache] = useState({});
     const userService = useUserService();
 
-    // This is like looking up a single contact
     const getUserDetails = useCallback(async (userId) => {
-        // First, check if we already have this user's info
         if (userCache[userId]) {
             return userCache[userId];
         }
 
         try {
             const userData = await userService.fetchUserDetails(userId);
-            // Save this user's info for later
             setUserCache(prev => ({
                 ...prev,
                 [userId]: userData
@@ -35,13 +31,11 @@ export const UserProvider = ({ children }) => {
     }, [userCache, userService]);
 
     const getMultipleUsers = useCallback(async (userIds) => {
-        // Filter out IDs we already have
         const missingUserIds = userIds.filter(id => !userCache[id]);
 
         if (missingUserIds.length > 0) {
             try {
                 const users = await userService.fetchMultipleUsers(missingUserIds);
-                // Add all these users to our cache
                 const newEntries = users.reduce((acc, user) => ({
                     ...acc,
                     [user._id]: user

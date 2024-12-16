@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }) => {
                 } catch (userError) {
                     console.error('Error fetching user data:', userError)
                     localStorage.removeItem('token');
-                    throw new Error('Fales to get user data after login')
+                    throw new Error('Failed to get user data after login')
                 }
             } else {
                 throw new Error('Invalid login response structure')

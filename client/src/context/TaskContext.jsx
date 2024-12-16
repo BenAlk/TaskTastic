@@ -1,7 +1,6 @@
-import { createContext, useState, useEffect, useCallback, useContext } from 'react';
+import { createContext, useState, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import useTaskService from "../services/taskService"
-import { useAuth } from './AuthContext'
 import { useProjectContext } from './ProjectContext'
 
 const TaskContext = createContext();
@@ -16,12 +15,11 @@ export const TaskProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState(null);
 
-    const {currentUser } = useAuth()
     const { currentProject } = useProjectContext()
     const taskService = useTaskService()
 
     const fetchTasks = useCallback(async (projectId) => {
-         setLoading(true);
+        setLoading(true);
         try {
             const fetchedTasks = await taskService.fetchProjectTasks(projectId);
             setTasks(fetchedTasks);
@@ -80,7 +78,7 @@ export const TaskProvider = ({ children }) => {
                 update: 'Failed to update task'
             }))
             return null
-        }
+        }                                           // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [taskService])
 
     const deleteTask = useCallback(async (taskId) => {
@@ -101,7 +99,7 @@ export const TaskProvider = ({ children }) => {
                 delete: 'Failed to delete task'
             }))
             return false
-        }
+        }                                           // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [taskService])
 
     const updateTaskRisk = useCallback(async (taskId, riskData) => {

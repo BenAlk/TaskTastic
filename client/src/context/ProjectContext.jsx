@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useCallback, useContext } from 'react';
+import { createContext, useState, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import useProjectService from "../services/projectService"
 import { useAuth } from './AuthContext'

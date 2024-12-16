@@ -4,7 +4,7 @@ import { LeftArrowIcon, RightArrowIcon, CreateIcon, EditIcon, TrashIcon } from '
 import styles from "./ProjectSlider.module.css"
 import { useProjectContext } from "../../../../context/ProjectContext"
 import CreateProjectModal from './CreateProjectModal/CreateProjectModal'
-
+import DeleteProjectModal from './DeleteProjectModal/DeleteProjectModal'
 const ProjectSlider = () => {
 
     const navigate = useNavigate()
@@ -13,7 +13,8 @@ const ProjectSlider = () => {
     const projectRefs = useRef({})
     const [showLeftArrow, setShowLeftArrow] = useState(false)
     const [showRightArrow, setShowRightArrow] = useState(true)
-    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     const {
         projectList,
@@ -38,7 +39,7 @@ const ProjectSlider = () => {
     }
 
     useEffect(() => {
-        fetchProjects();
+        fetchProjects();                                         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -53,12 +54,21 @@ const ProjectSlider = () => {
         try {
             const newProject = await createNewProject();
             if (newProject) {
-                setIsModalOpen(true);
+                setIsCreateModalOpen(true);
             }
         } catch (error) {
             console.error("Error creating new project:", error);
         }
     }
+
+    const handleDeleteProject = () => {
+        if (!currentProject) return;
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        await deleteCurrentProject();
+    };
 
     const scrollToProject = (projectId) => {
         if (projectRefs.current[projectId]) {
@@ -156,11 +166,25 @@ const ProjectSlider = () => {
                 <div className={styles['edit-current-project-button']} title={"Edit Project"} >
                     <EditIcon  height={"1.25rem"} width={"1.25rem"} className={styles['icon']} title={"Edit Project"}/>
                 </div>
-                <div className={styles['delete-current-project-button']} title={"Delete Project"} >
+                <div
+                    className={`${styles['delete-current-project-button']} ${!currentProject ? styles['disabled'] : ''}`}
+                    title="Delete Project"
+                    onClick={handleDeleteProject}
+                >
                     <TrashIcon  height={"1.25rem"} width={"1.25rem"} className={styles['icon']} title={"Delete Project"}/>
                 </div>
             </div>
-            <CreateProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            <CreateProjectModal
+                isOpen={isCreateModalOpen}
+                onClose={() => setIsCreateModalOpen(false)}
+            />
+            <DeleteProjectModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleConfirmDelete}
+                projectId={currentProject?._id}
+                projectName={currentProject?.projectName}
+            />
         </div>
     )
 }

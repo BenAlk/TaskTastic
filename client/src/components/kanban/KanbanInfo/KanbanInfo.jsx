@@ -9,9 +9,14 @@ const KanbanInfo = ({selectedColumn, setSelectedColumn, isEditing, setIsEditing,
     const [showSaveModal, setShowSaveModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const { updateKanbanColumns, currentProject } = useProjectContext()
+    const columnName = selectedColumn?.name || '';
 
     const getColumnChanges = (original, draft) => {
-        if (!original || !draft) return []
+        if (!selectedColumn || !selectedColumn._id) {
+            return [];
+        }
+
+        if (!original || !draft) return [];
 
         const changes = []
 
@@ -129,16 +134,23 @@ const KanbanInfo = ({selectedColumn, setSelectedColumn, isEditing, setIsEditing,
     };
 
     const handleSaveClick = () => {
-        if(!isEditing) return
+        if (!isEditing) return;
 
-        const changes = getColumnChanges(currentProject.kanbanColumns, draftKanban)
-        if(changes.length === 0) {
-            setIsEditing(false)
-            setDraftKanban(null)
-            return
+        // Add this check
+        if (!selectedColumn) {
+            // You might want to show a user-friendly message here
+            console.log('Please select a column to save changes');
+            return;
         }
-        setShowSaveModal(true)
-    }
+
+        const changes = getColumnChanges(currentProject.kanbanColumns, draftKanban);
+        if (changes.length === 0) {
+            setIsEditing(false);
+            setDraftKanban(null);
+            return;
+        }
+        setShowSaveModal(true);
+    };
 
     const handleConfirmSave = async () => {
         try {
@@ -226,7 +238,7 @@ const KanbanInfo = ({selectedColumn, setSelectedColumn, isEditing, setIsEditing,
                     {isEditing ? (
                         <input
                             type="text"
-                            value={selectedColumn?.name ?? ''}
+                            value={columnName}
                             onChange={(e) => handleInputChange('name', e.target.value)}
                         />
                     ) : (
@@ -262,7 +274,7 @@ const KanbanInfo = ({selectedColumn, setSelectedColumn, isEditing, setIsEditing,
                     <input
                         className={styles['input-number']}
                         type="number"
-                        value={selectedColumn?.maxDays ?? ''}
+                        value={selectedColumn?.maxDays || 0}
                         onChange={(e) => handleInputChange('maxDays', parseInt(e.target.value))}
                     /> :
                     <div className={styles['column-data']}>{selectedColumn.maxDays}</div>
@@ -278,7 +290,7 @@ const KanbanInfo = ({selectedColumn, setSelectedColumn, isEditing, setIsEditing,
                     <input
                         className={styles['input-number']}
                         type="number"
-                        value={selectedColumn?.maxTasks}
+                        value={selectedColumn?.maxTasks || 0}
                         onChange={(e) => handleInputChange('maxTasks', parseInt(e.target.value))}
                     /> :
                     <div className={styles['column-data']}>{selectedColumn?.maxTasks ?? ''}</div>}
@@ -291,7 +303,7 @@ const KanbanInfo = ({selectedColumn, setSelectedColumn, isEditing, setIsEditing,
                 <div className={styles['info-group-content']}>
                     <input
                         type="color"
-                        value={selectedColumn?.color ?? ''}
+                        value={selectedColumn?.color || '#e2e8f0'}
                         className={styles['color-input']}
                         onChange={(e) => handleInputChange('color', e.target.value)}
                         disabled={!isEditing}

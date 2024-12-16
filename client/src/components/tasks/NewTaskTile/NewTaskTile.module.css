@@ -1,11 +1,13 @@
 .new-task-tile-container {
     display: flex;
     flex-direction: column;
-    height: 30%;
+    min-height: 30%;
+    min-width: 24%;
     flex-basis: calc(25% - 1rem);
     background-color: white;
     border-radius: 10px;
     padding: 1rem;
+    cursor: pointer;
 }
 
 .new-task-tile-header {

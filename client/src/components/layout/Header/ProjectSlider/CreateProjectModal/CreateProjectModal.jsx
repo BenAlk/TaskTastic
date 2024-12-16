@@ -30,7 +30,6 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
                     eisenhowerEnabled: currentProject.eisenhowerEnabled
                 });
             } else {
-                // Reset to defaults if no current project
                 setFormData({
                     projectName: "New Project",
                     startDate: dayjs().format('YYYY-MM-DD'),
@@ -51,17 +50,14 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
             newErrors.projectName = 'Project name is required';
         }
 
-        // Check for empty start date
         if (!formData.startDate) {
             newErrors.startDate = 'Start date is required';
         }
 
-        // Check for empty target date
         if (!formData.targetDate) {
             newErrors.targetDate = 'Target date is required';
         }
 
-        // If both dates are filled, check if target date is after start date
         if (formData.startDate && formData.targetDate) {
             const start = new Date(formData.startDate);
             const target = new Date(formData.targetDate);

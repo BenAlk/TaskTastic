@@ -14,16 +14,16 @@ const Tasks = () => {
 
         const loadTasks = async () => {
             if (currentProject?._id && mounted) {
-                await fetchTasks(currentProject._id);
+                await fetchTasks(currentProject._id)
             }
         };
 
-        loadTasks();
+        loadTasks()
 
         return () => {
-            mounted = false;
-        };
-    }, [currentProject?._id]);;
+            mounted = false
+        }                                                    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentProject?._id])
 
     if (!currentProject) {
         return (
@@ -32,7 +32,7 @@ const Tasks = () => {
                     <h2>Tasks</h2>
                 </div>
                 <div className={styles['task-content-container']}>
-                    <div>Please select a project to view tasks.</div>
+                    <div className={styles['select-a-task']}>Please select a project to view tasks.</div>
                 </div>
             </div>
         );
@@ -48,10 +48,9 @@ const Tasks = () => {
                     <div>Loading tasks...</div>
                 ) : errors?.fetch ? (
                     <div>Error: {errors.fetch}</div>
-                ) : tasks.length === 0 ? (<div className={styles['no-tasks-content-container']}>
-                    <NewTaskTile />
-                    </div>
-                ) : (
+                ) : tasks.length === 0 ?
+                <NewTaskTile />
+                : (
                     <>
                         {tasks.map(task => (
                             <TaskTile
@@ -67,4 +66,4 @@ const Tasks = () => {
     );
 };
 
-export default Tasks;
+export default Tasks

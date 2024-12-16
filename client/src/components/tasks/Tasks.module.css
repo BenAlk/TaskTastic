@@ -31,7 +31,6 @@
     overflow: auto;
 }
 
-
 .no-tasks-content-container {
     display: flex;
     justify-content: center;
@@ -39,4 +38,15 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
+}
+
+.select-a-task {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary-color);
 }

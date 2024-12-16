@@ -9,11 +9,10 @@ const useTaskService = () => {
                 const response = await api.get(`/tasks/project/${projectId}`);
                 return response.data;
             } catch (error) {
-                // Detailed error logging
                 console.error('🚨 Request failed:', {
                     status: error.response?.status,
                     message: error.response?.data?.message,
-                    config: error.config, // This will show what was actually sent
+                    config: error.config,
                 });
                 throw error;
             }

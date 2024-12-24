@@ -33,6 +33,41 @@
     width: 80%;
 }
 
+.no-projects-selection-container {
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    width: 100%;
+    gap: 2rem;
+}
+
+.no-projects-slider-container {
+    position: relative;
+    height: 2rem;
+    background-color: var(--tertiary-color);
+    border-radius: 100px;
+    display: flex;
+    gap: 30px;
+    justify-content: flex-start;
+    align-content: center;
+    overflow: hidden;
+    padding: 0 3rem 0 1rem;
+}
+
+.no-projects-message {
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.no-projects-selection-container .no-projects-slider-container .create-new-project-button {
+    position: absolute;
+    top: 4px;
+    right: 10px;
+}
+
 .project-slider-container .right-arrow,
 .project-slider-container .left-arrow {
     position: absolute;

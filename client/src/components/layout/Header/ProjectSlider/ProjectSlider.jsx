@@ -121,13 +121,15 @@ const ProjectSlider = () => {
 
     if (!projectList || projectList.length === 0) {
         return (
-            <div className={styles['project-slider-container']}>
+            <div className={styles['no-projects-selection-container']}>
+            <div className={styles['no-projects-slider-container']}>
                 <div className={styles['no-projects-message']}>
                     No projects available, create your first project!
                 </div>
                 <div className={styles['create-new-project-button']} onClick={handleCreateNewProject}>
-                    <CreateIcon  height={"1.5rem"} width={"1.5rem"} backgroundFill='green' />
+                    <CreateIcon  height={"1.25rem"} width={"1.25rem"} backgroundFill='transparent' className={styles['icon']} title={"Create New Project"}/>
                 </div>
+            </div>
             </div>
         );
     }

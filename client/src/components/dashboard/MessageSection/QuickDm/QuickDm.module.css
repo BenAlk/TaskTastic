@@ -1,0 +1,178 @@
+.quickdm {
+    width: 100%;
+    background-color: white;
+    padding: 1rem;
+    height: 100%;
+    border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.section-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px 10px 0 0;
+    border-bottom: none;
+    width: 100%;
+    padding: 0.25rem;
+    background-color: #d3d3d3;
+    font-size: 1rem;
+    color: var(--primary-color);
+}
+.empty-conversation-wrapper {
+    display: flex;
+    border: 1px solid #E5E7EB;
+    padding: 0.75rem;
+}
+
+.conversation-wrapper {
+    width: 100%;
+    max-height: 100%;
+    padding: 0.7rem;
+}
+.conversation-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    min-height: 0;
+    border: 1px solid #E5E7EB;
+    border-radius: 0 0 0.5rem 0.5rem;
+    background-color: #e0e0e0;
+}
+
+.conversation-preview {
+    height: 100%;
+    min-width: 0;
+    width: 25%;
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.conversation-preview:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.avatar {
+    width: 24px;
+    height: 24px;
+    background-color: #6b7280;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.user-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1F2937;
+    white-space: wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.separator {
+    width: 100%;
+    height: 1px;
+    background-color: #E5E7EB;
+    margin: 0.25rem 0;
+}
+
+.message-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #6b7280;
+}
+
+.message-icon {
+    scale: 1.35;
+}
+
+.unread-badge {
+    background-color: yellow;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem;
+    border-radius: 9999px;
+    min-width: 1.5rem;
+    text-align: center;
+}
+
+.message-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.count {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.loading-shimmer {
+    display: inline-block;
+    background: linear-gradient(
+        90deg,
+        #f0f0f0 25%,
+        #e0e0e0 50%,
+        #f0f0f0 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+    width: 120px;
+    height: 1rem;
+}
+
+.no-messages {
+    width: 100%;
+    text-align: center;
+    color: #6B7280;
+    padding: 1rem;
+    background-color: #F9FAFB;
+    border-radius: 0 0 0.5rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.loading,
+.error {
+    text-align: center;
+    color: #6B7280;
+    padding: 2rem;
+}
+
+.error {
+    color: #DC2626;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}

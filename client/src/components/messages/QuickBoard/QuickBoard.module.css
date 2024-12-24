@@ -1,0 +1,208 @@
+.quickboard-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 1rem;
+}
+
+.composer-section {
+    padding: 1rem;
+    background-color: var(--primary-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.messages-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow-y: auto;
+    padding: 0 1rem 0;
+}
+
+.message-thread {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background-color: #d3d3d3;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.thread-replies {
+    margin-left: 2rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--primary-color);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.message-info {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted, #6c757d);
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.message-error {
+    text-align: center;
+    padding: 2rem;
+    color: var(--danger-color, #dc3545);
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.thread-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.toggle-thread-button {
+    align-self: flex-start;
+    margin-left: 2rem;
+    padding: 0.25rem 0.75rem;
+    background-color: var(--background-light, #f8f9fa);
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 4px;
+    color: var(--text-muted, #6c757d);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toggle-thread-button:hover {
+    background-color: var(--background-lighter, #e9ecef);
+    color: var(--primary-color);
+}
+
+/* Skeleton Animation */
+@keyframes skeleton-pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.6; }
+}
+
+/* Loading Skeleton Styles */
+.loading-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    padding: 1rem;
+}
+
+/* Skeleton Message Thread */
+.skeleton-message {
+    background-color: #d3d3d3;
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Skeleton Message Header */
+.skeleton-message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.skeleton-user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.skeleton-avatar {
+    width: 32px;
+    height: 32px;
+    background-color: #e2e8f0;
+    border-radius: 50%;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-name {
+    width: 120px;
+    height: 16px;
+    background-color: #e2e8f0;
+    border-radius: 4px;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-timestamp {
+    width: 80px;
+    height: 14px;
+    background-color: #e2e8f0;
+    border-radius: 4px;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+/* Skeleton Message Content */
+.skeleton-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+}
+
+.skeleton-text-line {
+    height: 12px;
+    background-color: #e2e8f0;
+    border-radius: 4px;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-text-line:nth-child(1) {
+    width: 100%;
+}
+
+.skeleton-text-line:nth-child(2) {
+    width: 85%;
+}
+
+/* Skeleton Message Actions */
+.skeleton-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.skeleton-action {
+    width: 60px;
+    height: 24px;
+    background-color: #e2e8f0;
+    border-radius: 4px;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+/* Skeleton Composer */
+.skeleton-composer {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.skeleton-input {
+    width: 100%;
+    height: 38px;
+    background-color: #e2e8f0;
+    border-radius: 4px;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+/* Skeleton Reply Thread */
+.skeleton-reply {
+    margin-left: 2rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--primary-color);
+    opacity: 0.8;
+}

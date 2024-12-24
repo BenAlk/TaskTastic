@@ -17,9 +17,14 @@ export const ProjectProvider = ({ children }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
+    const [lastRefresh, setLastRefresh] = useState(Date.now());
 
     const { currentUser, authError } = useAuth();
     const projectService = useProjectService()
+
+    const refreshDashboard = useCallback(() => {
+        setLastRefresh(Date.now());
+    }, []);
 
     const fetchProjects = useCallback(async () => {
         if (!currentUser || authError) {
@@ -207,7 +212,9 @@ export const ProjectProvider = ({ children }) => {
         deleteCurrentProject,
         addTeamMember,
         removeTeamMember,
-        updateKanbanColumns
+        updateKanbanColumns,
+        lastRefresh,
+        refreshDashboard
     }
 
     return (

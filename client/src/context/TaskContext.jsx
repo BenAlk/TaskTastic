@@ -22,7 +22,7 @@ export const TaskProvider = ({ children }) => {
         setLoading(true);
         try {
             const fetchedTasks = await taskService.fetchProjectTasks(projectId);
-            setTasks(fetchedTasks);
+            setTasks(fetchedTasks.filter(task => !task.completed.isCompleted));
             setErrors({});
         } catch (error) {
             console.error('Failed to fetch tasks:', error);

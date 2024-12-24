@@ -4,6 +4,7 @@ import { AuthProvider } from "./context/AuthContext"
 import { ProjectProvider } from "./context/ProjectContext"
 import { TaskProvider } from "./context/TaskContext"
 import { UserProvider } from "./context/UserContext"
+import { MessageProvider } from "./context/MessageContext"
 import AppRoutes from "./routes/Routes"
 
 function App() {
@@ -12,11 +13,13 @@ function App() {
             <AuthProvider>
                 <UserProvider>
                     <ProjectProvider>
-                        <TaskProvider>
-                            <div className="App">
-                                <AppRoutes />
-                            </div>
-                        </TaskProvider>
+                        <MessageProvider>
+                            <TaskProvider>
+                                <div className="App">
+                                    <AppRoutes />
+                                </div>
+                            </TaskProvider>
+                        </MessageProvider>
                     </ProjectProvider>
                 </UserProvider>
             </AuthProvider>

@@ -109,11 +109,6 @@ const Column = ({
                         isEditing={isEditing}
                     />
                 ))}
-                {/* {columnTasks.length === 0 && (
-                    <div className={styles['column-empty-state']}>
-                        Drop tasks here
-                    </div>
-                )} */}
             </div>
         </div>
     );

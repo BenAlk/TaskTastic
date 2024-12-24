@@ -123,14 +123,40 @@ export const AuthProvider = ({ children }) => {
         setAuthError(null);
     }, []);
 
+    const signup = async (email, password) => {
+        try {
+            const response = await api.post('/auth/register', { email, password });
+            if (response.status === 201) {
+                return {
+                    success: true,
+                    message: response.data.message // "User created successfully"
+                };
+            } else {
+                throw new Error('Invalid signup response structure');
+            }
+        } catch (error) {
+            console.error('Signup error:', error);
+            const errorMessage = error.response?.data?.message || 'Signup failed';
+            setAuthError(errorMessage);
+            return {
+                success: false,
+                error: errorMessage
+            };
+        }
+    };
+
+
     const value = {
         currentUser,
         login,
         logout,
         loading,
         authError,
-        api
+        api,
+        signup
     };
+
+
 
     return (
         <AuthContext.Provider value={value}>

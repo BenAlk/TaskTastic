@@ -42,6 +42,13 @@ const TaskSchema = new mongoose.Schema({
             ref: 'Users'
         },
         flaggedAt: Date
+    },
+    completed: {
+        isCompleted: {
+            type: Boolean,
+            default: false
+        },
+        completedOn: Date
     }
 },{timestamps: true})
 

@@ -1,0 +1,91 @@
+.messages-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: white;
+    padding: 1.5rem;
+    height: 100%;
+}
+
+.messages-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background-color: var(--primary-color);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.messages-header-container h2 {
+    font-size: 2rem;
+    color: white;
+    margin: 0;
+}
+
+.messages-content-container {
+    min-width: 100%;
+    max-height: 100%; /* Account for header height */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    overflow: hidden;
+    flex: 1;
+}
+
+.message-type-header-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    gap: 0.5rem; /* Add space between tabs */
+}
+
+.message-type-header {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    background-color: #D3D3D3;
+    width: 100%;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+    padding: 0.5rem;
+    border: 1px solid var(--primary-color);
+    border-bottom: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    user-select: none;
+}
+
+.message-type-header:hover:not(.selected) {
+    background-color: #C0C0C0;
+}
+
+.message-type-header.selected {
+    color: white;
+    background-color: var(--primary-color);
+}
+
+
+.message-content-main {
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--primary-color);
+    border-radius: 0 0 10px 10px;
+    overflow-y: hidden; /* Move scroll to content area */
+    background-color: #ffffff;
+}
+
+.select-a-project {
+    font-size: 1rem;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.features-soon {
+    font-size: 1rem;
+    color:yellow;
+    font-weight: 700;
+    text-align: center;
+    margin-right: 5rem;
+}

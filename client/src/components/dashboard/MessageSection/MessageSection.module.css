@@ -1,0 +1,37 @@
+.messageSection {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.content {
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    /* justify-content: space-evenly; */
+    height: 100%;
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #6B7280;
+    font-size: 0.875rem;
+}
+
+.error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #DC2626;
+    font-size: 0.875rem;
+    padding: 1rem;
+}
+
+@media (max-width: 768px) {
+    .content {
+        flex-direction: column;
+    }
+}

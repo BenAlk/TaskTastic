@@ -14,10 +14,17 @@ const Modal = ({
     if (!isOpen) return null;
 
     const handleOverlayClick = (e) => {
+        // Add some debugging to understand what's being clicked
+        console.log('Overlay clicked!');
+        console.log('Click target:', e.target.className);
+        console.log('Current target:', e.currentTarget.className);
+
+        // Only close if we click the actual overlay
         if (closeOnOverlayClick && e.target === e.currentTarget) {
+            console.log('Should close now!');
             onClose();
         }
-    };
+    }
 
     return (
         <div className={styles['modal-overlay']} onClick={handleOverlayClick}>

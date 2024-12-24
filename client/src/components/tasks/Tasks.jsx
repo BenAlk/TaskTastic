@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
+import dayjs from 'dayjs';
 import styles from './Tasks.module.css';
 import TaskTile from './TaskTile/TaskTile';
 import NewTaskTile from './NewTaskTile/NewTaskTile';
@@ -19,11 +20,24 @@ const Tasks = () => {
         };
 
         loadTasks()
-
         return () => {
             mounted = false
         }                                                    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentProject?._id])
+
+    console.log(tasks)
+
+    const sortedTasks = useMemo(() => {
+        return [...tasks].sort((a, b) => {
+            // Handle cases where due date might not be set
+            if (!a.dueDate && !b.dueDate) return 0;
+            if (!a.dueDate) return 1;  // Tasks without due dates go last
+            if (!b.dueDate) return -1;
+
+            // Convert dates to dayjs objects and compare
+            return dayjs(a.dueDate).diff(dayjs(b.dueDate));
+        });
+    }, [tasks]);
 
     if (!currentProject) {
         return (
@@ -52,12 +66,12 @@ const Tasks = () => {
                 <NewTaskTile />
                 : (
                     <>
-                        {tasks.map(task => (
-                            <TaskTile
-                                key={task._id}
-                                task={task}
-                            />
-                        ))}
+                        {sortedTasks
+                            .filter(task => !task.completed?.isCompleted)
+                            .map(task => (
+                                <TaskTile key={task._id} task={task} />
+                            ))
+                        }
                         <NewTaskTile />
                     </>
                 )}

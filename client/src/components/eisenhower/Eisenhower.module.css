@@ -1,0 +1,143 @@
+.eisenhowerContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    padding: 1.5rem;
+}
+
+.eisenhowerHeaderContainer {
+    width: 100%;
+    background-color: var(--primary-color);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.eisenhowerHeaderContainer h2 {
+    font-size: 2rem;
+    color: white;
+}
+
+.matrixWrapper {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 5rem);
+}
+
+.topHeader {
+    text-align: center;
+    font-weight: bold;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.topHeaders {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-left: 40px;
+    margin-bottom: 0.5rem;
+}
+
+.matrixContent {
+    display: flex;
+    flex: 1;
+}
+
+.sideHeaders {
+    width: 40px;  /* Reduced from 100px */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-right: 0.5rem;  /* Reduced padding */
+}
+
+.sideHeader {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    text-align: center;
+    font-weight: bold;
+    color: var(--primary-color);
+    font-size: 1rem;  /* Slightly smaller font */
+    height: 33%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.matrix {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1rem;
+}
+
+.quadrant {
+    padding: 1.5rem;
+    border-radius: 8px;
+    color: white;
+}
+
+.quadrant h3 {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    width: 100%;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.quadrant ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.quadrant li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 1.5rem;
+}
+
+.quadrant li:first-child {
+    margin-top: 1rem;
+}
+
+.quadrant li:last-child {
+    border-bottom: none;
+}
+
+.quadrant li:hover {
+    color: var(--primary-color);
+    cursor: pointer;
+    user-select: none;
+}
+
+.selectProject {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Color coding for each quadrant */
+.urgentImportant {
+    background-color: #e74c3c; /* Red for urgent & important */
+}
+
+.notUrgentImportant {
+    background-color: #3498db; /* Blue for not urgent but important */
+}
+
+.urgentNotImportant {
+    background-color: #f39c12; /* Orange for urgent but not important */
+}
+
+.notUrgentNotImportant {
+    background-color: #2ecc71; /* Green for not urgent & not important */
+}

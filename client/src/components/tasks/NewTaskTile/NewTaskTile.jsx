@@ -6,6 +6,7 @@ const NewTaskTile = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
+        <>
             <div
                 className={styles['new-task-tile-container']}
                 onClick={() => setIsModalOpen(true)}
@@ -18,12 +19,12 @@ const NewTaskTile = () => {
                         +
                     </div>
                 </div>
-                <NewTaskModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-            />
             </div>
-
+            <NewTaskModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            />
+        </>
 
     );
 };

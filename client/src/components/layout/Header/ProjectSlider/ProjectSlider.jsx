@@ -13,8 +13,8 @@ const ProjectSlider = () => {
     const projectRefs = useRef({})
     const [showLeftArrow, setShowLeftArrow] = useState(false)
     const [showRightArrow, setShowRightArrow] = useState(true)
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
     const {
         projectList,
@@ -39,7 +39,7 @@ const ProjectSlider = () => {
     }
 
     useEffect(() => {
-        fetchProjects();                                         // eslint-disable-next-line react-hooks/exhaustive-deps
+        fetchProjects()                                          // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -57,17 +57,17 @@ const ProjectSlider = () => {
                 setIsCreateModalOpen(true);
             }
         } catch (error) {
-            console.error("Error creating new project:", error);
+            console.error("Error creating new project:", error)
         }
     }
 
     const handleDeleteProject = () => {
-        if (!currentProject) return;
-        setIsDeleteModalOpen(true);
+        if (!currentProject) return
+        setIsDeleteModalOpen(true)
     };
 
     const handleConfirmDelete = async () => {
-        await deleteCurrentProject();
+        await deleteCurrentProject()
     };
 
     const scrollToProject = (projectId) => {
@@ -89,34 +89,34 @@ const ProjectSlider = () => {
     const checkScrollPosition = () => {
         if (containerRef.current) {
             const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
-            setShowLeftArrow(scrollLeft > 0);
+            setShowLeftArrow(scrollLeft > 0)
             setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 1);
         }
     }
 
     useEffect(() => {
-        checkScrollPosition();
+        checkScrollPosition()
         const container = containerRef.current;
         if (container) {
-            container.addEventListener('scroll', checkScrollPosition);
-            return () => container.removeEventListener('scroll', checkScrollPosition);
+            container.addEventListener('scroll', checkScrollPosition)
+            return () => container.removeEventListener('scroll', checkScrollPosition)
         }
     }, [projectList]);
 
     const scrollLeft = () => {
         if (containerRef.current) {
-            containerRef.current.scrollLeft -= 200;
+            containerRef.current.scrollLeft -= 200
         }
     }
 
     const scrollRight = () => {
         if (containerRef.current) {
-            containerRef.current.scrollLeft += 200;
+            containerRef.current.scrollLeft += 200
         }
     }
 
     if (loading) {
-        return <div>Loading projects...</div>;
+        return <div>Loading projects...</div>
     }
 
     if (!projectList || projectList.length === 0) {

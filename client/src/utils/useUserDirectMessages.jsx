@@ -1,48 +1,109 @@
-import { useState, useEffect } from 'react'
-import useMessageService from "../services/messageService"
+import { useState, useEffect, useCallback } from 'react';
+import useMessageService from "../services/messageService";
 
 const useUserDirectMessages = (projectId, userId) => {
-    const [messages, setMessages] = useState([])
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(null)
-    const messageService = useMessageService()
+    const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const messageService = useMessageService();
 
-    const fetchDirectMessages = async () => {
+    const filterUnreadMessages = useCallback((allMessages) => {
+        console.log('All messages before filtering:', allMessages);
+
+        const filtered = allMessages.filter(message => {
+            // Log the actual recipients array and our userId for comparison
+            console.log('Message details:', {
+                messageId: message._id,
+                rawRecipients: message.recipients,  // Let's see the raw array
+                recipientIds: message.recipients.map(r =>
+                    typeof r === 'object' ? r._id || r : r
+                ),
+                userId,
+                recipientsType: typeof message.recipients,
+                firstRecipientType: message.recipients[0] ? typeof message.recipients[0] : 'none'
+            });
+
+            const recipientIds = message.recipients.map(r =>
+                typeof r === 'object' ? r._id || r : r
+            ).map(id => id.toString());
+            const userIdStr = userId.toString();
+
+            const isRecipient = recipientIds.includes(userIdStr);
+            const isUnread = !Array.isArray(message.read) || !message.read.includes(userId);
+
+            console.log('Evaluation:', {
+                isRecipient,
+                isUnread,
+                recipientIds,
+                userIdStr
+            });
+
+            return message.type === 'direct' && isRecipient && isUnread;
+        });
+
+        return filtered;
+    }, [userId]);
+
+    const fetchDirectMessages = useCallback(async () => {
+        console.log('Fetching messages with:', { projectId, userId });
+
+        if (!projectId || !userId) {
+            console.log('Missing required IDs:', { projectId, userId });
+            return;
+        }
+
         try {
-            setLoading(true)
-            const response = await messageService.getDirectMessages(projectId)
-            const unreadDms = response.filter( message =>
-                message.type === 'direct' &&
-                message.recipient.includes(userId) &&
-                !message.read.includes(userId)
-            )
+            setLoading(true);
+            const response = await messageService.getDirectMessages(projectId);
+            console.log('API Response:', response);
 
-            setMessages(unreadDms)
+            if (!Array.isArray(response)) {
+                throw new Error('Invalid response format');
+            }
+
+            const unreadDms = filterUnreadMessages(response);
+            setMessages(unreadDms);
+            setError(null);
         } catch (error) {
-            setError(error.message)
-            console.error('Error fetching direct messages:', error)
+            console.error('DM fetch error:', error);
+            setError('Failed to fetch messages');
+            setMessages([]);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
-
-    const markMessageAsRead = async (messageId) => {
-        try {
-            await messageService.markMessageAsRead(messageId)
-            setMessages(prevMessages =>
-                prevMessages.filter(msg => msg._id !== messageId)
-            )
-        } catch (error) {
-            console.error('Error marking message as read:', error)
-            throw error
-        }
-    }
+    }, [projectId, userId, messageService, filterUnreadMessages]);
 
     useEffect(() => {
-        if(projectId && userId) {
-            fetchDirectMessages()
+        console.log('Effect running with IDs:', { projectId, userId });
+        let mounted = true;
+
+        const loadMessages = async () => {
+            if (mounted) {
+                await fetchDirectMessages();
+            }
+        };
+
+        loadMessages();
+
+        return () => {
+            mounted = false;
+            setMessages([]);
+            setError(null);
+            setLoading(false);
+        };
+    }, [projectId, userId]);
+
+    const markMessageAsRead = async (messageId) => {
+        if (!messageId) return;
+
+        try {
+            await messageService.markMessageAsRead(messageId);
+            setMessages(prev => prev.filter(msg => msg._id !== messageId));
+        } catch (error) {
+            console.error('Error marking as read:', error);
+            throw new Error('Failed to mark as read');
         }
-    }, [projectId, userId])
+    };
 
     return {
         messages,
@@ -50,7 +111,7 @@ const useUserDirectMessages = (projectId, userId) => {
         error,
         refreshMessages: fetchDirectMessages,
         markMessageAsRead
-    }
-}
+    };
+};
 
-export default useUserDirectMessages
+export default useUserDirectMessages;

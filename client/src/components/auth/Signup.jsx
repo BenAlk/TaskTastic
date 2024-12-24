@@ -55,12 +55,14 @@ const Signup = () => {
     try {
         const result = await signup(email, password);
         if(result.success) {
-            setMessage('Signup successful, Redirecting to login ...')
-            setTimeout(() => navigate('/login'), 2000)
+            setMessage('Account created successfully! Redirecting to login...');
+            setTimeout(() => navigate('/login'), 2000);
+        } else {
+            setError(result.error);
         }
     } catch (err) {
-        console.error('Signup error:', err)
-        setError(err.message || 'An unexpected error occurred during signup')
+        console.error('Signup error:', err);
+        setError(err.message || 'An unexpected error occurred during signup');
     }
 };
 

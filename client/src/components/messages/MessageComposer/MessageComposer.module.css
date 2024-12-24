@@ -1,0 +1,93 @@
+.composer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background-color: white;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.reply-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background-color:#f8f9fa;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    color: var(--text-muted, #6c757d);
+}
+
+.cancel-reply {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    cursor: pointer;
+    color: #6c757d;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.cancel-reply:hover {
+    background-color:#e9ecef;
+    color:#dc3545;
+}
+
+.composer-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.composer-input {
+    width: 100%;
+    min-height: 38px;
+    max-height: 200px;
+    padding: 0.5rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    resize: none;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 1.5;
+    transition: border-color 0.2s ease;
+}
+
+.composer-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.composer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.shortcut-hint {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+.send-button {
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+}
+
+.send-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.send-button:not(:disabled):hover {
+    opacity: 0.9;
+}

@@ -1,18 +1,17 @@
-
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import styles from './TaskTile.module.css';
 import { useEffect, useState } from 'react';
-import { EditIcon, TrashIcon } from '../../../assets/icons';
-import { useTaskContext } from '../../../context/TaskContext';
 import { useProjectContext } from '../../../context/ProjectContext';
 import { useUserContext } from '../../../context/UserContext';
 
+import TaskDetailModal from "../TaskDetailModal/TaskDetailModal"
+
 const TaskTile = ({ task }) => {
-    const { deleteTask } = useTaskContext();
     const { currentProject } = useProjectContext();
     const { getUserDetails } = useUserContext();
     const [assignedUser, setAssignedUser] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     useEffect(() => {
         // When the task's assignedTo changes, look up the user
@@ -33,9 +32,9 @@ const TaskTile = ({ task }) => {
         if (!task.eisenhowerStatus) return 'Not Set';
         const { important, urgent } = task.eisenhowerStatus;
         if (important && urgent) return 'Important & Urgent';
-        if (important) return 'Important, Not Urgent';
-        if (urgent) return 'Urgent, Not Important';
-        return 'Not Important/Urgent';
+        if (important) return 'Important & Not Urgent';
+        if (urgent) return 'Not Important & Urgent';
+        return 'Not Important & Not Urgent';
     };
 
     const isOverdue = () => {
@@ -43,47 +42,19 @@ const TaskTile = ({ task }) => {
         return dayjs(task.dueDate).isBefore(dayjs(), 'day');
     };
 
-    const handleDelete = async () => {
-        if (window.confirm('Are you sure you want to delete this task?')) {
-            await deleteTask(task._id);
-        }
-    };
-
-    const handleEdit = () => {
-        // We'll implement this when we create the edit modal
-        console.log('Edit task:', task._id);
-    };
-
     return (
-        <div className={styles['task-tile-container']}>
+        <>
+        <div
+            className={styles['task-tile-container']}
+            onClick={() => setIsModalOpen(true)}
+            style={{ cursor: 'pointer' }}
+        >
             <div className={styles['task-tile-header']}>
                 <h2>{task.title}</h2>
-                <div className={styles['task-tile-controls']}>
-                    <div
-                        className={styles['edit-task-button']}
-                        title="Edit Task"
-                        onClick={handleEdit}
-                    >
-                        <EditIcon
-                            height="1.25rem"
-                            width="1.25rem"
-                            className={styles['icon']}
-                        />
-                    </div>
-                    <div
-                        className={styles['delete-task-button']}
-                        title="Delete Task"
-                        onClick={handleDelete}
-                    >
-                        <TrashIcon
-                            height="1.25rem"
-                            width="1.25rem"
-                            className={styles['icon']}
-                        />
-                    </div>
-                </div>
+
             </div>
-            <div className={styles['task-tile-content']}>
+            <div
+                className={styles['task-tile-content']}>
                 <div className={styles['task-info-group']}>
                     <h3>Assigned to:</h3>
                     <p>
@@ -108,15 +79,22 @@ const TaskTile = ({ task }) => {
                 {currentProject?.eisenhowerEnabled && (
                     <div className={styles['task-info-group']}>
                         <h3>Eisenhower:</h3>
-                        <p>{getEisenhowerStatus()}</p>
+                        <p className={styles['eisenhower-status']}>{getEisenhowerStatus()}</p>
                     </div>
                 )}
                 <div className={styles['task-info-group']}>
                     <h3>At Risk:</h3>
-                    <p>{task.isAtRisk ? 'Yes' : 'No'}</p>
+                    <p>{task.risk?.isAtRisk ? 'Yes' : 'No'}</p>
                 </div>
             </div>
         </div>
+
+        <TaskDetailModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            task={task}
+        />
+        </>
     );
 };
 
@@ -128,7 +106,9 @@ TaskTile.propTypes = {
         assignedTo: PropTypes.string.isRequired,
         kanbanColumnId: PropTypes.string.isRequired,
         dueDate: PropTypes.string,
-        isAtRisk: PropTypes.bool,
+        risk: PropTypes.shape({
+            isAtRisk: PropTypes.bool
+        }),
         eisenhowerStatus: PropTypes.shape({
             important: PropTypes.bool,
             urgent: PropTypes.bool

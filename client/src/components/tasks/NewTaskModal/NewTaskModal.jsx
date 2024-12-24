@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { useTaskContext } from '../../../context/TaskContext';
 import { useProjectContext } from '../../../context/ProjectContext';
 import { useAuth } from '../../../context/AuthContext';
+import { useUserContext } from '../../../context/UserContext';
 import styles from './NewTaskModal.module.css';
 import Modal from "../../common/Modal/Modal";
 
@@ -11,6 +12,7 @@ const NewTaskModal = ({ isOpen, onClose }) => {
     const { currentProject } = useProjectContext();
     const { createTask } = useTaskContext();
     const { currentUser } = useAuth();
+    const { getMultipleUsers } = useUserContext();
 
     const initialFormState = {
         title: '',
@@ -28,6 +30,7 @@ const NewTaskModal = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState(initialFormState);
     const [errors, setErrors] = useState({});
     const [showConfirmation, setShowConfirmation] = useState(false);
+    const [teamMembers, setTeamMembers] = useState([]);
 
     useEffect(() => {
         if (!isOpen) {
@@ -35,7 +38,26 @@ const NewTaskModal = ({ isOpen, onClose }) => {
             setErrors({});
             setShowConfirmation(false);
         }
-    }, [isOpen]);
+    }, [isOpen, currentProject?.team]);
+
+    useEffect(() => {
+        const fetchTeamMembers = async () => {
+            try {
+                // Only proceed if we have team data
+                if (currentProject?.team && currentProject.team.length > 0) {
+                    // Extract user IDs from team members
+                    const userIds = currentProject.team.map(member => member.user);
+
+                    // Fetch the user details
+                    const userDetails = await getMultipleUsers(userIds);
+                    setTeamMembers(userDetails);
+                }
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+            }
+        };
+        fetchTeamMembers();
+    }, [currentProject?.team])
 
     const handleClose = () => {
         setFormData(initialFormState);
@@ -199,9 +221,12 @@ const NewTaskModal = ({ isOpen, onClose }) => {
                             onChange={handleInputChange}
                             className={styles['form-input']}
                         >
-                            {currentProject?.team.map(member => (
-                                <option key={member._id} value={member.user}>
-                                    {member.user === currentUser._id ? 'Me' : member.user}
+                            {teamMembers.map(member => (
+                                <option
+                                    key={member._id}
+                                    value={member._id}
+                                >
+                                    {member._id === currentUser._id ? ' Me' : `${member.firstName} ${member.lastName}`}
                                 </option>
                             ))}
                         </select>

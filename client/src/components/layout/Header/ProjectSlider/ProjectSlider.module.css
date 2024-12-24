@@ -30,7 +30,7 @@
     align-content: center;
     overflow: hidden;
     padding: 0 1rem;
-    max-width: 80%;
+    width: 80%;
 }
 
 .project-slider-container .right-arrow,

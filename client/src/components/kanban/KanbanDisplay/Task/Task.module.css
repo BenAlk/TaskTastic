@@ -7,6 +7,11 @@
     transition: all 0.2s ease-in-out;
 }
 
+.task-container:last-child {
+    margin-bottom: 0;
+}
+
+
 .task-container:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
@@ -30,7 +35,7 @@
 .task-content-container {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.1rem;
 }
 
 /* Assigned User Styles */

@@ -1,0 +1,92 @@
+/* QuickDm.module.css */
+.messages-list {
+    display: flex;
+    gap: 1rem;
+    padding: 0.25rem;
+    width: 100%;
+    min-height: 0;
+}
+
+.dm-message-container {
+    flex: 1;
+    min-width: 0;
+    max-width: calc(33.333% - 0.667rem);
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+}
+
+.dm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.dm-user-section {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.dm-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.dm-author {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1F2937;
+    line-height: 1.25;
+}
+
+.dm-timestamp {
+    color: #6B7280;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.dm-content {
+    flex: 1;
+    font-size: 0.875rem;
+    color: #4B5563;
+    line-height: 1.5;
+}
+
+.dm-content p {
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mark-read-button {
+    align-self: flex-end;
+    margin-top: auto;
+    background: none;
+    border: none;
+    color: #059669;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.mark-read-button:hover {
+    background-color: #F3F4F6;
+    transform: scale(1.1);
+}

@@ -1,0 +1,120 @@
+.member-tile-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 30%;
+    min-width: 24%;
+    flex-basis: calc(25% - 1rem);
+    background-color: white;
+    border-radius: 10px;
+    padding: 1rem;
+    transition: transform 0.2s ease;
+}
+
+.member-tile-header {
+    position: relative;
+    background-color: var(--primary-color);
+    padding: 0.5rem;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+}
+
+.member-tile-header h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+.member-tile-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex-grow: 1;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid var(--primary-color);
+    border-radius: 0 0 10px 10px;
+}
+
+.member-info-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.member-info-group h3 {
+    width: 40%;
+    font-weight: 500;
+}
+
+.task-stats-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.task-stats-container .member-info-group {
+    flex-direction: column;
+    width: 50%;
+    align-items: center;
+    gap: 0rem;
+}
+
+.task-stats-container .member-info-group h3 {
+    font-size: 1rem;
+    width: 100%;
+    text-align: center;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.25rem;
+
+}
+
+.task-stats-container .member-info-group p {
+    font-size: 1rem;
+    padding: 0.25rem;
+    text-align: center;
+    width: 100%;
+}
+
+
+
+.task-count {
+    font-weight: bold;
+    padding: 2px 8px;
+    background-color: #e5e7eb;
+    transition: all 0.2s ease;
+    border-radius: 0 0 10px 10px;
+    border: 1px solid var(--primary-color);
+}
+
+.task-count-header {
+    border-radius: 10px 10px 0 0;
+}
+
+
+.high-workload {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.overdue {
+    background-color: #fee2e2;
+    color: #dc2626;
+    animation: pulse 2s infinite;
+}
+
+
+
+@keyframes pulse {
+    0% { background-color: #fee2e2;
+        color: #dc2626;
+    }
+    50% { background-color: #dc2626;
+        color: #000;
+    }
+    100% { background-color: #fee2e2;
+        color: #dc2626;
+    }
+}

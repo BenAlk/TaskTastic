@@ -3,8 +3,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useUserContext } from '../../../../context/UserContext';
 import { useMessage } from '../../../../context/MessageContext';
 import { CheckCircle } from 'lucide-react';
-import styles from './Quickboard.module.css';
-    /* eslint react/prop-types: 0 */
+import styles from "./QuickBoard.module.css"    /* eslint react/prop-types: 0 */
 
 // MessagePreview is a child component that handles individual message display
 const MessagePreview = ({ message, onMarkAsRead, boardMessages }) => {
@@ -127,7 +126,7 @@ const MessagePreview = ({ message, onMarkAsRead, boardMessages }) => {
 
 
 // Main Quickboard component that manages the list of messages
-const Quickboard = ({ messages, onMarkAsRead }) => {
+const QuickBoard = ({ messages, onMarkAsRead }) => {
     const { boardMessages } = useMessage();
 
     if (!messages?.length) {
@@ -160,7 +159,7 @@ const Quickboard = ({ messages, onMarkAsRead }) => {
     );
 };
 
-Quickboard.propTypes = {
+QuickBoard.propTypes = {
     messages: PropTypes.arrayOf(PropTypes.shape({
         _id: PropTypes.string.isRequired,
         content: PropTypes.shape({
@@ -181,4 +180,4 @@ Quickboard.propTypes = {
     onMarkAsRead: PropTypes.func.isRequired
 };
 
-export default Quickboard;
+export default QuickBoard;

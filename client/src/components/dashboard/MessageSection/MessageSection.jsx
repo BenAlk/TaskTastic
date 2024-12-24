@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { useMessage } from '../../../context/MessageContext';
 import { useProjectContext } from '../../../context/ProjectContext';
 import { useAuth } from '../../../context/AuthContext';
-import Quickboard from './Quickboard/Quickboard';
+import QuickBoard from './QuickBoard/QuickBoard';
 import QuickDm from './QuickDm/QuickDm';
 import styles from './MessageSection.module.css';
 
@@ -51,7 +51,7 @@ const MessageSection = () => {
     return (
         <div className={styles.messageSection}>
             <div className={styles.content}>
-                <Quickboard
+                <QuickBoard
                     messages={unreadBoardMessages}
                     onMarkAsRead={markMessagesAsRead}
                 />

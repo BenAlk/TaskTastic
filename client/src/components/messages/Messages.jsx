@@ -1,12 +1,20 @@
-import { useState } from 'react';
-import { useProjectContext } from '../../context/ProjectContext';
-import QuickBoard from './QuickBoard/QuickBoard';
-import DirectMessages from './DirectMessages/DirectMessages';
-import styles from './Messages.module.css';
+import { useState, useEffect } from 'react'
+import { useProjectContext } from '../../context/ProjectContext'
+import { useLocation } from 'react-router-dom'
+import QuickBoard from './QuickBoard/QuickBoard'
+import DirectMessages from './DirectMessages/DirectMessages'
+import styles from './Messages.module.css'
 
 const Messages = () => {
-    const [activeTab, setActiveTab] = useState('quickboard');
-    const { currentProject } = useProjectContext();
+    const location = useLocation()
+    const [activeTab, setActiveTab] = useState('quickboard')
+    const { currentProject } = useProjectContext()
+
+    useEffect(() => {
+        if (location.state?.activeTab) {
+            setActiveTab(location.state.activeTab)
+        }
+    }, [location])
 
     if (!currentProject) {
         return (
@@ -21,7 +29,7 @@ const Messages = () => {
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 
     return (
@@ -47,14 +55,14 @@ const Messages = () => {
                 </div>
                 <div className={styles['message-content-main']}>
                     {activeTab === 'quickboard' ? (
-                        <QuickBoard />
+                        <QuickBoard scrollToMessageId={location.state?.scrollToMessageId} />
                     ) : (
-                        <DirectMessages />
+                        <DirectMessages selectedUser={location.state?.selectedUser} />
                     )}
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Messages;
+export default Messages

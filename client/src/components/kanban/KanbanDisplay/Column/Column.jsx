@@ -1,9 +1,9 @@
-import { useRef, useMemo } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
-import PropTypes from 'prop-types';
-import styles from './Column.module.css';
-import Task from '../Task/Task';
-import { useTaskContext } from '../../../../context/TaskContext';
+import { useRef, useMemo } from 'react'
+import { useDrag, useDrop } from 'react-dnd'
+import PropTypes from 'prop-types'
+import styles from './Column.module.css'
+import Task from '../Task/Task'
+import { useTaskContext } from '../../../../context/TaskContext'
 
 const Column = ({
     column,
@@ -15,19 +15,21 @@ const Column = ({
     highlightClass,
     movingTaskId
 }) => {
-    const { tasks } = useTaskContext();
-    const dragDropRef = useRef(null);
+    const { tasks } = useTaskContext()
+    const dragDropRef = useRef(null)
 
     const columnTasks = useMemo(() => {
+        if (isEditing) return []
+
         return tasks.filter(task => task.kanbanColumnId === column._id)
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    }, [tasks, column._id]);
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    }, [tasks, column._id, isEditing])
 
     const [{ isDragging }, drag] = useDrag({
         type: 'COLUMN',
         item: () => {
             if (isEditing) {
-                selectColumn();
+                selectColumn()
             }
             return {
                 type: 'COLUMN',
@@ -39,34 +41,34 @@ const Column = ({
             isDragging: monitor.isDragging(),
         }),
         canDrag: () => isEditing,
-    });
+    })
 
     const [{ isOver }, drop] = useDrop({
         accept: ['COLUMN', 'TASK'],
         hover: (draggedItem, monitor) => {
-            if (!draggedItem) return;
+            if (!draggedItem) return
 
             if (draggedItem.type === 'COLUMN') {
                 if (draggedItem.index !== index) {
-                    moveColumn(draggedItem.index, index);
-                    draggedItem.index = index;
+                    moveColumn(draggedItem.index, index)
+                    draggedItem.index = index
                 }
                 return;
             }
 
-            if (draggedItem.type === 'TASK') {
-                if (draggedItem.columnId === column._id) return;
+            if (draggedItem.type === 'TASK' && !isEditing) {
+                if (draggedItem.columnId === column._id) return
 
                 moveTask(
-                    draggedItem.columnId,  // from column
-                    column._id,            // to column
-                    draggedItem.index,     // from position
-                    columnTasks.length,    // to position
-                    draggedItem.taskId     // Add this! The specific task ID
+                    draggedItem.columnId,
+                    column._id,
+                    draggedItem.index,
+                    columnTasks.length,
+                    draggedItem.taskId
                 );
 
-                draggedItem.columnId = column._id;
-                draggedItem.index = columnTasks.length;
+                draggedItem.columnId = column._id
+                draggedItem.index = columnTasks.length
             }
         },
         collect: (monitor) => ({
@@ -74,8 +76,8 @@ const Column = ({
         })
     });
 
-    drag(dragDropRef);
-    drop(dragDropRef);
+    drag(dragDropRef)
+    drop(dragDropRef)
 
     return (
         <div
@@ -83,14 +85,14 @@ const Column = ({
             className={`${styles['column-container']}
                         ${highlightClass ? styles['column-highlight'] : ''}
                         ${isOver ? styles['column-is-over'] : ''}`}
+            data-editing={isEditing}
             style={{
                 opacity: isDragging ? 0.5 : 1,
-                cursor: isEditing ? 'move' : 'pointer',
                 backgroundColor: column.color,
             }}
             onClick={() => {
                 if (isEditing) {
-                    selectColumn();
+                    selectColumn()
                 }
             }}
         >
@@ -98,7 +100,7 @@ const Column = ({
                 <span className={styles['column-title']}>{column.name}</span>
             </div>
             <div className={styles['column-content-container']}>
-                {columnTasks.map((task, taskIndex) => (
+                {!isEditing && columnTasks.map((task, taskIndex) => (
                     <Task
                         key={task._id}
                         task={task}
@@ -111,8 +113,8 @@ const Column = ({
                 ))}
             </div>
         </div>
-    );
-};
+    )
+}
 
 Column.propTypes = {
     column: PropTypes.shape({
@@ -129,6 +131,6 @@ Column.propTypes = {
     selectColumn: PropTypes.func.isRequired,
     highlightClass: PropTypes.bool.isRequired,
     movingTaskId: PropTypes.string
-};
+}
 
-export default Column;
+export default Column

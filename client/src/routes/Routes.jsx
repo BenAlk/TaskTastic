@@ -1,28 +1,20 @@
-import { Route, Routes, Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { Route, Routes, Navigate, Outlet } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import { ProjectProvider } from "../context/ProjectContext"
-import PropTypes from 'prop-types';
-
-// Layout components
-import Layout from '../components/layout/Layout';
-
-// Page components
-import DashboardPage from '../pages/DashboardPage';
-import EditProjectPage from '../pages/EditProjectPage';
-import TeamPage from '../pages/TeamPage';
-import MessagesPage from '../pages/MessagesPage';
-import TasksPage from '../pages/TasksPage';
-import KanbanPage from '../pages/KanbanPage';
-import EisenhowerPage from '../pages/EisenhowerPage';
-import AchievementsPage from '../pages/AchievementsPage';
-import SettingsPage from '../pages/SettingsPage';
-
-// Auth components
-import Login from '../components/auth/Login';
-import Signup from '../components/auth/Signup';
-
-//Welcome components
-import Welcome from '../components/welcome/Welcome';
+import PropTypes from 'prop-types'
+import Layout from '../components/layout/Layout'
+import DashboardPage from '../pages/DashboardPage'
+import EditProjectPage from '../pages/EditProjectPage'
+import TeamPage from '../pages/TeamPage'
+import MessagesPage from '../pages/MessagesPage'
+import TasksPage from '../pages/TasksPage'
+import KanbanPage from '../pages/KanbanPage'
+import EisenhowerPage from '../pages/EisenhowerPage'
+import AchievementsPage from '../pages/AchievementsPage'
+import SettingsPage from '../pages/SettingsPage'
+import Login from '../components/auth/Login'
+import Signup from '../components/auth/Signup'
+import Welcome from '../components/welcome/Welcome'
 
 const PrivateRoute = ({children}) => {
     const { currentUser, loading } = useAuth()
@@ -39,7 +31,7 @@ const PrivateRoute = ({children}) => {
 }
 
 const PublicRoute = ({ children }) => {
-    const { currentUser, loading } = useAuth();
+    const { currentUser, loading } = useAuth()
 
     if(loading) {
         return <div>Loading...</div>
@@ -60,7 +52,7 @@ const ProtectedRoutes = () => (
             </Layout>
         </PrivateRoute>
     </ProjectProvider>
-);
+)
 
 const AppRoutes = () => {
     return (
@@ -82,7 +74,6 @@ const AppRoutes = () => {
                     </PublicRoute>
                 } />
 
-                {/* Protected routes */}
                     <Route element={<ProtectedRoutes />}>
                         <Route path="/dashboard" element={<DashboardPage />} />
                         <Route path="/edit-project/:projectId" element={<EditProjectPage />} />
@@ -97,7 +88,7 @@ const AppRoutes = () => {
 
                     <Route path="*" element={<Navigate to="/" />} />
             </Routes>
-);
+)
 }
 
 PrivateRoute.propTypes = {

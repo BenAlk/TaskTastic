@@ -30,6 +30,29 @@ const useUserService = () => {
                 console.error('Error searching users:', error)
                 throw error
             }
+        },
+        updateProfile: async (userId, updates) => {
+            try {
+                const response = await api.patch(`/users/${userId}`, updates)
+                return response.data
+            } catch (error) {
+                console.error('Error updating profile:', error)
+                throw error
+            }
+        },
+        updatePassword: async (userId, currentPassword, newPassword) => {
+            try {
+                const response = await api.patch(`/users/${userId}/password`, {
+                    currentPassword,
+                    newPassword
+                })
+                return response.data
+            } catch (error) {
+                if (error.response?.status === 401) {
+                    throw new Error('Current password is incorrect')
+                }
+                throw error
+            }
         }
     }
 }

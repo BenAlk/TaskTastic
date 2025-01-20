@@ -42,15 +42,16 @@
 
 .matrixContent {
     display: flex;
-    flex: 1;
+    height: 70vh;
+    padding-right: 1.5rem;
 }
 
 .sideHeaders {
-    width: 40px;  /* Reduced from 100px */
+    width: 40px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding-right: 0.5rem;  /* Reduced padding */
+    padding-right: 0.5rem;
 }
 
 .sideHeader {
@@ -59,7 +60,7 @@
     text-align: center;
     font-weight: bold;
     color: var(--primary-color);
-    font-size: 1rem;  /* Slightly smaller font */
+    font-size: 1.2rem;
     height: 33%;
     display: flex;
     align-items: center;
@@ -78,6 +79,8 @@
     padding: 1.5rem;
     border-radius: 8px;
     color: white;
+    height: 35vh;
+    overflow: scroll;
 }
 
 .quadrant h3 {
@@ -125,19 +128,18 @@
     color: var(--primary-color);
 }
 
-/* Color coding for each quadrant */
 .urgentImportant {
-    background-color: #e74c3c; /* Red for urgent & important */
+    background-color: #e74c3c;
 }
 
 .notUrgentImportant {
-    background-color: #3498db; /* Blue for not urgent but important */
+    background-color: #3498db;
 }
 
 .urgentNotImportant {
-    background-color: #f39c12; /* Orange for urgent but not important */
+    background-color: #f39c12;
 }
 
 .notUrgentNotImportant {
-    background-color: #2ecc71; /* Green for not urgent & not important */
+    background-color: #2ecc71;
 }

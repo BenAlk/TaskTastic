@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 import useTaskService from "../services/taskService"
 
 const useKanbanStats = (project) => {
@@ -34,21 +34,17 @@ const useKanbanStats = (project) => {
                 const dueDate = new Date(task.dueDate)
                 const completedDate = task.completedAt ? new Date(task.completedAt) : null
 
-                // Find the corresponding column in our chart data
                 const columnIndex = chartData.findIndex(col => col.name === task.status)
                 if (columnIndex === -1) return
 
-                // Tasks due in next 3 days
                 if (dueDate <= threeDaysFromNow && dueDate >= today) {
                     chartData[columnIndex]["Tasks Due Next 3 Days"]++
                 }
 
-                // Tasks completed in last 7 days
                 if (completedDate && completedDate >= sevenDaysAgo) {
                     chartData[columnIndex]["Tasks Completed Last 7 Days"]++
                 }
 
-                // Overdue tasks
                 if (dueDate < today && !completedDate) {
                     chartData[columnIndex]["Overdue Tasks"]++
                 }

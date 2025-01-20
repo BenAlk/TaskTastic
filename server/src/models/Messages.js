@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 const MessageSchema = new mongoose.Schema({
     projectId: {
@@ -8,7 +8,7 @@ const MessageSchema = new mongoose.Schema({
     },
     sender: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',  // matches your user model name
+        ref: 'users',
         required: true
     },
     recipients: [{
@@ -55,10 +55,9 @@ const MessageSchema = new mongoose.Schema({
         },
         tags: [String],
         reactions: [{
-            // This is the key change - properly defining the reactions schema
             user: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'users'  // Now Mongoose knows how to populate this
+                ref: 'users'
             },
             emoji: String
         }]
@@ -67,6 +66,6 @@ const MessageSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users'
     }]
-}, { timestamps: true });
+}, { timestamps: true })
 
-export const MessageModel = mongoose.model('messages', MessageSchema);
+export const MessageModel = mongoose.model('messages', MessageSchema)

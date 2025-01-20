@@ -1,60 +1,64 @@
-import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
-import styles from './TaskTile.module.css';
-import { useEffect, useState } from 'react';
-import { useProjectContext } from '../../../context/ProjectContext';
-import { useUserContext } from '../../../context/UserContext';
-
+import PropTypes from 'prop-types'
+import dayjs from 'dayjs'
+import styles from './TaskTile.module.css'
+import { useEffect, useState } from 'react'
+import { useProjectContext } from '../../../context/ProjectContext'
+import { useUserContext } from '../../../context/UserContext'
+import { useAuth } from '../../../context/AuthContext'
 import TaskDetailModal from "../TaskDetailModal/TaskDetailModal"
 
-const TaskTile = ({ task }) => {
-    const { currentProject } = useProjectContext();
-    const { getUserDetails } = useUserContext();
-    const [assignedUser, setAssignedUser] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false)
+const TaskTile = ({ task, initialModalState = false }) => {
+    const { currentProject } = useProjectContext()
+    const { getUserDetails } = useUserContext()
+    const { currentUser } = useAuth()
+    const [assignedUser, setAssignedUser] = useState(null)
+    const [isModalOpen, setIsModalOpen] = useState(initialModalState)
+
+    const isAssignedToCurrentUser = currentUser?._id === task.assignedTo
 
     useEffect(() => {
-        // When the task's assignedTo changes, look up the user
         const loadUserDetails = async () => {
-            const user = await getUserDetails(task.assignedTo);
-            setAssignedUser(user);
-        };
+            const user = await getUserDetails(task.assignedTo)
+            setAssignedUser(user)
+        }
 
-        loadUserDetails();
-    }, [task.assignedTo, getUserDetails]);
+        loadUserDetails()
+    }, [task.assignedTo, getUserDetails])
 
     const getKanbanColumnName = (columnId) => {
-        const column = currentProject?.kanbanColumns.find(col => col._id === columnId);
-        return column?.name || 'Unknown';
-    };
+        const column = currentProject?.kanbanColumns.find(col => col._id === columnId)
+        return column?.name || 'Unknown'
+    }
 
     const getEisenhowerStatus = () => {
-        if (!task.eisenhowerStatus) return 'Not Set';
-        const { important, urgent } = task.eisenhowerStatus;
-        if (important && urgent) return 'Important & Urgent';
-        if (important) return 'Important & Not Urgent';
-        if (urgent) return 'Not Important & Urgent';
-        return 'Not Important & Not Urgent';
-    };
+        if (!task.eisenhowerStatus) return 'Not Set'
+        const { important, urgent } = task.eisenhowerStatus
+        if (important && urgent) return 'Important & Urgent'
+        if (important) return 'Important & Not Urgent'
+        if (urgent) return 'Not Important & Urgent'
+        return 'Not Important & Not Urgent'
+    }
 
     const isOverdue = () => {
         if (!task.dueDate) return false;
-        return dayjs(task.dueDate).isBefore(dayjs(), 'day');
-    };
+        return dayjs(task.dueDate).isBefore(dayjs(), 'day')
+    }
 
     return (
         <>
         <div
-            className={styles['task-tile-container']}
+            className={`${styles['task-tile-container']} ${isAssignedToCurrentUser ? styles['assigned-to-me'] : ''}`}
             onClick={() => setIsModalOpen(true)}
-            style={{ cursor: 'pointer' }}
         >
             <div className={styles['task-tile-header']}>
                 <h2>{task.title}</h2>
-
+                {isAssignedToCurrentUser && (
+                    <div className={styles['assigned-badge']}>
+                        Assigned to You
+                    </div>
+                )}
             </div>
-            <div
-                className={styles['task-tile-content']}>
+            <div className={styles['task-tile-content']}>
                 <div className={styles['task-info-group']}>
                     <h3>Assigned to:</h3>
                     <p>
@@ -95,8 +99,8 @@ const TaskTile = ({ task }) => {
             task={task}
         />
         </>
-    );
-};
+    )
+}
 
 TaskTile.propTypes = {
     task: PropTypes.shape({
@@ -113,7 +117,8 @@ TaskTile.propTypes = {
             important: PropTypes.bool,
             urgent: PropTypes.bool
         })
-    }).isRequired
-};
+    }).isRequired,
+    initialModalState: PropTypes.bool
+}
 
-export default TaskTile;
+export default TaskTile

@@ -1,16 +1,23 @@
 .layout {
     display: grid;
-    grid-template-columns: 12.5% auto;
+    grid-template-rows: 130px auto;
+    grid-template-columns: 225px auto;
+    grid-template-areas:
+    "navbar header"
+    "navbar main";
+    height: 100vh;
+    width: 100vw;
     overflow: hidden;
-    max-height: 100vh;
 }
 
-.main-content {
-    display: flex;
-    flex-direction: column;
-    width: 87vw;
+.navbar {
+    grid-area: navbar;
 }
 
-.content {
-height: 88vh;
+.header {
+    grid-area: header;
+}
+
+.main {
+    grid-area: main;
 }

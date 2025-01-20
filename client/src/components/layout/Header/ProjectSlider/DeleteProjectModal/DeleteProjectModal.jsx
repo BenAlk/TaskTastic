@@ -1,16 +1,16 @@
-import PropTypes from 'prop-types';
-import { useState, useEffect, useRef } from 'react';
-import { useTaskContext } from '../../../../../context/TaskContext';
-import Modal from "../../../../common/Modal/Modal";
+import PropTypes from 'prop-types'
+import { useState, useEffect, useRef } from 'react'
+import { useTaskContext } from '../../../../../context/TaskContext'
+import Modal from "../../../../common/Modal/Modal"
 import styles from './DeleteProjectModal.module.css'
 
 const DeleteProjectModal = ({ isOpen, onClose, onConfirm, projectId, projectName }) => {
-    const [isChecking, setIsChecking] = useState(false);
-    const [associatedTasks, setAssociatedTasks] = useState([]);
-    const { fetchTasks, tasks } = useTaskContext();
-    const [showConfirmation, setShowConfirmation] = useState(false);
-    const [checkComplete, setCheckComplete] = useState(false);
-    const hasCheckedRef = useRef(false);
+    const [isChecking, setIsChecking] = useState(false)
+    const [associatedTasks, setAssociatedTasks] = useState([])
+    const { fetchTasks, tasks } = useTaskContext()
+    const [showConfirmation, setShowConfirmation] = useState(false)
+    const [checkComplete, setCheckComplete] = useState(false)
+    const hasCheckedRef = useRef(false)
 
     useEffect(() => {
         if (isOpen) {
@@ -20,7 +20,7 @@ const DeleteProjectModal = ({ isOpen, onClose, onConfirm, projectId, projectName
             setCheckComplete(false)
             hasCheckedRef.current = false
         }
-    }, [isOpen]);
+    }, [isOpen])
 
     useEffect(() => {
         const checkForTasks = async () => {
@@ -35,7 +35,7 @@ const DeleteProjectModal = ({ isOpen, onClose, onConfirm, projectId, projectName
                 await fetchTasks(projectId)
                 await new Promise(resolve => setTimeout(resolve, 300))
 
-                setAssociatedTasks(tasks);
+                setAssociatedTasks(tasks)
                 setShowConfirmation(true)
             } catch (error) {
                 console.error('Error:', error)
@@ -44,15 +44,15 @@ const DeleteProjectModal = ({ isOpen, onClose, onConfirm, projectId, projectName
                 setCheckComplete(true)
                 hasCheckedRef.current = true
             }
-        };
+        }
 
         checkForTasks();                                // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isOpen, projectId, tasks]);
+    }, [isOpen, projectId, tasks])
 
     const handleConfirmDelete = async () => {
-        await onConfirm();
-        onClose();
-    };
+        await onConfirm()
+        onClose()
+    }
 
     return (
         <Modal
@@ -102,8 +102,8 @@ const DeleteProjectModal = ({ isOpen, onClose, onConfirm, projectId, projectName
                 </div>
             ) : null}
         </Modal>
-    );
-};
+    )
+}
 
 DeleteProjectModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -111,6 +111,6 @@ DeleteProjectModal.propTypes = {
     onConfirm: PropTypes.func.isRequired,
     projectId: PropTypes.string,
     projectName: PropTypes.string
-};
+}
 
-export default DeleteProjectModal;
+export default DeleteProjectModal

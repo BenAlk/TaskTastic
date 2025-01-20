@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import styles from './Modal.module.css';
+import PropTypes from 'prop-types'
+import styles from './Modal.module.css'
 
 const Modal = ({
     isOpen,
@@ -11,17 +11,10 @@ const Modal = ({
     width = '500px',
     closeOnOverlayClick = true,
 }) => {
-    if (!isOpen) return null;
+    if (!isOpen) return null
 
     const handleOverlayClick = (e) => {
-        // Add some debugging to understand what's being clicked
-        console.log('Overlay clicked!');
-        console.log('Click target:', e.target.className);
-        console.log('Current target:', e.currentTarget.className);
-
-        // Only close if we click the actual overlay
         if (closeOnOverlayClick && e.target === e.currentTarget) {
-            console.log('Should close now!');
             onClose();
         }
     }
@@ -41,8 +34,8 @@ const Modal = ({
                 {children}
             </div>
         </div>
-    );
-};
+    )
+}
 
 Modal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -53,6 +46,6 @@ Modal.propTypes = {
     className: PropTypes.string,
     width: PropTypes.string,
     closeOnOverlayClick: PropTypes.bool,
-};
+}
 
-export default Modal;
+export default Modal

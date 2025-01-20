@@ -25,9 +25,16 @@
     flex-direction: column;
     gap: 0.5rem;
     background-color: #d3d3d3;
+    position: relative;
+    transition: background-color 0.3s ease;
     border-radius: 8px;
     padding: 1rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.message-thread:last-child {
+    margin-bottom: 1rem;
 }
 
 .thread-replies {
@@ -66,7 +73,8 @@
 .toggle-thread-button {
     align-self: flex-start;
     margin-left: 2rem;
-    padding: 0.25rem 0.75rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
     background-color: var(--background-light, #f8f9fa);
     border: 1px solid var(--border-color, #e0e0e0);
     border-radius: 4px;
@@ -81,14 +89,12 @@
     color: var(--primary-color);
 }
 
-/* Skeleton Animation */
 @keyframes skeleton-pulse {
     0% { opacity: 0.6; }
     50% { opacity: 0.8; }
     100% { opacity: 0.6; }
 }
 
-/* Loading Skeleton Styles */
 .loading-skeleton {
     display: flex;
     flex-direction: column;
@@ -97,7 +103,6 @@
     padding: 1rem;
 }
 
-/* Skeleton Message Thread */
 .skeleton-message {
     background-color: #d3d3d3;
     border-radius: 8px;
@@ -107,7 +112,6 @@
     gap: 0.5rem;
 }
 
-/* Skeleton Message Header */
 .skeleton-message-header {
     display: flex;
     justify-content: space-between;
@@ -145,7 +149,6 @@
     animation: skeleton-pulse 1.5s ease-in-out infinite;
 }
 
-/* Skeleton Message Content */
 .skeleton-content {
     display: flex;
     flex-direction: column;
@@ -168,7 +171,6 @@
     width: 85%;
 }
 
-/* Skeleton Message Actions */
 .skeleton-actions {
     display: flex;
     gap: 1rem;
@@ -183,7 +185,6 @@
     animation: skeleton-pulse 1.5s ease-in-out infinite;
 }
 
-/* Skeleton Composer */
 .skeleton-composer {
     background-color: white;
     border-radius: 8px;
@@ -199,10 +200,89 @@
     animation: skeleton-pulse 1.5s ease-in-out infinite;
 }
 
-/* Skeleton Reply Thread */
 .skeleton-reply {
     margin-left: 2rem;
     padding-left: 1rem;
     border-left: 2px solid var(--primary-color);
     opacity: 0.8;
+}
+
+.highlighted-message {
+    animation: highlight 2s ease-in-out infinite;
+}
+
+@keyframes highlight {
+    0% {
+        background-color: rgba(59, 130, 246, 0.1);
+    }
+    50% {
+        background-color: transparent;
+    }
+    100% {
+        background-color: rgba(59, 130, 246, 0.1);
+    }
+}
+
+.reply-message {
+    position: relative;
+    transition: background-color 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 6px;
+    margin-left: 2rem;
+    cursor: pointer;
+}
+
+.message-thread:hover,
+.reply-message:hover {
+    background-color: #999;
+}
+
+.unread {
+    position: relative;
+}
+
+.unread::before {
+    content: '';
+    position: absolute;
+    left: -1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    background-color: #3B82F6;
+    border-radius: 50%;
+}
+
+.mark-read-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    padding-bottom: 0;
+    background: transparent;
+    border: none;
+    color: red;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.mark-read-button:hover {
+    color: #3B82F6;
+}
+
+.check-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.thread-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.toggle-thread-button:has(+ .unread) {
+    color: #3B82F6;
+    font-weight: 500;
+
 }

@@ -4,7 +4,7 @@ const UserSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true 
+        unique: true
     },
     firstName: {
         type: String,
@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
         default: '',
         validate: {
             validator: function(v) {
-                if(!v) return true;
+                if(!v) return true
                 return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(v)
             },
             message: props => `${props.value} is not a valid URL`

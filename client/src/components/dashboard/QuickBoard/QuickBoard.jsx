@@ -1,159 +1,181 @@
-// QuickBoard.jsx
-import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { useProjectContext } from "../../../context/ProjectContext";
-import { useAuth } from "../../../context/AuthContext";
-import useMessageService from "../../../services/messageService";
-import useUserService from "../../../services/usersService";
-import { ImportantIcon } from "../../../assets/icons";
-import styles from "./QuickBoard.module.css";
+import PropTypes from "prop-types"
+import { useNavigate } from 'react-router-dom'
+import { useState, useEffect, useMemo } from 'react'
+import { useUserContext } from '../../../context/UserContext'
+import { useMessage } from '../../../context/MessageContext'
+import { CheckCircle } from 'lucide-react'
+import styles from "./QuickBoard.module.css"
+    /* eslint react/prop-types: 0 */
 
-const QuickBoard = ({ messageLimit = 3 }) => {
-    // Context and services initialization
-    const { currentProject } = useProjectContext();
-    const { currentUser } = useAuth();
-    const messageService = useMessageService();
-    const userService = useUserService();
+const MessagePreview = ({ message, onMarkAsRead, boardMessages }) => {
+    const navigate = useNavigate()
+    const { getUserDetails } = useUserContext()
+    const [sender, setSender] = useState(null)
+    const [isLoading, setIsLoading] = useState(true)
 
-    // State management
-    const [messages, setMessages] = useState([]);
-    const [senderDetails, setSenderDetails] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [markingRead, setMarkingRead] = useState({});
-
-    // Fetch messages effect
     useEffect(() => {
-        const fetchBoardMessages = async () => {
-            if (!currentProject?._id) return;
-
+        const loadSender = async () => {
+            setIsLoading(true)
             try {
-                setLoading(true);
-                const boardMessages = await messageService.getBoardMessages(currentProject._id);
+                if (message.sender && typeof message.sender === 'object' && message.sender.firstName) {
+                    setSender(message.sender)
+                    setIsLoading(false)
+                    return
+                }
 
-                // Filter unread messages, sort by date, and limit quantity
-                const unreadMessages = boardMessages
-                    .filter(msg => !msg.read.includes(currentUser?._id))
-                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                    .slice(0, messageLimit);
-
-                setMessages(unreadMessages);
-                setError(null);
-            } catch (err) {
-                console.error('Error fetching board messages:', err);
-                setError('Unable to load board messages');
+                if (typeof message.sender === 'string') {
+                    const user = await getUserDetails(message.sender)
+                    setSender(user)
+                }
+            } catch (error) {
+                console.error('Error loading user:', error)
             } finally {
-                setLoading(false);
+                setIsLoading(false)
             }
-        };
-
-        fetchBoardMessages();
-    }, [currentProject?._id, currentUser?._id, messageLimit]);
-
-    // Fetch user details effect
-    useEffect(() => {
-        const fetchSenderDetails = async () => {
-            if (!messages?.length) return;
-
-            try {
-                const senderIds = [...new Set(messages.map(message => message.sender))];
-                const users = await userService.fetchMultipleUsers(senderIds);
-
-                const userMap = users.reduce((acc, user) => ({
-                    ...acc,
-                    [user._id]: user
-                }), {});
-
-                setSenderDetails(userMap);
-            } catch (err) {
-                console.error('Error fetching sender details:', err);
-            }
-        };
-
-        fetchSenderDetails();
-    }, [messages]);
-
-    // Handle marking a message as read
-    const handleAcknowledgeMessage = async (messageId) => {
-        if (markingRead[messageId]) return;
-
-        try {
-            setMarkingRead(prev => ({ ...prev, [messageId]: true }));
-            await messageService.markMessageAsRead(messageId);
-
-            setMessages(prevMessages =>
-                prevMessages.filter(msg => msg._id !== messageId)
-            );
-        } catch (err) {
-            console.error('Error marking message as read:', err);
-        } finally {
-            setMarkingRead(prev => ({ ...prev, [messageId]: false }));
         }
+        loadSender()
+    }, [message.sender])
+
+    const replyCount = useMemo(() => {
+        return boardMessages?.filter(msg =>
+            msg.parentMessage === message._id
+        ).length ?? 0
+    }, [message._id, boardMessages])
+
+    const formattedDate = useMemo(() => {
+        const messageDate = new Date(message.createdAt)
+        const now = new Date()
+        const diffHours = (now - messageDate) / (1000 * 60 * 60)
+
+        if (diffHours < 24) {
+            return `${Math.floor(diffHours)}h ago`
+        } else if (diffHours < 48) {
+            return 'yesterday'
+        } else {
+            return messageDate.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric'
+            })
+        }
+    }, [message.createdAt])
+
+    const handleMarkAsRead = (e) => {
+        e.stopPropagation()
+        onMarkAsRead([message._id])
     };
 
-    // Render loading state
-    if (loading) {
-        return <div className={styles['status-message']}>Loading board messages...</div>;
+    const handleMessageClick = () => {
+        sessionStorage.setItem('highlightedMessageId', message._id)
+        navigate('/messages', {
+            state: {
+                activeTab: 'quickboard',
+                scrollToMessageId: message._id
+            }
+        })
     }
 
-    // Render error state
-    if (error) {
-        return <div className={styles['status-message-error']}>{error}</div>;
-    }
-
-    // Render empty state
-    if (!messages?.length) {
-        return <div className={styles['status-message-empty']}>No unread board messages</div>;
-    }
-
-    // Render message cards
     return (
-        <div className={styles['messages-list']}>
-            {messages.map((message) => {
-                const sender = senderDetails[message.sender] || {};
-                const displayName = sender.firstName ?
-                    `${sender.firstName} ${sender.lastName}`.trim() :
-                    sender.email || 'Unknown User';
-
-                return (
-                    <div key={message._id} className={styles['message-container']}>
-                        <div className={styles['message-header']}>
-                            <div className={styles['message-author']}>{displayName}</div>
-                            <div className={styles['message-timestamp']}>
-                                {new Date(message.createdAt).toLocaleString(undefined, {
-                                    month: 'short',
-                                    day: 'numeric'
-                                })}
-                            </div>
-                        </div>
-
-                        <div className={styles['message-content']}>
-                            <p>{message.content?.text}</p>
-                        </div>
-
-                        <div className={styles['message-footer']}>
-                            {message.metadata?.priority === 'urgent' && (
-                                <div className={styles['important-icon']}>
-                                    <ImportantIcon height="15px" width="15px" />
+        <div className={styles['message-container']}>
+            <div
+                className={styles['message-preview']}
+                onClick={handleMessageClick}
+                role="button"
+                tabIndex={0}
+            >
+                <div className={styles['user-info']}>
+                    <div className={styles['user-avatar']}>{`${sender?.firstName[0]}${sender?.lastName[0]}`}</div>
+                    <div className={styles['user-details']}>
+                        {isLoading ? (
+                            <span className={styles['loading-shimmer']}>Loading...</span>
+                        ) : (
+                            sender && (
+                                <div className={styles['user-name']}>
+                                    {`${sender?.firstName} ${sender?.lastName}`}
                                 </div>
-                            )}
-                            <button
-                                className={styles['acknowledge-button']}
-                                onClick={() => handleAcknowledgeMessage(message._id)}
-                                disabled={markingRead[message._id]}
-                            >
-                                {markingRead[message._id] ? '...' : '✓'}
-                            </button>
+                            )
+                        )}
+                        <div className={styles['message-date']}>
+                            {formattedDate}
                         </div>
                     </div>
-                );
-            })}
+                </div>
+
+                <div className={styles['message-content']}>
+                    {message.content.text.length > 75
+                        ? `${message.content.text.substring(0, 75)}...`
+                        : message.content.text}
+                </div>
+
+                <div className={styles['message-footer']}>
+                    <div className={styles['reply-count']}>
+                        {replyCount} {replyCount === 1 ? 'reply' : 'replies'}
+                    </div>
+                    <button
+                        onClick={handleMarkAsRead}
+                        className={styles['read-button']}
+                        aria-label="Mark as read"
+                    >
+                        <CheckCircle className={styles['check-icon']} />
+                    </button>
+                </div>
+            </div>
         </div>
-    );
-};
+    )
+}
 
-QuickBoard.propTypes = {
-    messageLimit: PropTypes.number
-};
 
-export default QuickBoard;
+const Quickboard = ({ messages, onMarkAsRead }) => {
+    const { boardMessages } = useMessage();
+
+    if (!messages?.length) {
+        return (
+            <div className={styles['quickboard']}>
+                <h3 className={styles['section-title']}>Board Messages</h3>
+                <div className={styles['empty-message-container']}>
+                    <div className={styles['no-messages']}>
+                        No unread messages
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className={styles['quickboard']}>
+            <h3 className={styles['section-title']}>Board Messages</h3>
+            <div className={styles['message-wrapper']}>
+                {messages.map(message => (
+                    <MessagePreview
+                        key={message._id}
+                        message={message}
+                        onMarkAsRead={onMarkAsRead}
+                        boardMessages={boardMessages}
+                    />
+                ))}
+            </div>
+        </div>
+    )
+}
+
+Quickboard.propTypes = {
+    messages: PropTypes.arrayOf(PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        content: PropTypes.shape({
+            text: PropTypes.string.isRequired
+        }).isRequired,
+        createdAt: PropTypes.string.isRequired,
+        sender: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.shape({
+                _id: PropTypes.string,
+                firstName: PropTypes.string,
+                lastName: PropTypes.string,
+                email: PropTypes.string
+            })
+        ]).isRequired,
+        parentMessage: PropTypes.string
+    })),
+    onMarkAsRead: PropTypes.func.isRequired
+}
+
+export default Quickboard;

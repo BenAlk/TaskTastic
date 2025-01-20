@@ -1,69 +1,66 @@
-import { useState, useEffect } from 'react';
-import styles from "./Kanban.module.css";
+import { useState, useEffect } from 'react'
+import styles from "./Kanban.module.css"
 import KanbanInfo from './KanbanInfo/KanbanInfo'
 import KanbanDisplay from './KanbanDisplay/KanbanDisplay'
-import { useProjectContext } from "../../context/ProjectContext";
-import {EditIcon} from '../../assets/icons'
+import { useProjectContext } from "../../context/ProjectContext"
+import { useProjectPermissions } from "../../hooks/useProjectPermissions"
+import { EditIcon } from '../../assets/icons'
 
 const Kanban = () => {
-    const { currentProject } = useProjectContext();
-    const [selectedColumn, setSelectedColumn] = useState(null);
-    const [isEditing, setIsEditing] = useState(false);
-    const [draftKanban, setDraftKanban] = useState(null);
+    const { currentProject } = useProjectContext()
+    const { canEditKanbanBoard } = useProjectPermissions()
+    const [selectedColumnId, setSelectedColumnId] = useState(null)
+    const [isEditing, setIsEditing] = useState(false)
+    const [draftKanban, setDraftKanban] = useState(null)
 
-    const DEFAULT_COLUMN =
-        {
-            name: "New Column",
-            color: "#e2e8f0",
-            maxDays: 0,
-            maxTasks: 0,
-        }
+    const selectedColumn = draftKanban?.find(col => col._id === selectedColumnId) || null
 
-
-    const handleEditChange = () => {
-        if (!isEditing) {
-            setDraftKanban([...currentProject.kanbanColumns]);
-        } else {
-            setDraftKanban(null);
-            setSelectedColumn(null);
-        }
-        setIsEditing(!isEditing);
+    const DEFAULT_COLUMN = {
+        name: "New Column",
+        color: "#e2e8f0",
+        maxDays: 0,
+        maxTasks: 0,
     }
 
-    const selectedColumnData = isEditing
-    ? draftKanban?.find(column => column._id === selectedColumn)
-    : currentProject?.kanbanColumns?.find(column => column._id === selectedColumn)
+    const handleEditChange = () => {
+        if (!canEditKanbanBoard()) {
+            return
+        }
+
+        if (!isEditing) {
+            setDraftKanban([...currentProject.kanbanColumns])
+        } else {
+            setDraftKanban(null)
+            setSelectedColumnId(null)
+        }
+        setIsEditing(!isEditing)
+    }
 
     const handleCreateFirstColumn = async () => {
+        if (!canEditKanbanBoard()) {
+            return
+        }
+
         try {
             const newColumn = {
                 ...DEFAULT_COLUMN,
                 _id: `draft_${Date.now()}`,
                 order: 0
-            };
+            }
 
-            setDraftKanban([newColumn]);
-            setIsEditing(true);
-            setSelectedColumn(newColumn._id);
-
+            setDraftKanban([newColumn])
+            setIsEditing(true)
+            setSelectedColumnId(newColumn._id)
         } catch (error) {
-            console.error('Error creating first kanban column:', error);
+            console.error('Error creating first kanban column:', error)
         }
-    };
+    }
 
     useEffect(() => {
         setIsEditing(false)
         setDraftKanban(null)
-        setSelectedColumn(null)
+        setSelectedColumnId(null)
     }, [currentProject?._id])
-
-    useEffect(() => {
-        console.log('States changed:', {
-            draftKanban,
-            isEditing,
-            selectedColumn
-        });
-    }, [draftKanban, isEditing, selectedColumn]);
 
     if (!currentProject) {
         return (
@@ -86,16 +83,18 @@ const Kanban = () => {
                 </div>
                 <div className={styles['no-kanban-content-container']}>
                     <h2 className={styles['no-data-message']}>This project has no Kanban columns.</h2>
-                    <div
-                        className={styles['create-default-button']}
-                        onClick={() =>handleCreateFirstColumn()}
-                        title="Add your first column"
-                    >
-                        Add First Column
-                    </div>
+                    {canEditKanbanBoard() && (
+                        <div
+                            className={styles['create-default-button']}
+                            onClick={handleCreateFirstColumn}
+                            title="Add your first column"
+                        >
+                            Add First Column
+                        </div>
+                    )}
                 </div>
             </div>
-        );
+        )
     }
 
     return (
@@ -111,8 +110,8 @@ const Kanban = () => {
                         </div>
                         <div className={styles['kanban-info-content-container']}>
                             <KanbanInfo
-                                selectedColumn={selectedColumnData}
-                                setSelectedColumn={setSelectedColumn}
+                                selectedColumn={selectedColumn}
+                                setSelectedColumn={setSelectedColumnId}
                                 isEditing={isEditing}
                                 setIsEditing={setIsEditing}
                                 setDraftKanban={setDraftKanban}
@@ -134,18 +133,29 @@ const Kanban = () => {
                     </div>
                 )}
                 <div className={styles['kanban-display-container']}>
-                <div className={`${styles['kanban-display-header-container']} ${styles[!isEditing ? 'kanban-display-header-container-editing' : '']}`}>
+                    <div className={`${styles['kanban-display-header-container']} ${!isEditing ? styles['kanban-display-header-container-editing'] : ''}`}>
                         <h3>Kanban Visual</h3>
-                        <div className={styles['kanban-controls']}>
-                    <div className={styles['edit-task-button']} title={"Edit Kanban"} onClick={handleEditChange}>
-                        <EditIcon height={"1.25rem"} width={"1.25rem"} className={styles['icon']} title={"Edit Selected Column"}/>
+                        {canEditKanbanBoard() && (
+                            <div className={styles['kanban-controls']}>
+                                <div
+                                    className={styles['edit-task-button']}
+                                    title={"Edit Kanban"}
+                                    onClick={handleEditChange}
+                                >
+                                    <EditIcon
+                                        height={"1.25rem"}
+                                        width={"1.25rem"}
+                                        className={styles['icon']}
+                                        title={"Edit Selected Column"}
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div>
-                </div>
-                    </div>
-                    <div className={`${styles['kanban-display-content-container']} ${styles[!isEditing ? 'kanban-display-content-container-editing' : '']}`}>
+                    <div className={`${styles['kanban-display-content-container']} ${!isEditing ? styles['kanban-display-content-container-editing'] : ''}`}>
                         <KanbanDisplay
-                            selectedColumn={selectedColumn}
-                            setSelectedColumn={setSelectedColumn}
+                            selectedColumn={selectedColumnId}
+                            setSelectedColumn={setSelectedColumnId}
                             currentProject={{
                                 ...currentProject,
                                 kanbanColumns: isEditing ? draftKanban : currentProject.kanbanColumns
@@ -157,7 +167,7 @@ const Kanban = () => {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Kanban;
+export default Kanban

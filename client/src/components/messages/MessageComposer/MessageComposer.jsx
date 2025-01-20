@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-import { useState, useEffect, useRef } from 'react';
-import { X } from 'lucide-react';
-import styles from './MessageComposer.module.css';
+import PropTypes from 'prop-types'
+import { useState, useEffect, useRef } from 'react'
+import { X } from 'lucide-react'
+import styles from './MessageComposer.module.css'
 
 const MessageComposer = ({
     onSubmit,
@@ -9,47 +9,41 @@ const MessageComposer = ({
     onCancelReply,
     placeholder = "Type a message..."
 }) => {
-    const [content, setContent] = useState('');
-    const textareaRef = useRef(null);
+    const [content, setContent] = useState('')
+    const textareaRef = useRef(null)
 
-    // Auto-focus the textarea when starting a reply
     useEffect(() => {
         if (replyingTo && textareaRef.current) {
-            textareaRef.current.focus();
+            textareaRef.current.focus()
         }
-    }, [replyingTo]);
+    }, [replyingTo])
 
-    // Auto-resize textarea as content grows
     const handleTextareaChange = (e) => {
-        const textarea = e.target;
-        setContent(textarea.value);
+        const textarea = e.target
+        setContent(textarea.value)
 
-        // Reset height to get the correct scrollHeight
-        textarea.style.height = 'auto';
-        // Set new height based on content
-        textarea.style.height = `${textarea.scrollHeight}px`;
+        textarea.style.height = 'auto'
+        textarea.style.height = `${textarea.scrollHeight}px`
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
-        if (!content.trim()) return;
+        if (!content.trim()) return
 
-        onSubmit(content);
-        setContent('');
+        onSubmit(content)
+        setContent('')
 
-        // Reset textarea height
         if (textareaRef.current) {
-            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height = 'auto'
         }
-    };
+    }
 
     const handleKeyDown = (e) => {
-        // Submit on Ctrl/Cmd + Enter
         if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-            handleSubmit(e);
+            handleSubmit(e)
         }
-    };
+    }
 
     return (
         <div className={styles['composer-container']}>
@@ -91,14 +85,14 @@ const MessageComposer = ({
                 </div>
             </form>
         </div>
-    );
-};
+    )
+}
 
-export default MessageComposer;
+export default MessageComposer
 
 MessageComposer.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     replyingTo: PropTypes.string,
     onCancelReply: PropTypes.func,
     placeholder: PropTypes.string
-};
+}

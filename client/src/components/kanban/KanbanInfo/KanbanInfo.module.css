@@ -112,15 +112,12 @@
     pointer-events: none;
 }
 
-
-
 .kanban-column-buttons {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
     padding: 0.75rem;
 }
-
 
 .kanban-column-buttons > div {
     display: flex;

@@ -26,7 +26,7 @@
 
 .messages-content-container {
     min-width: 100%;
-    max-height: 100%; /* Account for header height */
+    max-height: 74vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -39,7 +39,7 @@
     display: flex;
     width: 100%;
     justify-content: space-evenly;
-    gap: 0.5rem; /* Add space between tabs */
+    gap: 0.5rem;
 }
 
 .message-type-header {
@@ -72,7 +72,7 @@
     height: 100%;
     border: 1px solid var(--primary-color);
     border-radius: 0 0 10px 10px;
-    overflow-y: hidden; /* Move scroll to content area */
+    overflow-y: hidden; 
     background-color: #ffffff;
 }
 

@@ -1,9 +1,9 @@
-import Achievements from '../components/achievements/Achievements';
+import Achievements from '../components/achievements/Achievements'
 
 const AchievementsPage = () => {
     return (
         <Achievements />
-    );
-};
+    )
+}
 
-export default AchievementsPage;
+export default AchievementsPage

@@ -1,9 +1,9 @@
-import Eisenhower from '../components/eisenhower/Eisenhower';
+import Eisenhower from '../components/eisenhower/Eisenhower'
 
 const EisenhowerPage = () => {
     return (
         <Eisenhower />
-    );
-};
+    )
+}
 
-export default EisenhowerPage;
+export default EisenhowerPage

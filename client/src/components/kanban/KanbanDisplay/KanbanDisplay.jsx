@@ -1,10 +1,10 @@
-import { useState, useCallback, useEffect } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import PropTypes from 'prop-types';
-import styles from './KanbanDisplay.module.css';
-import Column from './Column/Column';
-import { useTaskContext } from '../../../context/TaskContext';
+import { useState, useCallback, useEffect, useMemo } from 'react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import PropTypes from 'prop-types'
+import styles from './KanbanDisplay.module.css'
+import Column from './Column/Column'
+import { useTaskContext } from '../../../context/TaskContext'
 
 const ColumnSkeleton = () => (
     <div className={styles['column-container']}>
@@ -24,7 +24,7 @@ const ColumnSkeleton = () => (
             ))}
         </div>
     </div>
-);
+)
 
 const KanbanDisplay = ({
     currentProject,
@@ -33,80 +33,119 @@ const KanbanDisplay = ({
     isEditing,
     setDraftKanban
 }) => {
-    const { tasks, fetchTasks, updateTask } = useTaskContext();
-    const [columns, setColumns] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [movingTaskId, setMovingTaskId] = useState(null);
+    const { tasks, fetchTasks, updateTask } = useTaskContext()
+    const [columns, setColumns] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [movingTaskId, setMovingTaskId] = useState(null)
 
-    // Initial load effect
+    const tasksMap = useMemo(() => {
+        return tasks.reduce((acc, task) => {
+            acc[task._id] = task
+            return acc
+        }, {})
+    }, [tasks])
+
     useEffect(() => {
+        let isSubscribed = true
+
         const loadData = async () => {
-            if (currentProject?._id) {
-                setIsLoading(true);
-                try {
-                    await fetchTasks(currentProject._id);
-                } catch (error) {
-                    console.error('Failed to fetch tasks:', error);
-                } finally {
-                    setTimeout(() => setIsLoading(false), 300);
+            if (!currentProject?._id) return
+
+            setIsLoading(true)
+            try {
+                await fetchTasks(currentProject._id)
+            } catch (error) {
+                console.error('Failed to fetch tasks:', error)
+            } finally {
+                if (isSubscribed) {
+                    setTimeout(() => setIsLoading(false), 300)
                 }
             }
-        };
-        loadData()                                         // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [currentProject])
+        }
+
+        loadData()
+
+        return () => {
+            isSubscribed = false
+        }
+    }, [currentProject?._id])
 
     useEffect(() => {
         if (currentProject?.kanbanColumns) {
-            const columnsToSort = [...currentProject.kanbanColumns];
-            const sortedColumns = columnsToSort.sort((a, b) => a.order - b.order);
-            setColumns(sortedColumns);
+            const columnsToSort = [...currentProject.kanbanColumns]
+            const sortedColumns = columnsToSort.sort((a, b) => a.order - b.order)
+            setColumns(sortedColumns)
         }
-    }, [currentProject?.kanbanColumns]);
+    }, [currentProject?.kanbanColumns])
 
     const moveColumn = useCallback((fromIndex, toIndex) => {
-        if (!isEditing) return;
+        if (!isEditing) return
 
-        const newColumns = [...columns];
-        const [movedColumn] = newColumns.splice(fromIndex, 1);
-        newColumns.splice(toIndex, 0, movedColumn);
+        setColumns(prevColumns => {
+            const newColumns = [...prevColumns]
+            const [movedColumn] = newColumns.splice(fromIndex, 1)
+            newColumns.splice(toIndex, 0, movedColumn)
 
-        const updatedColumns = newColumns.map((column, index) => ({
-            ...column,
-            order: index
-        }));
+            const updatedColumns = newColumns.map((column, index) => ({
+                ...column,
+                order: index
+            }))
 
-        setColumns(updatedColumns);
-        setDraftKanban(updatedColumns);
-    }, [columns, isEditing, setDraftKanban]);
+            setDraftKanban(updatedColumns)
+            return updatedColumns
+        })
+    }, [isEditing, setDraftKanban])
 
     const moveTask = useCallback(async (fromColumnId, toColumnId, fromIndex, toIndex, taskId) => {
-        // Find the specific task using both column ID and task ID
-        const taskToMove = tasks.find(task =>
-            task.kanbanColumnId === fromColumnId && task._id === taskId
-        );
+        if (isEditing) return
 
+        const taskToMove = tasksMap[taskId];
         if (!taskToMove) {
-            console.log('Task not found:', { taskId, fromColumnId });
-            return;
+            return
         }
 
         try {
-            setMovingTaskId(taskToMove._id);
+            setMovingTaskId(taskId)
 
-            // Update in database
-            await updateTask(taskToMove._id, {
-                kanbanColumnId: toColumnId
-            });
+            const sortedColumns = [...columns].sort((a, b) => a.order - b.order)
+            const lastColumnId = sortedColumns[sortedColumns.length - 1]._id
+            const isMovingFromLastColumn = fromColumnId === lastColumnId
+            const isMovingToLastColumn = toColumnId === lastColumnId
+            let completedData = {}
 
+            if (isMovingToLastColumn) {
+                completedData = {
+                    completed: {
+                        isCompleted: true,
+                        completedOn: new Date().toISOString(),
+                        completedBy: 'currentUserId'
+                    }
+                }
+            } else if (isMovingFromLastColumn) {
+                completedData = {
+                    completed: {
+                        isCompleted: false,
+                        completedOn: null,
+                        completedBy: null
+                    }
+                }
+            }
+
+            const updateData = {
+                kanbanColumnId: toColumnId,
+                ...completedData
+            }
+
+            await updateTask(taskId, updateData)
         } catch (error) {
-            console.error('Failed to move task:', error);
+            console.error('Failed to move task:', error)
         } finally {
-            setMovingTaskId(null);
+            setMovingTaskId(null)
         }
-    }, [tasks, updateTask]);
+    }, [tasksMap, updateTask, isEditing, columns])
 
     if (isLoading) {
-        const skeletonCount = currentProject?.kanbanColumns?.length || 0;
+        const skeletonCount = currentProject?.kanbanColumns?.length || 0
         return (
             <div className={styles['kanban-display-container']}>
                 <div className={styles['kanban-columns-container']}>
@@ -121,7 +160,7 @@ const KanbanDisplay = ({
                     )}
                 </div>
             </div>
-        );
+        )
     }
 
     return (
@@ -144,8 +183,8 @@ const KanbanDisplay = ({
                 </div>
             </div>
         </DndProvider>
-    );
-};
+    )
+}
 
 KanbanDisplay.propTypes = {
     currentProject: PropTypes.shape({
@@ -165,6 +204,6 @@ KanbanDisplay.propTypes = {
     selectedColumn: PropTypes.string,
     isEditing: PropTypes.bool.isRequired,
     setDraftKanban: PropTypes.func.isRequired
-};
+}
 
-export default KanbanDisplay;
+export default KanbanDisplay

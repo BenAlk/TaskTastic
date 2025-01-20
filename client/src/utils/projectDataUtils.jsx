@@ -9,21 +9,21 @@ export const createInitialProjectData = () => ({
     kanbanColumns: [
         {
             name: "To Do",
-            color: "#E2E8F0", // Light gray default
-            maxDays: 0,       // 0 means no limit
-            maxTasks: 0,      // 0 means no limit
+            color: "#E2E8F0",
+            maxDays: 0,
+            maxTasks: 0,
             order: 0
         },
         {
             name: "In Progress",
-            color: "#90CDF4", // Light blue default
+            color: "#90CDF4",
             maxDays: 0,
             maxTasks: 0,
             order: 1
         },
         {
             name: "Complete",
-            color: "#9AE6B4", // Light green default
+            color: "#9AE6B4",
             maxDays: 0,
             maxTasks: 0,
             order: 2

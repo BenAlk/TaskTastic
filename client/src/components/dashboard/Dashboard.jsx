@@ -1,5 +1,5 @@
 import styles from "./Dashboard.module.css"
-import { useEffect } from "react";
+import { useEffect } from "react"
 import TimelineSection from "./TimelineSection/TimelineSection"
 import ActivitySection from "./ActivitySection/ActivitySection"
 import TaskSection from "./TaskSection/TaskSection"
@@ -8,13 +8,12 @@ import { useProjectContext } from "../../context/ProjectContext"
 
 
 export const Dashboard = () => {
-    const { currentProject, lastRefresh, refreshDashboard } = useProjectContext();
+    const { currentProject, lastRefresh, refreshDashboard } = useProjectContext()
 
     useEffect(() => {
         refreshDashboard();
     }, [])
 
-    console.log("currentproject : : : ", currentProject)
     return (
         <div className={styles['dashboard-container']}>
             <div className={styles['card-container']}>
@@ -50,7 +49,7 @@ export const Dashboard = () => {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Dashboard;
+export default Dashboard

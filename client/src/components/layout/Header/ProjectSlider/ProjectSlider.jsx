@@ -4,7 +4,9 @@ import { LeftArrowIcon, RightArrowIcon, CreateIcon, EditIcon, TrashIcon } from '
 import styles from "./ProjectSlider.module.css"
 import { useProjectContext } from "../../../../context/ProjectContext"
 import CreateProjectModal from './CreateProjectModal/CreateProjectModal'
+import EditProjectModal from './EditProjectModal/EditProjectModal'
 import DeleteProjectModal from './DeleteProjectModal/DeleteProjectModal'
+
 const ProjectSlider = () => {
 
     const navigate = useNavigate()
@@ -14,6 +16,7 @@ const ProjectSlider = () => {
     const [showLeftArrow, setShowLeftArrow] = useState(false)
     const [showRightArrow, setShowRightArrow] = useState(true)
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
     const {
@@ -40,7 +43,7 @@ const ProjectSlider = () => {
 
     useEffect(() => {
         fetchProjects()                                          // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [])
 
     useEffect(() => {
         const activeProject = location.state?.activeProject
@@ -52,23 +55,28 @@ const ProjectSlider = () => {
 
     const handleCreateNewProject = async () => {
         try {
-            const newProject = await createNewProject();
+            const newProject = await createNewProject()
             if (newProject) {
-                setIsCreateModalOpen(true);
+                setIsCreateModalOpen(true)
             }
         } catch (error) {
             console.error("Error creating new project:", error)
         }
     }
 
+    const handleEditProject = () => {
+        if (!currentProject) return
+        setIsEditModalOpen(true)
+    }
+
     const handleDeleteProject = () => {
         if (!currentProject) return
         setIsDeleteModalOpen(true)
-    };
+    }
 
     const handleConfirmDelete = async () => {
         await deleteCurrentProject()
-    };
+    }
 
     const scrollToProject = (projectId) => {
         if (projectRefs.current[projectId]) {
@@ -88,20 +96,20 @@ const ProjectSlider = () => {
 
     const checkScrollPosition = () => {
         if (containerRef.current) {
-            const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
+            const { scrollLeft, scrollWidth, clientWidth } = containerRef.current
             setShowLeftArrow(scrollLeft > 0)
-            setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 1);
+            setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 1)
         }
     }
 
     useEffect(() => {
         checkScrollPosition()
-        const container = containerRef.current;
+        const container = containerRef.current
         if (container) {
             container.addEventListener('scroll', checkScrollPosition)
             return () => container.removeEventListener('scroll', checkScrollPosition)
         }
-    }, [projectList]);
+    }, [projectList])
 
     const scrollLeft = () => {
         if (containerRef.current) {
@@ -131,7 +139,7 @@ const ProjectSlider = () => {
                 </div>
             </div>
             </div>
-        );
+        )
     }
 
 
@@ -165,7 +173,7 @@ const ProjectSlider = () => {
                 <div className={styles['create-new-project-button']} onClick={handleCreateNewProject} title={"Create New Project"}>
                     <CreateIcon  height={"1.25rem"} width={"1.25rem"} backgroundFill='transparent' className={styles['icon']} title={"Create New Project"}/>
                 </div>
-                <div className={styles['edit-current-project-button']} title={"Edit Project"} >
+                <div className={`${styles['edit-current-project-button']} ${!currentProject ? styles['disabled'] : ''}`} title={"Edit Project"} onClick={handleEditProject}>
                     <EditIcon  height={"1.25rem"} width={"1.25rem"} className={styles['icon']} title={"Edit Project"}/>
                 </div>
                 <div
@@ -179,6 +187,10 @@ const ProjectSlider = () => {
             <CreateProjectModal
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
+            />
+            <EditProjectModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
             />
             <DeleteProjectModal
                 isOpen={isDeleteModalOpen}

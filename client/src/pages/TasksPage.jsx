@@ -1,9 +1,9 @@
-import Tasks from '../components/tasks/Tasks';
+import Tasks from '../components/tasks/Tasks'
 
 const TasksPage = () => {
     return (
             <Tasks />
-    );
-};
+    )
+}
 
-export default TasksPage;
+export default TasksPage

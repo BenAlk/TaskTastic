@@ -7,7 +7,6 @@
 .content {
     display: grid;
     grid-template-rows: repeat(2, 1fr);
-    /* justify-content: space-evenly; */
     height: 100%;
 }
 

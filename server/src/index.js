@@ -24,7 +24,7 @@ app.use("/tasks", taskRouter)
 app.use("/messages", messageRouter)
 
 mongoose.connect(
-    `mongodb+srv://benalkureishi:${MONGO_DB_PASSWORD}@tasktastic.qyi3u.mongodb.net/tasktastic?retryWrites=true&w=majority`,
+    `${MONGO_DB_PASSWORD}`,
 )
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.log('Error connecting to MongoDB', err))

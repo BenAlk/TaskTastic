@@ -1,18 +1,18 @@
-import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
-import dayjs from 'dayjs';
-import { useTaskContext } from '../../../context/TaskContext';
-import { useProjectContext } from '../../../context/ProjectContext';
-import { useAuth } from '../../../context/AuthContext';
-import { useUserContext } from '../../../context/UserContext';
-import styles from './NewTaskModal.module.css';
-import Modal from "../../common/Modal/Modal";
+import PropTypes from 'prop-types'
+import { useState, useEffect } from 'react'
+import dayjs from 'dayjs'
+import { useTaskContext } from '../../../context/TaskContext'
+import { useProjectContext } from '../../../context/ProjectContext'
+import { useAuth } from '../../../context/AuthContext'
+import { useUserContext } from '../../../context/UserContext'
+import styles from './NewTaskModal.module.css'
+import Modal from "../../common/Modal/Modal"
 
 const NewTaskModal = ({ isOpen, onClose }) => {
-    const { currentProject } = useProjectContext();
-    const { createTask } = useTaskContext();
-    const { currentUser } = useAuth();
-    const { getMultipleUsers } = useUserContext();
+    const { currentProject } = useProjectContext()
+    const { createTask } = useTaskContext()
+    const { currentUser } = useAuth()
+    const { getMultipleUsers } = useUserContext()
 
     const initialFormState = {
         title: '',
@@ -21,97 +21,93 @@ const NewTaskModal = ({ isOpen, onClose }) => {
         kanbanColumnId: currentProject?.kanbanColumns[0]?._id,
         dueDate: dayjs().add(1, 'week').format('YYYY-MM-DD'),
         isAtRisk: false,
-        eisenhowerStatus: currentProject?.eisenhowerEnabled ? {
+        eisenhowerStatus: {
             important: false,
             urgent: false
-        } : null
-    };
+        }
+    }
 
-    const [formData, setFormData] = useState(initialFormState);
-    const [errors, setErrors] = useState({});
-    const [showConfirmation, setShowConfirmation] = useState(false);
-    const [teamMembers, setTeamMembers] = useState([]);
+    const [formData, setFormData] = useState(initialFormState)
+    const [errors, setErrors] = useState({})
+    const [showConfirmation, setShowConfirmation] = useState(false)
+    const [teamMembers, setTeamMembers] = useState([])
 
     useEffect(() => {
         if (!isOpen) {
-            setFormData(initialFormState);
-            setErrors({});
-            setShowConfirmation(false);
+            setFormData(initialFormState)
+            setErrors({})
+            setShowConfirmation(false)
         }
-    }, [isOpen, currentProject?.team]);
+    }, [isOpen, currentProject?.team])
 
     useEffect(() => {
         const fetchTeamMembers = async () => {
             try {
-                // Only proceed if we have team data
                 if (currentProject?.team && currentProject.team.length > 0) {
-                    // Extract user IDs from team members
-                    const userIds = currentProject.team.map(member => member.user);
-
-                    // Fetch the user details
-                    const userDetails = await getMultipleUsers(userIds);
-                    setTeamMembers(userDetails);
+                    const userIds = currentProject.team.map(member => member.user)
+                    const userDetails = await getMultipleUsers(userIds)
+                    setTeamMembers(userDetails)
                 }
             } catch (error) {
-                console.error('Error fetching user details:', error);
+                console.error('Error fetching user details:', error)
             }
-        };
-        fetchTeamMembers();
+        }
+        fetchTeamMembers()
     }, [currentProject?.team])
 
     const handleClose = () => {
-        setFormData(initialFormState);
-        setErrors({});
-        setShowConfirmation(false);
-        onClose();
-    };
+        setFormData(initialFormState)
+        setErrors({})
+        setShowConfirmation(false)
+        onClose()
+    }
 
     const validateForm = () => {
-        const newErrors = {};
+        const newErrors = {}
 
         if (!formData.title || !formData.title.trim()) {
-            newErrors.title = 'Task title is required';
+            newErrors.title = 'Task title is required'
         }
 
         if (!formData.dueDate) {
-            newErrors.dueDate = 'Due date is required';
+            newErrors.dueDate = 'Due date is required'
         }
 
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
+        return Object.keys(newErrors).length === 0
+    }
 
     const handleInputChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        const { name, value, type, checked } = e.target
         if (type === 'checkbox') {
             if (name.startsWith('eisenhower.')) {
-                const [, status] = name.split('.');
+                const [, status] = name.split('.')
                 setFormData(prev => ({
                     ...prev,
                     eisenhowerStatus: {
                         ...prev.eisenhowerStatus,
                         [status]: checked
                     }
-                }));
+                }))
             } else {
                 setFormData(prev => ({
                     ...prev,
                     [name]: checked
-                }));
+                }))
             }
         } else {
             setFormData(prev => ({
                 ...prev,
                 [name]: value
-            }));
+            }))
         }
-    };
+    }
 
     const handleSave = () => {
         if (validateForm()) {
-            setShowConfirmation(true);
+            setShowConfirmation(true)
         }
-    };
+    }
 
     const handleConfirmSave = async () => {
         try {
@@ -127,11 +123,11 @@ const NewTaskModal = ({ isOpen, onClose }) => {
                     flaggedByUserId: null,
                     flaggedAt: null
                 }
-            };
-            const result = await createTask(taskWithProject);
+            }
+            const result = await createTask(taskWithProject)
 
             if (result) {
-                onClose();
+                onClose()
             } else {
                 setErrors(prev => ({ ...prev, submit: 'Failed to create task' }));
             }
@@ -139,9 +135,9 @@ const NewTaskModal = ({ isOpen, onClose }) => {
             console.error('Error creating task:', error);
             setErrors(prev => ({ ...prev, submit: 'Failed to create task' }));
         }
-    };
+    }
 
-    if (!isOpen) return null;
+    if (!isOpen) return null
 
     return (
         <Modal
@@ -274,12 +270,12 @@ const NewTaskModal = ({ isOpen, onClose }) => {
                 </>
             )}
         </Modal>
-    );
-};
+    )
+}
 
 NewTaskModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired
-};
+}
 
-export default NewTaskModal;
+export default NewTaskModal

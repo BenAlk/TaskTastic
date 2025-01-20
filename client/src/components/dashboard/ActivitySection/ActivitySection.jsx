@@ -1,35 +1,52 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
-    ComposedChart,
+    BarChart,
     Bar,
     XAxis,
     YAxis,
-    Line,
     CartesianGrid,
     Tooltip,
     ResponsiveContainer,
-    Area
-} from 'recharts';
-import PropTypes from 'prop-types';
-import { useProjectContext } from '../../../context/ProjectContext';
-import { useTaskContext } from '../../../context/TaskContext';
-import { useUserContext } from '../../../context/UserContext';
-import styles from './ActivitySection.module.css';
+    Legend
+} from 'recharts'
+import PropTypes from 'prop-types'
+import { useProjectContext } from '../../../context/ProjectContext'
+import { useTaskContext } from '../../../context/TaskContext'
+import { useUserContext } from '../../../context/UserContext'
+import styles from './ActivitySection.module.css'
 
 const ActivitySection = ({ height, width }) => {
-    // State management for our chart
-    const [chartData, setChartData] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [chartData, setChartData] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
+    const navigate = useNavigate()
 
-    // Get data from our contexts
-    const { currentProject } = useProjectContext();
-    const { tasks } = useTaskContext();
-    const { getMultipleUsers, userCache } = useUserContext();
+    const { currentProject } = useProjectContext()
+    const { tasks } = useTaskContext()
+    const { getMultipleUsers, userCache } = useUserContext()
 
-    /* eslint react/prop-types: 0 */
-    // Custom tooltip component for better data display
+    const handleBarClick = (data) => {
+        navigate('/team', {
+            state: {
+                openModal: true,
+                userId: data.userId
+            },
+            replace: true
+        });
+    };
+/* eslint react/prop-types: 0 */
+    const CustomBar = (props) => {
+        const { fill, x, y, width, height, data } = props;
+        return (
+            <g cursor="pointer" onClick={() => handleBarClick({ userId: data.userId })}>
+                <rect x={x} y={y} width={width} height={height} fill={fill} />
+            </g>
+        );
+    };
+
+
     const CustomTooltip = ({ active, payload, label }) => {
-        if (!active || !payload || !payload.length) return null;
+        if (!active || !payload || !payload.length) return null
 
         return (
             <div className={styles.tooltip}>
@@ -41,36 +58,30 @@ const ActivitySection = ({ height, width }) => {
                     </div>
                 ))}
             </div>
-        );
-    };
+        )
+    }
 
-    // Effect to load and process our data
     useEffect(() => {
         const loadTeamActivity = async () => {
             if (!currentProject?.team || !tasks) {
-                setIsLoading(false);
-                return;
+                setIsLoading(false)
+                return
             }
 
             try {
-                // Get team member IDs and fetch their details
-                const teamMemberIds = currentProject.team.map(member => member.user);
-
-                // Only fetch users we don't have in cache
-                const missingUserIds = teamMemberIds.filter(id => !userCache[id]);
+                const teamMemberIds = currentProject.team.map(member => member.user)
+                const missingUserIds = teamMemberIds.filter(id => !userCache[id])
                 if (missingUserIds.length > 0) {
-                    await getMultipleUsers(missingUserIds);
+                    await getMultipleUsers(missingUserIds)
                 }
 
-                // Set up our date ranges for filtering
-                const now = new Date();
-                const threeDaysFromNow = new Date(now);
-                threeDaysFromNow.setDate(now.getDate() + 3);
+                const now = new Date()
+                const threeDaysFromNow = new Date(now)
+                threeDaysFromNow.setDate(now.getDate() + 3)
 
-                const sevenDaysAgo = new Date(now);
-                sevenDaysAgo.setDate(now.getDate() - 7);
+                const sevenDaysAgo = new Date(now)
+                sevenDaysAgo.setDate(now.getDate() - 7)
 
-                // Process data for each team member
                 const memberStats = teamMemberIds.map(memberId => {
                     const memberTasks = tasks.filter(task =>
                         task.assignedTo === memberId ||
@@ -78,153 +89,128 @@ const ActivitySection = ({ height, width }) => {
                     );
 
                     const tasksDueNext3Days = memberTasks.filter(task => {
-                        const dueDate = new Date(task.dueDate);
-                        return dueDate <= threeDaysFromNow && dueDate >= now;
-                    }).length;
+                        if (!task.dueDate || task.completed.isCompleted) return false
+                        const dueDate = new Date(task.dueDate)
+                        return dueDate <= threeDaysFromNow && dueDate >= now
+                    }).length
 
                     const tasksCompletedLast7Days = memberTasks.filter(task => {
-                        const completedDate = new Date(task.completedAt);
-                        return completedDate >= sevenDaysAgo && completedDate <= now;
-                    }).length;
+                        if (!task.completed.isCompleted) return false
+                        const completedDate = new Date(task.completed?.completedOn)
+                        return completedDate >= sevenDaysAgo && completedDate <= now
+                    }).length
 
                     const overdueTasks = memberTasks.filter(task => {
-                        const dueDate = new Date(task.dueDate);
-                        return dueDate < now && task.status !== 'completed';
-                    }).length;
+                        if (!task.dueDate || task.completed.isCompleted) return false
+                        const dueDate = new Date(task.dueDate)
+                        return dueDate < now
+                    }).length
 
-                    const userDetails = userCache[memberId];
-
-                    // Format user's display name
+                    const userDetails = userCache[memberId]
                     const formatUserName = (user) => {
-                        if (!user) return `Unknown User`;
-
-                        // If we have both first and last name, use them
-                        if (user.firstName) {
-                            return `${user.firstName}`;
-                        }
-
-                        // Fall back to email if no names are available
-                        if (user.email) {
-                            return user.email.split('@')[0]; // Show only the part before @
-                        }
-
-                        // Last resort
-                        return `User ${memberId.slice(-4)}`; // Show last 4 chars of ID
+                        if (!user) return `Unknown User`
+                        if (user.firstName) return `${user.firstName}`
+                        if (user.email) return user.email.split('@')[0]
+                        return `User ${memberId.slice(-4)}`
                     };
 
                     return {
                         name: formatUserName(userDetails),
-                        'Tasks Due Next 3 Days': tasksDueNext3Days,
-                        'Tasks Completed Last 7 Days': tasksCompletedLast7Days,
-                        'Overdue Tasks': overdueTasks
+                        userId: memberId,
+                        'Due Soon': tasksDueNext3Days,
+                        'Completed Recently': tasksCompletedLast7Days,
+                        'Overdue': overdueTasks
                     };
                 });
-                setChartData(memberStats);
+                setChartData(memberStats)
             } catch (error) {
-                console.error('Error processing team activity:', error);
+                console.error('Error processing team activity:', error)
             } finally {
-                setIsLoading(false);
+                setIsLoading(false)
             }
         };
 
         loadTeamActivity();
-    }, [currentProject?.team, tasks]);
+    }, [currentProject?.team, tasks, getMultipleUsers, userCache])
 
-    // Handle loading state
     if (isLoading) {
-        return <div className={styles.loading}>Loading team activity...</div>;
+        return <div className={styles.loading}>Loading team activity...</div>
     }
 
-    // Handle various error states
     if (!currentProject?.team) {
-        return <div className={styles.noData}>No project team available</div>;
+        return <div className={styles.noData}>No project team available</div>
     }
 
     if (!tasks?.length) {
-        return <div className={styles.noData}>There are no tasks for activity to be shown.</div>;
+        return <div className={styles.noData}>There are no tasks for activity to be shown.</div>
     }
 
     if (!chartData.length) {
-        return <div className={styles.noData}>No activity data available</div>;
+        return <div className={styles.noData}>No activity data available</div>
     }
 
-    // Main render
     return (
         <div className={styles.container}>
             <div className={styles.chartWrapper}>
-                <ResponsiveContainer height={height} width={width}>
-                    <ComposedChart
+                <ResponsiveContainer height={height} width={width} >
+                <BarChart
                         data={chartData}
                         margin={{
-                            top: 40,
-                            right: 40,
-                            left: -40,
-                            bottom: 0,
+                            top: 20,
+                            right: 30,
+                            left: 20,
+                            bottom: 5,
                         }}
+                        onClick={(data) => {
+                            if (data && data.activePayload) {
+                                handleBarClick({ userId: data.activePayload[0].payload.userId })
+                            }
+                        }}
+                        cursor={'pointer'}
                     >
-                        {/* Grid lines for better readability */}
                         <CartesianGrid strokeDasharray="3 3" />
-
-                        {/* X-axis configuration - team member names */}
                         <XAxis
                             dataKey="name"
-                            tick={{ fill: '#666', fontSize: 16, fontWeight: 700, dy: 10 }}
-                            tickLine={false}
-                            axisLine={{ stroke: '#666' }}
+                            tick={{ fill: '#666', fontSize: 14 }}
                             height={60}
                             interval={0}
                             angle={0}
-                            textAnchor="middle"
                         />
-
-                        {/* Y-axis configuration - task counts */}
                         <YAxis
-                            tickCount={5}
                             allowDecimals={false}
-                            width={80}
                             tick={{ fill: '#666', fontSize: 12 }}
-                            tickLine={false}
-                            axisLine={{ stroke: '#666' }}
-                            tickFormatter={(value) => `${value}`}
                         />
-
-                        {/* Custom tooltip for interactive data display */}
                         <Tooltip content={<CustomTooltip />} />
-
-                        {/* Area chart for upcoming tasks */}
-                        <Area
-                            type="monotone"
-                            dataKey="Tasks Due Next 3 Days"
-                            fill="#8884d8"
-                            stroke="#8884d8"
-                            fillOpacity={0.3}
-                        />
-
-                        {/* Bar chart for completed tasks */}
+                        <Legend />
                         <Bar
-                            dataKey="Tasks Completed Last 7 Days"
-                            activeBar={false}
+                            dataKey="Completed Recently"
+                            fill="#82ca9d"
                             barSize={20}
-                            fill="#006400"
+                            shape={<CustomBar />}
                         />
-
-                        {/* Line chart for overdue tasks */}
-                        <Line
-                            type="monotone"
-                            dataKey="Overdue Tasks"
-                            stroke="#ff0000"
-                            strokeWidth={2}
+                        <Bar
+                            dataKey="Due Soon"
+                            fill="#8884d8"
+                            barSize={20}
+                            shape={<CustomBar />}
                         />
-                    </ComposedChart>
+                        <Bar
+                            dataKey="Overdue"
+                            fill="#ff8042"
+                            barSize={20}
+                            shape={<CustomBar />}
+                        />
+                    </BarChart>
                 </ResponsiveContainer>
             </div>
         </div>
-    );
-};
+    )
+}
+
 
 ActivitySection.propTypes = {
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
-};
+}
 
 export default ActivitySection;

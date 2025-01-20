@@ -1,12 +1,11 @@
 import express from 'express'
 import { TaskModel } from '../models/Tasks.js'
 import { ProjectModel } from '../models/Projects.js'
-import { verifyToken } from '../middleware/auth.js'
+import { verifyToken, preventDemoModification } from '../middleware/auth.js'
 
 const router = express.Router()
 
-    //Create a new task
-    router.post("/", verifyToken, async (req, res) => {
+    router.post("/", verifyToken, preventDemoModification, async (req, res) => {
         try {
             const { projectId, title, description, assignedTo, kanbanColumnId, eisenhowerStatus, dueDate } = req.body
             const project = await ProjectModel.findOne({ _id: projectId, 'team.user': req.userId })
@@ -31,7 +30,6 @@ const router = express.Router()
         }
     })
 
-    //Retrieve all tasks for a project
     router.get("/project/:projectId", verifyToken, async (req, res) => {
         try {
             const project = await ProjectModel.findOne({ _id: req.params.projectId, 'team.user': req.userId })
@@ -45,7 +43,6 @@ const router = express.Router()
         }
     })
 
-    //Retrieve a specific task by ID
     router.get("/:taskId", verifyToken, async (req, res) => {
         try {
             const task = await TaskModel.findById(req.params.taskId )
@@ -62,8 +59,7 @@ const router = express.Router()
         }
     })
 
-    //Update a task
-    router.put("/:taskId", verifyToken, async (req, res) => {
+    router.put("/:taskId", verifyToken, preventDemoModification, async (req, res) => {
         try {
             const task = await TaskModel.findById(req.params.taskId)
             if (!task) {
@@ -80,8 +76,7 @@ const router = express.Router()
         }
     })
 
-    //Delete a task
-    router.delete("/:taskId", verifyToken, async (req, res) => {
+    router.delete("/:taskId", verifyToken, preventDemoModification, async (req, res) => {
         try {
             const task = await TaskModel.findById(req.params.taskId)
             if (!task) {
@@ -98,8 +93,7 @@ const router = express.Router()
         }
     })
 
-    //Update task risk status
-    router.put("/:taskId/risk", verifyToken, async (req, res) => {
+    router.put("/:taskId/risk", verifyToken, preventDemoModification, async (req, res) => {
         try {
             const { isAtRisk, riskType, riskDescription } = req.body
             const task = await TaskModel.findById(req.params.taskId)
@@ -122,6 +116,33 @@ const router = express.Router()
             res.json(task)
         } catch (error) {
             res.status(500).json({ message: "Error updating task risk", error: error.message })
+        }
+    })
+
+    router.get("/project/:projectId/at-risk", verifyToken, async (req, res) => {
+        try {
+            const project = await ProjectModel.findOne({
+                _id: req.params.projectId,
+                'team.user': req.userId
+            })
+
+            if (!project) {
+                return res.status(404).json({
+                    message: "Project not found or access denied"
+                })
+            }
+
+            const riskyTasks = await TaskModel.find({
+                projectId: req.params.projectId,
+                'risk.isAtRisk': true  
+            })
+
+            res.json(riskyTasks)
+        } catch (error) {
+            res.status(500).json({
+                message: "Error fetching at-risk tasks",
+                error: error.message
+            })
         }
     })
 

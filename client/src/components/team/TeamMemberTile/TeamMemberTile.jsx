@@ -8,31 +8,41 @@ import { useProjectContext } from '../../../context/ProjectContext'
 import { useAuth } from '../../../context/AuthContext'
 import TeamMemberDetailModal from '../TeamMemberDetailModal/TeamMemberDetailModal'
 
-
-//FIX OVERLAYS! REMOVE FROM INSIDE TILES AND USE FRAGMENTS!
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-const TeamMemberTile = ({ member }) => {
+const TeamMemberTile = ({ member: initialMember, openModal, onModalClosed }) => {
     const { userCache } = useUserContext()
     const { tasks, fetchTasks } = useTaskContext()
-    const { currentProject } = useProjectContext()
-    const { currentUser } = useAuth();
+    const { currentProject, lastUpdate } = useProjectContext()
+    const { currentUser } = useAuth()
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [taskStats, setTaskStats] = useState({
         totalTasks: 0,
         overdueTasks: 0
     })
 
+    useEffect(() => {
+        if (openModal) {
+            setIsModalOpen(true)
+        }
+    }, [openModal])
 
-    const handleModalClose = () => {
-        event.stopPropagation();
-        setIsModalOpen(false);
-    };
+    const member = useMemo(() => {
+        return currentProject?.team.find(m => m.user === initialMember.user) || initialMember
+    }, [currentProject?.team, initialMember.user, lastUpdate])
+
+    const handleModalClose = (e) => {
+        if (e) {
+            e.stopPropagation()
+        }
+        setIsModalOpen(false)
+        if (onModalClosed) {
+            onModalClosed()
+        }
+    }
 
     const handleTileClick = (e) => {
         e.stopPropagation();
         setIsModalOpen(true);
-    };
+    }
 
     const userPermissions = useMemo(() => {
         if (!currentProject || !currentUser) return { canViewTaskStats: false }
@@ -45,8 +55,8 @@ const TeamMemberTile = ({ member }) => {
                     teamMember.role === 'admin'
                 )
             )
-        };
-    }, [currentProject, currentUser]);
+        }
+    }, [currentProject, currentUser])
 
     useEffect(() => {
         if (currentProject?._id) {
@@ -78,20 +88,21 @@ const TeamMemberTile = ({ member }) => {
             }
 
             const userTasks = tasks.filter(task =>
-                String(task.assignedTo) === String(member.user)
-            );
+                String(task.assignedTo) === String(member.user) &&
+                !task.completed?.isCompleted
+            )
 
             const today = dayjs();
             const overdue = userTasks.filter(task => {
                 if (!task.dueDate || task.completedDate) return false
                 return dayjs(task.dueDate).isBefore(today, 'day')
-            });
+            })
 
             setTaskStats({
                 totalTasks: userTasks.length,
                 overdueTasks: overdue.length
-            });
-        };
+            })
+        }
 
         calculateTaskStats();
     }, [tasks, currentProject?._id, userPermissions.canViewTaskStats])
@@ -100,65 +111,65 @@ const TeamMemberTile = ({ member }) => {
 
     return (
         <>
-        <div
-            className={styles['member-tile-container']}
-            onClick={handleTileClick}
-            style={{ cursor: 'pointer' }}
-        >
-            <div className={styles['member-tile-header']}>
-                <h2>{userDetails.firstName} {userDetails.lastName}</h2>
-            </div>
-
-            <div className={styles['member-tile-content']}>
-                <div className={styles['member-info-group']}>
-                    <h3>Role:</h3>
-                    <p>{member.role}</p>
+            <div
+                className={styles['member-tile-container']}
+                onClick={handleTileClick}
+                style={{ cursor: 'pointer' }}
+            >
+                <div className={styles['member-tile-header']}>
+                    <h2>{userDetails.firstName} {userDetails.lastName}</h2>
                 </div>
 
-                <div className={styles['member-info-group']}>
-                    <h3>Email:</h3>
-                    <p>{userDetails.email}</p>
-                </div>
-
-            {userPermissions.canViewTaskStats ? (
-                    <div className={styles['task-stats-container']}>
-                        <div className={styles['member-info-group']}>
-                            <h3 className={styles['task-count-header']}>Active Tasks:</h3>
-                            <p className={`${styles['task-count']} ${
-                                taskStats.totalTasks > 5 ? styles['high-workload'] : ''
-                            }`}>
-                                {taskStats.totalTasks}
-                            </p>
-                        </div>
-                        <div className={styles['member-info-group']}>
-                            <h3 className={styles['task-count-header']}>Overdue:</h3>
-                            <p className={`${styles['task-count']} ${
-                                taskStats.overdueTasks > 0 ? styles['overdue'] : ''
-                            }`}>
-                                {taskStats.overdueTasks}
-                            </p>
-                        </div>
+                <div className={styles['member-tile-content']}>
+                    <div className={styles['member-info-group']}>
+                        <h3>Role:</h3>
+                        <p>{member.role}</p>
                     </div>
-                ) : null}
+
+                    <div className={styles['member-info-group']}>
+                        <h3>Email:</h3>
+                        <p>{userDetails.email}</p>
+                    </div>
+
+                    {userPermissions.canViewTaskStats ? (
+                        <div className={styles['task-stats-container']}>
+                            <div className={styles['member-info-group']}>
+                                <h3 className={styles['task-count-header']}>Active Tasks:</h3>
+                                <p className={`${styles['task-count']} ${
+                                    taskStats.totalTasks > 5 ? styles['high-workload'] : ''
+                                }`}>
+                                    {taskStats.totalTasks}
+                                </p>
+                            </div>
+                            <div className={styles['member-info-group']}>
+                                <h3 className={styles['task-count-header']}>Overdue:</h3>
+                                <p className={`${styles['task-count']} ${
+                                    taskStats.overdueTasks > 0 ? styles['overdue'] : ''
+                                }`}>
+                                    {taskStats.overdueTasks}
+                                </p>
+                            </div>
+                        </div>
+                    ) : null}
+                </div>
             </div>
-
-
-        </div>
-        <TeamMemberDetailModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        member={member}
-        userDetails={userDetails}
-    />
-    </>
-    );
-};
+            <TeamMemberDetailModal
+                isOpen={isModalOpen}
+                onClose={handleModalClose}
+                member={member}
+                userDetails={userDetails}
+            />
+        </>
+    )
+}
 
 TeamMemberTile.propTypes = {
     member: PropTypes.shape({
         user: PropTypes.string.isRequired,
         role: PropTypes.string.isRequired
-    }).isRequired
-};
+    }).isRequired,
+    openModal: PropTypes.bool,
+    onModalClosed: PropTypes.func
+}
 
-export default TeamMemberTile;
+export default TeamMemberTile

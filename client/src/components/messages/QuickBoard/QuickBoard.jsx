@@ -1,53 +1,111 @@
-import { useState, useEffect } from 'react';
-import { useMessage } from '../../../context/MessageContext';
-import { useProjectContext } from '../../../context/ProjectContext';
-import MessageComposer from '../MessageComposer/MessageComposer';
-import BoardMessage from '../BoardMessage/BoardMessage';
-import styles from './QuickBoard.module.css';
+import { useState, useEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
+import { useMessage } from '../../../context/MessageContext'
+import { useProjectContext } from '../../../context/ProjectContext'
+import { useAuth } from '../../../context/AuthContext'
+import { CheckCircle } from 'lucide-react'
+import MessageComposer from '../MessageComposer/MessageComposer'
+import BoardMessage from '../BoardMessage/BoardMessage'
+import styles from './QuickBoard.module.css'
 
-const QuickBoard = () => {
-    // State Management:
-    // Think of these like different lists we need to keep track of
-    const [replyingTo, setReplyingTo] = useState(null);        // Which message we're replying to
-    const [expandedThreads, setExpandedThreads] = useState(new Set());  // Which conversations are open
-    const [loading, setLoading] = useState(true);              // Are we loading messages?
-    const [deletedMessages, setDeletedMessages] = useState(new Set()); // Keep track of what's been deleted
+const QuickBoard = ({ scrollToMessageId }) => {
+    const messagesEndRef = useRef(null)
 
-    // Get our tools from React contexts
-    // Like getting our supplies from different toolboxes
-    const { currentProject } = useProjectContext();
+    const [replyingTo, setReplyingTo] = useState(null)
+    const [expandedThreads, setExpandedThreads] = useState(new Set())
+    const [loading, setLoading] = useState(true)
+    const [deletedMessages, setDeletedMessages] = useState(new Set())
+    const [highlightState, setHighlightState] = useState({
+        messageId: scrollToMessageId,
+        isActive: Boolean(scrollToMessageId)
+    })
+
+    const { currentProject } = useProjectContext()
+    const { currentUser } = useAuth()
     const {
         createMessage,
         fetchBoardMessages,
-        boardMessages = [], // If no messages, start with empty array
+        markMessagesAsRead,
+        boardMessages = [],
         error
-    } = useMessage();
+    } = useMessage()
 
-    // When the project changes, load its messages
-    // Like opening a new file folder and reading its contents
     useEffect(() => {
-        if (!currentProject?._id) return;
+        if (!currentProject?._id) return
 
         const loadMessages = async () => {
-            setLoading(true);
+            setLoading(true)
             try {
-                await fetchBoardMessages(currentProject._id);
+                await fetchBoardMessages(currentProject._id)
             } catch (error) {
-                console.error('Failed to fetch messages:', error);
+                console.error('Failed to fetch messages:', error)
             } finally {
-                // Wait a bit before hiding loading screen to prevent flickering
-                setTimeout(() => setLoading(false), 300);
+                setTimeout(() => setLoading(false), 300)
             }
         };
 
-        loadMessages();
-        setExpandedThreads(new Set()); // Reset which threads are expanded
-    }, [currentProject?._id]);
+        loadMessages()
+        setExpandedThreads(new Set())
+    }, [currentProject?._id])
 
-    // When someone sends a new message
-    // Like adding a new note to our conversation
+    useEffect(() => {
+        if (scrollToMessageId && !loading) {
+            const threadId = Object.entries(organizeThreads(boardMessages))
+                .find(([_, thread]) =>
+                    thread.root._id === scrollToMessageId ||
+                    thread.replies.some(reply => reply._id === scrollToMessageId)
+                )?.[0]
+
+            if (threadId) {
+                setExpandedThreads(prev => new Set([...prev, threadId]))
+                setHighlightState({
+                    messageId: scrollToMessageId,
+                    isActive: true
+                })
+
+                setTimeout(() => {
+                    const messageElement = document.getElementById(`message-${scrollToMessageId}`)
+                    if (messageElement) {
+                        messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                    }
+                }, 100)
+            }
+        }
+    }, [scrollToMessageId, loading, boardMessages])
+
+    const isMessageUnread = (message) => {
+        return !message.read.includes(currentUser._id)
+    };
+
+    const handleMarkAsRead = async (messageId) => {
+        try {
+            await markMessagesAsRead([messageId])
+        } catch (error) {
+            console.error('Failed to mark message as read:', error)
+        }
+    }
+
+    // Handle marking an entire thread as read
+    const handleMarkThreadAsRead = async (threadId, replies) => {
+        try {
+            const messageIds = [threadId]
+            replies.forEach(reply => {
+                if (isMessageUnread(reply)) {
+                    messageIds.push(reply._id)
+                }
+            });
+
+            if (messageIds.length > 0) {
+                await markMessagesAsRead(messageIds)
+            }
+
+        } catch (error) {
+            console.error('Failed to mark thread as read:', error)
+        }
+    };
+
     const handleNewMessage = async (content) => {
-        if (!currentProject?._id) return;
+        if (!currentProject?._id) return
 
         try {
             await createMessage(
@@ -57,73 +115,174 @@ const QuickBoard = () => {
                 [],
                 replyingTo
             );
-            setReplyingTo(null); // Clear reply state after posting
+            setReplyingTo(null)
         } catch (error) {
-            console.error('Failed to create message:', error);
-            alert('Failed to create message. Please try again.');
+            console.error('Failed to create message:', error)
+            alert('Failed to create message. Please try again.')
         }
     };
 
-    // Handle when a message is successfully deleted
-    // Like crossing something off our list
     const handleMessageDeleted = (messageId) => {
-        setDeletedMessages(prev => new Set([...prev, messageId]));
+        setDeletedMessages(prev => new Set([...prev, messageId]))
     };
 
-    // Organize messages into conversations (threads)
-    // Like sorting papers into different folders
+    const handleMessageClick = (messageId) => {
+        if (messageId === highlightState.messageId) {
+            setHighlightState(prev => ({
+                ...prev,
+                isActive: false
+            }))
+        }
+    }
+
+    const shouldHighlight = (messageId) => {
+        return messageId === highlightState.messageId && highlightState.isActive
+    }
+
     const organizeThreads = (messages) => {
-        // First, remove any messages that have been deleted
-        const activeMessages = messages.filter(msg => !deletedMessages.has(msg._id));
+        const activeMessages = messages.filter(msg => !deletedMessages.has(msg._id))
 
         return activeMessages.reduce((acc, message) => {
             if (!message.parentMessage) {
-                // This is a new conversation starter
                 if (!acc[message._id]) {
                     acc[message._id] = {
                         root: message,
                         hasReplies: false,
                         replies: []
-                    };
+                    }
                 } else {
-                    // We found replies before the main message
-                    acc[message._id].root = message;
+                    acc[message._id].root = message
                 }
             } else {
-                // This is a reply to another message
-                const parentId = message.parentMessage;
+                const parentId = message.parentMessage
                 if (!acc[parentId]) {
-                    // Haven't seen the parent message yet
                     acc[parentId] = {
                         root: null,
                         hasReplies: true,
                         replies: [message]
-                    };
+                    }
                 } else {
-                    // Add to existing conversation
-                    acc[parentId].hasReplies = true;
-                    acc[parentId].replies.push(message);
+                    acc[parentId].hasReplies = true
+                    acc[parentId].replies.push(message)
                 }
             }
-            return acc;
-        }, {});
-    };
+            return acc
+        }, {})
+    }
 
-    // Toggle showing/hiding replies in a thread
-    // Like expanding or collapsing a folder
     const toggleThread = (threadId) => {
         setExpandedThreads(prev => {
-            const newSet = new Set(prev);
+            const newSet = new Set(prev)
             if (newSet.has(threadId)) {
-                newSet.delete(threadId);
+                newSet.delete(threadId)
             } else {
-                newSet.add(threadId);
+                newSet.add(threadId)
             }
-            return newSet;
-        });
-    };
+            return newSet
+        })
+    }
 
-    // Different screens based on our current state
+    const renderThread = (threadId, thread, isExpanded) => {
+        const hasUnreadReplies = thread.replies.some(isMessageUnread)
+        const isThreadUnread = isMessageUnread(thread.root) || hasUnreadReplies
+
+        return (
+            <div
+                key={threadId}
+                className={`
+                    ${styles['message-thread']}
+                    ${shouldHighlight(thread.root._id) ? styles['highlighted-message'] : ''}
+                    ${isThreadUnread ? styles['unread'] : ''}
+                `}
+                id={`message-${thread.root._id}`}
+                onClick={() => handleMessageClick(thread.root._id)}
+            >
+                <div className={styles['thread-header']}>
+                    <BoardMessage
+                        message={thread.root}
+                        hasReplies={thread.hasReplies}
+                        onReply={() => setReplyingTo(thread.root._id)}
+                        onDeleteSuccess={handleMessageDeleted}
+                        isUnread={isMessageUnread(thread.root)}
+                    />
+
+                    <div className={styles['thread-actions']}>
+                        {isThreadUnread && (
+                            <div
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleMarkThreadAsRead(thread.root._id, thread.replies);
+                                }}
+                                className={styles['mark-read-button']}
+                                title="Mark thread as read"
+                            >
+                                <CheckCircle className={styles['check-icon']} />
+                                Mark as read
+                            </div>
+                        )}
+
+                        {thread.replies.length > 0 && (
+                            <div
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleThread(threadId);
+                                }}
+                                className={styles['toggle-thread-button']}
+                            >
+                                {isExpanded ?
+                                    'Hide replies' :
+                                    `Show ${thread.replies.length} ${
+                                        thread.replies.length === 1 ? 'reply' : 'replies'
+                                    } ${hasUnreadReplies ? '(new)' : ''}`
+                                }
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {thread.replies.length > 0 && isExpanded && (
+                    <div className={styles['thread-replies']}>
+                        {thread.replies
+                            .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+                            .map(reply => (
+                                <div
+                                    key={reply._id}
+                                    className={`
+                                        ${styles['reply-message']}
+                                        ${shouldHighlight(reply._id) ? styles['highlighted-message'] : ''}
+                                        ${isMessageUnread(reply) ? styles['unread'] : ''}
+                                    `}
+                                    id={`message-${reply._id}`}
+                                    onClick={() => handleMessageClick(reply._id)}
+                                >
+                                    <BoardMessage
+                                        message={reply}
+                                        hasReplies={false}
+                                        isReply={true}
+                                        onReply={() => setReplyingTo(thread.root._id)}
+                                        onDeleteSuccess={handleMessageDeleted}
+                                        isUnread={isMessageUnread(reply)}
+                                    />
+                                    {isMessageUnread(reply) && (
+                                        <div
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleMarkAsRead(reply._id);
+                                            }}
+                                            className={styles['mark-read-button']}
+                                            title="Mark as read"
+                                        >
+                                            <CheckCircle className={styles['check-icon']} />
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                    </div>
+                )}
+            </div>
+        )
+    }
+
     if (!currentProject) {
         return (
             <div className={styles['quickboard-container']}>
@@ -131,7 +290,7 @@ const QuickBoard = () => {
                     Please select a project first.
                 </div>
             </div>
-        );
+        )
     }
 
     if (loading) {
@@ -145,7 +304,7 @@ const QuickBoard = () => {
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 
     if (error) {
@@ -155,16 +314,13 @@ const QuickBoard = () => {
                     Error: {error}
                 </div>
             </div>
-        );
+        )
     }
 
-    // Organize all our messages into threads
-    const threadedMessages = organizeThreads(boardMessages);
+    const threadedMessages = organizeThreads(boardMessages)
 
-    // The main display
     return (
         <div className={styles['quickboard-container']}>
-            {/* Area for writing new messages */}
             <div className={styles['composer-section']}>
                 <MessageComposer
                     onSubmit={handleNewMessage}
@@ -174,68 +330,22 @@ const QuickBoard = () => {
                 />
             </div>
 
-            {/* Area showing all messages */}
-            <div className={styles['messages-section']}>
+            <div className={styles['messages-section']} ref={messagesEndRef}>
                 {Object.entries(threadedMessages)
-                    // Only show threads that have a main message
                     .filter(([_, thread]) => thread.root)
-                    // Sort by date, newest first
                     .sort(([_, a], [__, b]) =>
                         new Date(b.root.createdAt) - new Date(a.root.createdAt)
                     )
-                    .map(([threadId, thread]) => {
-                        const isExpanded = expandedThreads.has(threadId);
-
-                        return (
-                            <div key={threadId} className={styles['message-thread']}>
-                                {/* The main message of the thread */}
-                                <div className={styles['thread-header']}>
-                                    <BoardMessage
-                                        message={thread.root}
-                                        hasReplies={thread.hasReplies}
-                                        onReply={() => setReplyingTo(thread.root._id)}
-                                        onDeleteSuccess={handleMessageDeleted}
-                                    />
-
-                                    {/* Button to show/hide replies */}
-                                    {thread.replies.length > 0 && (
-                                        <button
-                                            onClick={() => toggleThread(threadId)}
-                                            className={styles['toggle-thread-button']}
-                                        >
-                                            {isExpanded ?
-                                                'Hide replies' :
-                                                `Show ${thread.replies.length} ${
-                                                    thread.replies.length === 1 ? 'reply' : 'replies'
-                                                }`
-                                            }
-                                        </button>
-                                    )}
-                                </div>
-
-                                {/* The replies, shown when expanded */}
-                                {thread.replies.length > 0 && isExpanded && (
-                                    <div className={styles['thread-replies']}>
-                                        {thread.replies
-                                            .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-                                            .map(reply => (
-                                                <BoardMessage
-                                                    key={reply._id}
-                                                    message={reply}
-                                                    hasReplies={false}
-                                                    isReply={true}
-                                                    onReply={() => setReplyingTo(thread.root._id)}
-                                                    onDeleteSuccess={handleMessageDeleted}
-                                                />
-                                            ))}
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    })}
+                    .map(([threadId, thread]) =>
+                        renderThread(threadId, thread, expandedThreads.has(threadId))
+                    )}
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default QuickBoard;
+QuickBoard.propTypes = {
+    scrollToMessageId: PropTypes.string
+}
+
+export default QuickBoard

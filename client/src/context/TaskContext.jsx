@@ -1,37 +1,37 @@
-import { createContext, useState, useCallback, useContext } from 'react';
-import PropTypes from 'prop-types';
+import { createContext, useState, useCallback, useContext } from 'react'
+import PropTypes from 'prop-types'
 import useTaskService from "../services/taskService"
 import { useProjectContext } from './ProjectContext'
 
-const TaskContext = createContext();
+const TaskContext = createContext()
 
 export const useTaskContext = () => {
-    return useContext(TaskContext);
-};
+    return useContext(TaskContext)
+}
 
 export const TaskProvider = ({ children }) => {
-    const [tasks, setTasks] = useState([]);
-    const [currentTask, setCurrentTask] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState(null);
+    const [tasks, setTasks] = useState([])
+    const [currentTask, setCurrentTask] = useState(null)
+    const [loading, setLoading] = useState(false)
+    const [errors, setErrors] = useState(null)
 
     const { currentProject } = useProjectContext()
     const taskService = useTaskService()
 
     const fetchTasks = useCallback(async (projectId) => {
-        setLoading(true);
+        setLoading(true)
         try {
-            const fetchedTasks = await taskService.fetchProjectTasks(projectId);
-            setTasks(fetchedTasks.filter(task => !task.completed.isCompleted));
-            setErrors({});
+            const fetchedTasks = await taskService.fetchProjectTasks(projectId)
+            setTasks(fetchedTasks)
+            setErrors({})
         } catch (error) {
-            console.error('Failed to fetch tasks:', error);
-            setErrors(prev => ({...prev, fetch: 'Failed to fetch tasks'}));
-            setTasks([]);
+            console.error('Failed to fetch tasks:', error)
+            setErrors(prev => ({...prev, fetch: 'Failed to fetch tasks'}))
+            setTasks([])
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    }, [taskService]);
+    }, [taskService])
 
     const createTask = useCallback(async (taskData) => {
         if (currentProject && !currentProject?._id) {
@@ -138,11 +138,11 @@ export const TaskProvider = ({ children }) => {
         <TaskContext.Provider value={value}>
             {children}
         </TaskContext.Provider>
-    );
+    )
 }
 
 TaskProvider.propTypes = {
     children: PropTypes.node.isRequired
-};
+}
 
 export default TaskProvider

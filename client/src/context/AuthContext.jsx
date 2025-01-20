@@ -1,26 +1,27 @@
-import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
-import PropTypes from 'prop-types';
-import axios from 'axios';
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react'
+import PropTypes from 'prop-types'
+import axios from 'axios'
 
 const debounce = (func, wait) => {
-    let timeout;
+    let timeout
     return (...args) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func(...args), wait);
-    };
-};
+        clearTimeout(timeout)
+        timeout = setTimeout(() => func(...args), wait)
+    }
+}
 
-const AuthContext = createContext();
+const AuthContext = createContext()
 
 export const useAuth = () => {
-    return useContext(AuthContext);
+    return useContext(AuthContext)
 }
 
 export const AuthProvider = ({ children }) => {
-    const [currentUser, setCurrentUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [authError, setAuthError] = useState(null);
-    const verifyingRef = useRef(false);
+    const [currentUser, setCurrentUser] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [authError, setAuthError] = useState(null)
+    const [isDemo, setIsDemo] = useState(() => localStorage.getItem('isDemo') === 'true')
+    const verifyingRef = useRef(false)
 
 
 
@@ -29,121 +30,156 @@ export const AuthProvider = ({ children }) => {
         headers: {
             'Content-Type': 'application/json'
         }
-    });
+    })
 
-    // Request Interceptor for API calls
     api.interceptors.request.use(
         (config) => {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('token')
             if (token) {
-                config.headers['Authorization'] = `Bearer ${token}`;
+                config.headers['Authorization'] = `Bearer ${token}`
             }
-            return config;
+            return config
         },
         (error) => {
-            return Promise.reject(error);
+            return Promise.reject(error)
         }
-    );
+    )
 
-    // Response Interceptor for API calls
     api.interceptors.response.use(
         (response) => response,
         async (error) => {
             if (error.response && error.response.status === 401) {
-                localStorage.removeItem('token');
-                setCurrentUser(null);
-                setAuthError('Session expired. Please log in again.');
+                localStorage.removeItem('token')
+                localStorage.removeItem('isDemo')
+                setCurrentUser(null)
+                setIsDemo(false)
+                setAuthError('Session expired. Please log in again.')
             }
-            return Promise.reject(error);
+            return Promise.reject(error)
         }
-    );
+    )
 
     const verifyToken = useCallback(debounce(async () => {
-        if (verifyingRef.current) return;
-        verifyingRef.current = true;
+        if (verifyingRef.current) return
+        verifyingRef.current = true
 
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token')
         if (token) {
             try {
-                const response = await api.get('/auth/me');
-                setCurrentUser(response.data);
+                const response = await api.get('/auth/me')
+                setCurrentUser(response.data)
             } catch (error) {
-                console.error('Error verifying token:', error);
-                localStorage.removeItem('token');
-                setCurrentUser(null);
+                console.error('Error verifying token:', error)
+                localStorage.removeItem('token')
+                setCurrentUser(null)
             }
         } else {
-            setCurrentUser(null);
+            setCurrentUser(null)
         }
-        setLoading(false);
+        setLoading(false)
         verifyingRef.current = false
-    }, 1000),[]);
+    }, 1000),[])
 
     useEffect(() => {
-        verifyToken();
+        verifyToken()
 
-        const handleFocus = () => verifyToken();
-        window.addEventListener('focus', handleFocus);
-        return () => window.removeEventListener('focus', handleFocus);
-    }, [verifyToken]);
+        const handleFocus = () => verifyToken()
+        window.addEventListener('focus', handleFocus)
+        return () => window.removeEventListener('focus', handleFocus)
+    }, [verifyToken])
 
-    const login = async (email, password) => {
+    const demoLogin = async () => {
         try {
-            const response = await api.post('/auth/login', { email, password });
-            if (response.data.token  && response.data.userID) {
-                localStorage.setItem('token', response.data.token);
+            const response = await api.post('/auth/demo-login')
+            if (response.data.token && response.data.userID) {
+                localStorage.setItem('token', response.data.token)
+                localStorage.setItem('isDemo', 'true')
+                setIsDemo(true)
+
                 try {
                     const userResponse = await api.get('auth/me')
                     if(userResponse.data) {
-                        setCurrentUser(userResponse.data);
-                        setAuthError(null);
-                        return { success: true };
+                        setCurrentUser(userResponse.data)
+                        setAuthError(null)
+                        return { success: true }
+                    }
+                } catch (userError) {
+                    console.error('Error fetching user data:', userError)
+                    localStorage.removeItem('token')
+                    localStorage.removeItem('isDemo')
+                    setIsDemo(false)
+                    throw new Error('Failed to get user data after demo login')
+                }
+            } else {
+                throw new Error('Invalid demo login response')
+            }
+        } catch (error) {
+            console.error('Demo login error:', error)
+            setAuthError('Failed to access demo account')
+            return { success: false, error: error.response?.data?.message || 'Demo login failed' }
+        }
+    }
+
+
+    const login = async (email, password) => {
+        try {
+            const response = await api.post('/auth/login', { email, password })
+            if (response.data.token  && response.data.userID) {
+                localStorage.setItem('token', response.data.token)
+                try {
+                    const userResponse = await api.get('auth/me')
+                    if(userResponse.data) {
+                        setCurrentUser(userResponse.data)
+                        setAuthError(null)
+                        return { success: true }
                     } else {
                         throw new Error('No user data received')
                     }
                 } catch (userError) {
                     console.error('Error fetching user data:', userError)
-                    localStorage.removeItem('token');
+                    localStorage.removeItem('token')
                     throw new Error('Failed to get user data after login')
                 }
             } else {
                 throw new Error('Invalid login response structure')
             }
         } catch (error) {
-                console.error('Login error:', error);
-                setAuthError('Login failed. Please check your credentials.');
-                return { success: false, error: error.response?.data?.message || 'Login failed' };
+                console.error('Login error:', error)
+                setAuthError('Login failed. Please check your credentials.')
+                return { success: false, error: error.response?.data?.message || 'Login failed' }
 
         }
-    };
+    }
 
     const logout = useCallback(() => {
-        localStorage.removeItem('token');
-        setCurrentUser(null);
-        setAuthError(null);
-    }, []);
+        localStorage.removeItem('token')
+        localStorage.removeItem('isDemo')
+        setCurrentUser(null)
+        setAuthError(null)
+        setIsDemo(false)
+    }, [])
 
     const signup = async (email, password) => {
         try {
-            const response = await api.post('/auth/register', { email, password });
+            const response = await api.post('/auth/register', { email, password })
             if (response.status === 201) {
                 return {
                     success: true,
-                    message: response.data.message // "User created successfully"
-                };
+                    message: response.data.message
+                }
             } else {
-                throw new Error('Invalid signup response structure');
+                throw new Error('Invalid signup response structure')
             }
         } catch (error) {
-            console.error('Signup error:', error);
-            const errorMessage = error.response?.data?.message || 'Signup failed';
-            setAuthError(errorMessage);
+            console.error('Signup error:', error)
+            const errorMessage = error.response?.data?.message || 'Signup failed'
+            setAuthError(errorMessage)
             return {
                 success: false,
                 error: errorMessage
-            };
+            }
         }
-    };
+    }
 
 
     const value = {
@@ -153,8 +189,10 @@ export const AuthProvider = ({ children }) => {
         loading,
         authError,
         api,
-        signup
-    };
+        signup,
+        demoLogin,
+        isDemo
+    }
 
 
 
@@ -162,9 +200,9 @@ export const AuthProvider = ({ children }) => {
         <AuthContext.Provider value={value}>
             {!loading && children}
         </AuthContext.Provider>
-    );
+    )
 }
 
 AuthProvider.propTypes = {
     children: PropTypes.node.isRequired,
-};
+}

@@ -11,8 +11,8 @@
     padding: 10px 10px 30px;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
-    width: 90%;
-    margin: 1rem auto;
+    width: 96%;
+    margin-top: 1rem;
     transition: all 0.3s ease-in-out;
     position: relative;
     display: flex;
@@ -61,6 +61,7 @@
     background-color: #4a90e2;
     border-radius: 10px;
     transition: width 0.5s ease-in-out;
+    max-width: 99.7%;
 }
 
 .progress-bar-timeline {
@@ -112,7 +113,19 @@
     transition: all 0.3s ease-in-out;
 }
 
-/* Enter/exit animations for transition group */
+.timeline-label:hover ~ .progress-container > .progress-bar-tasks {
+    display: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.timeline-label:hover ~ .progress-container > .progress-bar-timeline {
+    height: 90%;
+    transition: all 0.3s ease-in-out;
+    top: 1px;
+    left: 1px;
+    border-radius: 10px;
+}
+
 .project-timeline-enter {
     opacity: 0;
     transform: translateY(20px);
@@ -134,30 +147,12 @@
     transition: opacity 300ms, transform 300ms;
 }
 
-/*--------------- Risk Container ---------------*/
-
 .risk-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 1rem;
     width: 100%;
     height: 100%;
-}
-
-.risk-container h2 {
-    font-weight: 600;
-}
-
-.risk-list {
-    width: 90%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-}
-
-.risk-list h2 {
-    padding-bottom : 1rem;
+    overflow: hidden;
 }

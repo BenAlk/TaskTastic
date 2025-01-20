@@ -1,37 +1,34 @@
-import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
-import { useUserContext } from '../../../context/UserContext';
-import Modal from '../../common/Modal/Modal';
-import styles from './NewMessageModal.module.css';
+import PropTypes from 'prop-types'
+import { useState, useEffect } from 'react'
+import { useUserContext } from '../../../context/UserContext'
+import Modal from '../../common/Modal/Modal'
+import styles from './NewMessageModal.module.css'
 
 const NewMessageModal = ({ isOpen, onClose, projectTeam, onSelectUser, currentUserId }) => {
-    const [teamMembers, setTeamMembers] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const { getMultipleUsers } = useUserContext();
+    const [teamMembers, setTeamMembers] = useState([])
+    const [loading, setLoading] = useState(true)
+    const { getMultipleUsers } = useUserContext()
 
     useEffect(() => {
         const fetchTeamMembers = async () => {
-            if (!projectTeam?.length) return;
+            if (!projectTeam?.length) return
 
-            setLoading(true);
+            setLoading(true)
             try {
-                // Extract user IDs from project team array
-                const teamUserIds = projectTeam.map(member => member.user);
-                // Fetch full user details for all team members
-                const users = await getMultipleUsers(teamUserIds);
-                // Filter out current user and set team members
-                setTeamMembers(users.filter(user => user._id !== currentUserId));
+                const teamUserIds = projectTeam.map(member => member.user)
+                const users = await getMultipleUsers(teamUserIds)
+                setTeamMembers(users.filter(user => user._id !== currentUserId))
             } catch (error) {
-                console.error('Failed to fetch team members:', error);
+                console.error('Failed to fetch team members:', error)
             } finally {
-                setLoading(false);
+                setLoading(false)
             }
         };
 
         if (isOpen) {
-            fetchTeamMembers();
+            fetchTeamMembers()
         }
-    }, [isOpen, projectTeam, currentUserId, getMultipleUsers]);
+    }, [isOpen, projectTeam, currentUserId, getMultipleUsers])
 
     return (
         <Modal
@@ -49,8 +46,8 @@ const NewMessageModal = ({ isOpen, onClose, projectTeam, onSelectUser, currentUs
                             key={member._id}
                             className={styles['user-item']}
                             onClick={() => {
-                                onSelectUser(member);
-                                onClose();
+                                onSelectUser(member)
+                                onClose()
                             }}
                         >
                             <div className={styles['user-info']}>
@@ -79,8 +76,8 @@ const NewMessageModal = ({ isOpen, onClose, projectTeam, onSelectUser, currentUs
                 </div>
             </div>
         </Modal>
-    );
-};
+    )
+}
 
 NewMessageModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -90,6 +87,6 @@ NewMessageModal.propTypes = {
     })).isRequired,
     onSelectUser: PropTypes.func.isRequired,
     currentUserId: PropTypes.string.isRequired,
-};
+}
 
-export default NewMessageModal;
+export default NewMessageModal

@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import styles from './Team.module.css'
 import TeamMemberTile from './TeamMemberTile/TeamMemberTile'
 import NewTeamMemberTile from './NewTeamMemberTile/NewTeamMemberTile'
@@ -8,6 +9,15 @@ import { useUserContext } from '../../context/UserContext'
 const Team = () => {
     const { currentProject } = useProjectContext()
     const { getMultipleUsers } = useUserContext()
+    const location = useLocation()
+    const [selectedUserId, setSelectedUserId] = useState(null)
+
+    useEffect(() => {
+        if (location.state?.openModal && location.state?.userId) {
+            setSelectedUserId(location.state.userId)
+            window.history.replaceState({}, document.title)
+        }
+    }, [location])
 
     useEffect(() => {
         if (currentProject?.team) {
@@ -28,7 +38,7 @@ const Team = () => {
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 
     return (
@@ -37,16 +47,18 @@ const Team = () => {
                 <h2>Team Members</h2>
             </div>
             <div className={styles['team-content-container']}>
-                {currentProject.team.map(member => (
+            {currentProject.team.map(member => (
                     <TeamMemberTile
                         key={member.user}
                         member={member}
+                        openModal={selectedUserId === member.user}
+                        onModalClosed={() => setSelectedUserId(null)}
                     />
                 ))}
                 <NewTeamMemberTile />
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Team;
+export default Team

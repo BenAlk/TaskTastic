@@ -1,8 +1,13 @@
-Risk Cards :
+//To-Do: Team member modal - add interactions/board messages.
 
-//To-Do: if any score is 5/5 then show a red flag
-//To-Do: change hover from a title to a tooltip
+//To-Do: LINKS BETWEEN PAGES!
+Quickboard - dashboard done.
 
-//To-Do: Project owner - allow to remove self from project and nominate new project owner.
+//To-Do: Add team member to current conversations.
 
-//To-Do: complete dashboard refactor
+//To-Do: Team hierarchy page
+
+//To-Do: Spell check?
+
+//To-Do: Messages:
+    //To-Do: DM's lazy loading - only load last weeks worth of messages, allow to view older messages.

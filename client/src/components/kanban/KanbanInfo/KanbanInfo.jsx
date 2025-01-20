@@ -1,22 +1,32 @@
-import PropTypes from 'prop-types';
-import styles from './KanbanInfo.module.css';
+import PropTypes from 'prop-types'
+import styles from './KanbanInfo.module.css'
 import { useState } from 'react'
 import KanbanSaveModal from "./KanbanSaveModal/KanbanSaveModal"
-import KanbanDeleteModal from './KanbanDeleteModal/KanbanDeleteModal';
-import { useProjectContext } from "./../../../context/ProjectContext"
+import KanbanDeleteModal from './KanbanDeleteModal/KanbanDeleteModal'
+import { useProjectContext } from "../../../context/ProjectContext"
 
-const KanbanInfo = ({selectedColumn, setSelectedColumn, isEditing, setIsEditing, setDraftKanban, onUpdateColumn, draftKanban, defaultColumn}) => {
+const KanbanInfo = ({
+    selectedColumn,
+    setSelectedColumn,
+    isEditing,
+    setIsEditing,
+    setDraftKanban,
+    onUpdateColumn,
+    draftKanban,
+    defaultColumn
+}) => {
     const [showSaveModal, setShowSaveModal] = useState(false)
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
     const { updateKanbanColumns, currentProject } = useProjectContext()
-    const columnName = selectedColumn?.name || '';
+
+    const columnName = selectedColumn?.name || ''
 
     const getColumnChanges = (original, draft) => {
         if (!selectedColumn || !selectedColumn._id) {
-            return [];
+            return []
         }
 
-        if (!original || !draft) return [];
+        if (!original || !draft) return []
 
         const changes = []
 
@@ -52,56 +62,55 @@ const KanbanInfo = ({selectedColumn, setSelectedColumn, isEditing, setIsEditing,
                         to: draftCol.order + 1
                     }
                 }
-            });
-            return changes;
+            })
+            return changes
         }
-
 
         const originalCol = original.find(col => col._id === selectedColumn._id)
         if(!originalCol || !draftCol) return []
 
-        const differences = {};
+        const differences = {}
 
         if (draftCol.name !== originalCol.name) {
             differences.name = {
                 from: originalCol.name,
                 to: draftCol.name
-            };
+            }
         }
         if (draftCol.maxDays !== originalCol.maxDays) {
             differences.maxDays = {
                 from: originalCol.maxDays,
                 to: draftCol.maxDays
-            };
+            }
         }
         if (draftCol.maxTasks !== originalCol.maxTasks) {
             differences.maxTasks = {
                 from: originalCol.maxTasks,
                 to: draftCol.maxTasks
-            };
+            }
         }
         if (draftCol.color !== originalCol.color) {
             differences.color = {
                 from: originalCol.color,
                 to: draftCol.color
-            };
+            }
         }
         if (draftCol.order !== originalCol.order) {
             differences.order = {
                 from: originalCol.order + 1,
                 to: draftCol.order + 1
-            };
+            }
         }
 
         if (Object.keys(differences).length > 0) {
             changes.push({
                 columnName: originalCol.name,
                 changes: differences
-            });
+            })
         }
 
-        return changes;
-    };
+        return changes
+    }
 
     const handleInputChange = (field, value) => {
         if (isEditing && selectedColumn) {
@@ -113,80 +122,77 @@ const KanbanInfo = ({selectedColumn, setSelectedColumn, isEditing, setIsEditing,
     }
 
     const handleOrderChange = (direction) => {
-        if (!isEditing || !selectedColumn) return;
+        if (!isEditing || !selectedColumn) return
 
-        const currentOrder = selectedColumn.order;
-        const newOrder = direction === 'left' ? currentOrder - 1 : currentOrder + 1;
+        const currentOrder = selectedColumn.order
+        const newOrder = direction === 'left' ? currentOrder - 1 : currentOrder + 1
 
-        if (newOrder < 0 || newOrder >= draftKanban.length) return;
+        if (newOrder < 0 || newOrder >= draftKanban.length) return
 
         const updatedColumns = draftKanban.map(column => {
             if (column._id === selectedColumn._id) {
-                return { ...column, order: newOrder };
+                return { ...column, order: newOrder }
             }
             if (column.order === newOrder) {
-                return { ...column, order: currentOrder };
+                return { ...column, order: currentOrder }
             }
-            return column;
-        });
+            return column
+        })
 
-        onUpdateColumn(updatedColumns);
-    };
+        onUpdateColumn(updatedColumns)
+    }
 
     const handleSaveClick = () => {
-        if (!isEditing) return;
+        if (!isEditing) return
 
-        // Add this check
         if (!selectedColumn) {
-            // You might want to show a user-friendly message here
-            console.log('Please select a column to save changes');
-            return;
+            return
         }
 
-        const changes = getColumnChanges(currentProject.kanbanColumns, draftKanban);
+        const changes = getColumnChanges(currentProject.kanbanColumns, draftKanban)
         if (changes.length === 0) {
-            setIsEditing(false);
-            setDraftKanban(null);
-            return;
+            setIsEditing(false)
+            setDraftKanban(null)
+            return
         }
-        setShowSaveModal(true);
-    };
+        setShowSaveModal(true)
+    }
 
     const handleConfirmSave = async () => {
         try {
             const columnsToSave = draftKanban.map(column => {
                 if (column._id.startsWith('draft_')) {
-                    const { _id, ...columnWithoutId } = column;
-                    return columnWithoutId;
+                    const { _id, ...columnWithoutId } = column
+                    return columnWithoutId
                 }
-                return column;
-            });
+                return column
+            })
 
-            await updateKanbanColumns(columnsToSave);
-            setShowSaveModal(false);
-            setIsEditing(false);
-            setDraftKanban(null);
-            setSelectedColumn(null);
+            await updateKanbanColumns(columnsToSave)
+            setShowSaveModal(false)
+            setIsEditing(false)
+            setDraftKanban(null)
+            setSelectedColumn(null)
         } catch (error) {
-            console.error('Error saving kanban columns:', error);
+            console.error('Error saving kanban columns:', error)
         }
-    };
+    }
 
     const handleCancel = () => {
-        setIsEditing(false);
-        setDraftKanban(null);
-    };
+        setIsEditing(false)
+        setDraftKanban(null)
+    }
 
     const handleReset = () => {
         if (isEditing && selectedColumn) {
-            setDraftKanban(currentProject.kanbanColumns);
+            setDraftKanban(currentProject.kanbanColumns)
         }
-    };
+    }
 
     const handleDeleteClick = () => {
-        if (!selectedColumn) return;
-        setShowDeleteModal(true);
-    };
+        if (!selectedColumn) return
+        setShowDeleteModal(true)
+    }
 
     const handleAddClick = () => {
         if (isEditing && draftKanban) {
@@ -194,32 +200,32 @@ const KanbanInfo = ({selectedColumn, setSelectedColumn, isEditing, setIsEditing,
                 ...defaultColumn,
                 _id: `draft_${Date.now()}`,
                 order: draftKanban.length
-            };
-            setDraftKanban([...draftKanban, newColumn]);
-            setSelectedColumn(newColumn._id);
+            }
+            setDraftKanban([...draftKanban, newColumn])
+            setSelectedColumn(newColumn._id)
         }
     }
 
     const handleConfirmDelete = async () => {
-        if (!selectedColumn || !draftKanban) return;
+        if (!selectedColumn || !draftKanban) return
 
         try {
-            const updatedColumns = draftKanban.filter(col => col._id !== selectedColumn._id);
+            const updatedColumns = draftKanban.filter(col => col._id !== selectedColumn._id)
 
             const reorderedColumns = updatedColumns.map((col, index) => ({
                 ...col,
                 order: index
-            }));
+            }))
 
+            await updateKanbanColumns(reorderedColumns)
             setDraftKanban(reorderedColumns)
             setSelectedColumn(null)
-            setShowDeleteModal(false);
+            setShowDeleteModal(false)
 
         } catch (error) {
-            console.error('Error deleting kanban column:', error);
+            console.error('Error deleting kanban column:', error)
         }
-    };
-
+    }
 
     return (
         <>
@@ -235,15 +241,12 @@ const KanbanInfo = ({selectedColumn, setSelectedColumn, isEditing, setIsEditing,
                     <h4>Column Title</h4>
                 </div>
                 <div className={styles['info-group-content']}>
-                    {isEditing ? (
-                        <input
-                            type="text"
-                            value={columnName}
-                            onChange={(e) => handleInputChange('name', e.target.value)}
-                        />
-                    ) : (
-                    <div className={styles['column-data']}>{selectedColumn.name}</div>
-                    )}
+                    <input
+                        type="text"
+                        value={columnName}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        disabled={!isEditing || !selectedColumn}
+                    />
                 </div>
             </div>
             <div className={styles['info-group']}>
@@ -258,7 +261,7 @@ const KanbanInfo = ({selectedColumn, setSelectedColumn, isEditing, setIsEditing,
                         Left
                     </div>
                     <div
-                        className={`${styles['order-selector']} ${(!isEditing || selectedColumn?.order === draftKanban.length - 1 || !selectedColumn) ? styles['disabled'] : ''}`}
+                        className={`${styles['order-selector']} ${(!isEditing || selectedColumn?.order === draftKanban?.length - 1 || !selectedColumn) ? styles['disabled'] : ''}`}
                         onClick={() => handleOrderChange('right')}
                     >
                         Right
@@ -270,30 +273,27 @@ const KanbanInfo = ({selectedColumn, setSelectedColumn, isEditing, setIsEditing,
                     <h4>Maximum Days</h4>
                 </div>
                 <div className={styles['info-group-content']}>
-                    {isEditing ?
                     <input
                         className={styles['input-number']}
                         type="number"
                         value={selectedColumn?.maxDays || 0}
                         onChange={(e) => handleInputChange('maxDays', parseInt(e.target.value))}
-                    /> :
-                    <div className={styles['column-data']}>{selectedColumn.maxDays}</div>
-                    }
+                        disabled={!isEditing || !selectedColumn}
+                    />
                 </div>
             </div>
             <div className={styles['info-group']} title={"Maximum number of tasks that can be in this column, before a flag for attention."}>
                 <div className={styles['info-group-title']}>
                     <h4>Maximum Tasks</h4>
                 </div>
-                    <div className={styles['info-group-content']}>
-                    {isEditing ?
+                <div className={styles['info-group-content']}>
                     <input
                         className={styles['input-number']}
                         type="number"
                         value={selectedColumn?.maxTasks || 0}
                         onChange={(e) => handleInputChange('maxTasks', parseInt(e.target.value))}
-                    /> :
-                    <div className={styles['column-data']}>{selectedColumn?.maxTasks ?? ''}</div>}
+                        disabled={!isEditing || !selectedColumn}
+                    />
                 </div>
             </div>
             <div className={styles['info-group']}>
@@ -306,33 +306,36 @@ const KanbanInfo = ({selectedColumn, setSelectedColumn, isEditing, setIsEditing,
                         value={selectedColumn?.color || '#e2e8f0'}
                         className={styles['color-input']}
                         onChange={(e) => handleInputChange('color', e.target.value)}
-                        disabled={!isEditing}
-                        />
+                        disabled={!isEditing || !selectedColumn}
+                    />
                 </div>
             </div>
             <div className={styles['kanban-column-buttons']}>
                 <div
-                className={`${styles['kanban-column-save']} ${!isEditing ? styles['disabled'] : ''}`}
-                onClick={handleSaveClick}
-                title={isEditing ? "Save Changes" : ""}
+                    className={`${styles['kanban-column-save']} ${!isEditing ? styles['disabled'] : ''}`}
+                    onClick={handleSaveClick}
+                    title={isEditing ? "Save Changes" : ""}
                 >
                     SAVE
                 </div>
-                <div className={`${styles['kanban-column-reset']} ${!isEditing ? styles['disabled'] : ''}`}
-                onClick={handleReset}
-                title={isEditing ? "Reset Changes" : ""}
+                <div
+                    className={`${styles['kanban-column-reset']} ${!isEditing ? styles['disabled'] : ''}`}
+                    onClick={handleReset}
+                    title={isEditing ? "Reset Changes" : ""}
                 >
                     RESET
                 </div>
-                <div className={`${styles['kanban-column-cancel']} ${!isEditing ? styles['disabled'] : ''}`}
-                onClick={handleCancel}
-                title={isEditing ? "Cancel Changes" : ""}
+                <div
+                    className={`${styles['kanban-column-cancel']} ${!isEditing ? styles['disabled'] : ''}`}
+                    onClick={handleCancel}
+                    title={isEditing ? "Cancel Changes" : ""}
                 >
                     CANCEL
                 </div>
-                <div className={`${styles['kanban-column-delete']} ${!isEditing ? styles['disabled'] : ''}`}
-                onClick={handleDeleteClick}
-                title={isEditing ? "Delete Column" : ""}
+                <div
+                    className={`${styles['kanban-column-delete']} ${!isEditing ? styles['disabled'] : ''}`}
+                    onClick={handleDeleteClick}
+                    title={isEditing ? "Delete Column" : ""}
                 >
                     DELETE
                 </div>
@@ -349,10 +352,9 @@ const KanbanInfo = ({selectedColumn, setSelectedColumn, isEditing, setIsEditing,
             isOpen={showDeleteModal}
             onClose={() => setShowDeleteModal(false)}
             columnName={selectedColumn?.name ?? ''}
-            // taskCount={selectedColumn?.tasks?.length || 0}
             onConfirm={handleConfirmDelete}
         />
-    </>
+        </>
     )
 }
 
@@ -385,8 +387,7 @@ KanbanInfo.propTypes = {
         color: PropTypes.string.isRequired,
         maxDays: PropTypes.number.isRequired,
         maxTasks: PropTypes.number.isRequired,
-        order: PropTypes.number,
     })
-};
+}
 
-export default KanbanInfo;
+export default KanbanInfo

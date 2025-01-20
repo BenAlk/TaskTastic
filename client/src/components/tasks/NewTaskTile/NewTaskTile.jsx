@@ -3,7 +3,7 @@ import styles from './NewTaskTile.module.css'
 import NewTaskModal from '../NewTaskModal/NewTaskModal'
 
 const NewTaskTile = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     return (
         <>
@@ -16,7 +16,7 @@ const NewTaskTile = () => {
                 </div>
                 <div className={styles['new-task-tile-content']}>
                     <div className={styles['new-task-icon']}>
-                        +
+                        <p>+</p>
                     </div>
                 </div>
             </div>
@@ -25,8 +25,7 @@ const NewTaskTile = () => {
             onClose={() => setIsModalOpen(false)}
             />
         </>
+    )
+}
 
-    );
-};
-
-export default NewTaskTile;
+export default NewTaskTile

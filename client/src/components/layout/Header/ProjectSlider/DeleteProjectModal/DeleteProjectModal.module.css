@@ -82,7 +82,6 @@
 }
 
 .checking-content p {
-    /* Optional: Add a gentle pulse animation */
     animation: pulse 2s infinite;
 }
 

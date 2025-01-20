@@ -1,68 +1,87 @@
-import { useEffect, useRef, useState } from 'react';
-import { useDrag } from 'react-dnd';
-import PropTypes from 'prop-types';
-import { useUserContext } from '../../../../context/UserContext';
-import styles from './Task.module.css';
+import { useEffect, useRef, useState } from 'react'
+import { useDrag } from 'react-dnd'
+import PropTypes from 'prop-types'
+import { useUserContext } from '../../../../context/UserContext'
+import { useProjectPermissions } from '../../../../hooks/useProjectPermissions'
+import styles from './Task.module.css'
+import { useNavigate } from 'react-router-dom'
 
-const Task = ({ task, index, columnId, isEditing, isMoving, moveTask }) => {
-    const { getUserDetails } = useUserContext();
-    const [assignedUser, setAssignedUser] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+const Task = ({ task, index, columnId, isEditing, isMoving,  }) => {
+    const { getUserDetails } = useUserContext()
+    const { canMoveTask } = useProjectPermissions()
+    const [assignedUser, setAssignedUser] = useState(null)
+    const [isLoading, setIsLoading] = useState(true)
+    const [dragStarted, setDragStarted] = useState(false)
 
-    const dragDropRef = useRef(null);
+    const navigate = useNavigate()
+
+    const handleClick = (e) => {
+        if (!isDragging && !isEditing && !dragStarted) {
+            navigate(`/tasks?taskId=${task._id}`)
+        }
+    };
+
+
+    const dragDropRef = useRef(null)
 
     useEffect(() => {
         const fetchUser = async () => {
             if (task.assignedTo) {
-                setIsLoading(true);
+                setIsLoading(true)
                 try {
-                    const userData = await getUserDetails(task.assignedTo);
-                    setAssignedUser(userData);
+                    const userData = await getUserDetails(task.assignedTo)
+                    setAssignedUser(userData)
                 } catch (error) {
-                    console.error('Error fetching user details:', error);
+                    console.error('Error fetching user details:', error)
                 } finally {
-                    setIsLoading(false);
+                    setIsLoading(false)
                 }
             } else {
-                setIsLoading(false);
+                setIsLoading(false)
             }
         };
 
-        fetchUser();
-    }, [task.assignedTo, getUserDetails]);
+        fetchUser()
+    }, [task.assignedTo, getUserDetails])
 
     const getFullName = (user) => {
-        if (!user) return 'Unassigned';
-        return `${user.firstName} ${user.lastName}`.trim();
+        if (!user) return 'Unassigned'
+        return `${user.firstName} ${user.lastName}`.trim()
     };
 
     const getInitials = (user) => {
-        if (!user) return '?';
-        return user.firstName.charAt(0);
-    };
+        if (!user) return '?'
+        return user.firstName.charAt(0)
+    }
 
     const [{ isDragging }, drag] = useDrag({
         type: 'TASK',
-        item: {
-            type: 'TASK',
-            index,
-            columnId,
-            taskId: task._id
+        item: () => {
+                setDragStarted(true)
+                return {
+                type: 'TASK',
+                index,
+                columnId,
+                taskId: task._id
+            }
         },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),
-        canDrag: () => !isEditing
-    });
+        end: () => {
+            setTimeout(() => setDragStarted(false), 100)
+        },
+        canDrag: () => !isEditing && canMoveTask(task.assignedTo)
+    })
 
-    drag(dragDropRef);
+    drag(dragDropRef)
 
     const formattedDueDate = task.dueDate
         ? new Date(task.dueDate).toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric',
         })
-        : null;
+        : null
 
     return (
         <div
@@ -70,9 +89,10 @@ const Task = ({ task, index, columnId, isEditing, isMoving, moveTask }) => {
             className={[
                 styles['task-container'],
                 isDragging ? styles['task-dragging'] : '',
-                isMoving ? styles['task-moving'] : ''
+                isMoving ? styles['task-moving'] : '',
+                !canMoveTask(task.assignedTo) ? styles['task-locked'] : styles['user-task']
             ].filter(Boolean).join(' ')}
-            style={{ opacity: isDragging ? 0.5 : 1 }}
+            onClick={handleClick}
         >
             <div className={styles['task-header-container']}>
                 <h3 className={styles['task-title']}>{task.title}</h3>
@@ -95,16 +115,22 @@ const Task = ({ task, index, columnId, isEditing, isMoving, moveTask }) => {
                 {formattedDueDate && (
                     <div className={styles['task-due-container']}>
                         <span className={`${styles['due-date']} ${
-                            new Date(task.dueDate) < new Date() ? styles['due-date-overdue'] : ''
+                            (new Date(task.dueDate) < new Date()) && !task.completed?.isCompleted ? styles['due-date-overdue'] : ''
                         }`}>
-                            Due {formattedDueDate}
+                            {task.completed?.isCompleted
+                                ? `Completed on ${new Date(task.completed?.completedOn).toLocaleDateString('en-US', {
+                                    month: 'short',
+                                    day: 'numeric',
+                                })}`
+                                : `Due ${formattedDueDate}`
+                            }
                         </span>
                     </div>
                 )}
             </div>
         </div>
-    );
-};
+    )
+}
 
 Task.propTypes = {
     task: PropTypes.shape({
@@ -112,12 +138,16 @@ Task.propTypes = {
         title: PropTypes.string.isRequired,
         assignedTo: PropTypes.string,
         dueDate: PropTypes.string,
+        completed: ({
+            isCompleted: PropTypes.bool,
+            completedOn: PropTypes.string
+        })
     }).isRequired,
     index: PropTypes.number.isRequired,
     moveTask: PropTypes.func.isRequired,
     columnId: PropTypes.string.isRequired,
     isEditing: PropTypes.bool.isRequired,
     isMoving: PropTypes.bool.isRequired,
-};
+}
 
-export default Task;
+export default Task

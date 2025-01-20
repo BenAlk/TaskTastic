@@ -37,12 +37,12 @@ const AddTeamMemberModal = ({ isOpen, onClose }) => {
     }, [canHaveAdmins, role])
 
     const debounce = (func, wait) => {
-        let timeout;
+        let timeout
         return (...args) => {
             clearTimeout(timeout)
             timeout = setTimeout(() => func(...args), wait);
-        };
-    };
+        }
+    }
 
     const handleSearch = useCallback(
         debounce(async (email) => {
@@ -53,10 +53,9 @@ const AddTeamMemberModal = ({ isOpen, onClose }) => {
                 const response = await api.get(`/users?email=${encodeURIComponent(email)}`)
                 const filteredResults = response.data.filter(user =>
                     !currentProject?.team.some(member => member.user === user._id)
-                );
+                )
 
                 setSearchResults(filteredResults)
-                console.log(filteredResults)
                 setErrors({})
             } catch (error) {
                 console.error('Search error:', error)
@@ -67,7 +66,7 @@ const AddTeamMemberModal = ({ isOpen, onClose }) => {
             }
         }, 300),
         [api, currentProject?.team]
-    );
+    )
 
     const handleInputChange = (e) => {
         const email = e.target.value
@@ -77,7 +76,7 @@ const AddTeamMemberModal = ({ isOpen, onClose }) => {
         } else {
             setSearchResults([])
         }
-    };
+    }
 
     const handleAddMember = async () => {
         if (!selectedUser) {
@@ -91,7 +90,7 @@ const AddTeamMemberModal = ({ isOpen, onClose }) => {
         } catch (error) {
             setErrors({ submit: 'Failed to add team member' })
         }
-    };
+    }
 
     return (
         <Modal
@@ -200,12 +199,12 @@ const AddTeamMemberModal = ({ isOpen, onClose }) => {
                 )}
             </div>
         </Modal>
-    );
-};
+    )
+}
 
 AddTeamMemberModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired
-};
+}
 
 export default AddTeamMemberModal

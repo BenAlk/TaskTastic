@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import styles from './NewTeamMemberTile.module.css';
-import AddTeamMemberModal from '../AddTeamMemberModal/AddTeamMemberModal';
+import { useState } from 'react'
+import styles from './NewTeamMemberTile.module.css'
+import AddTeamMemberModal from '../AddTeamMemberModal/AddTeamMemberModal'
 
 const NewTeamMemberTile = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     return (
         <>
@@ -16,7 +16,7 @@ const NewTeamMemberTile = () => {
                 </div>
                 <div className={styles['new-member-tile-content']}>
                     <div className={styles['new-member-icon']}>
-                        +
+                        <p>+</p>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@ const NewTeamMemberTile = () => {
                 onClose={() => setIsModalOpen(false)}
             />
         </>
-    );
-};
+    )
+}
 
-export default NewTeamMemberTile;
+export default NewTeamMemberTile

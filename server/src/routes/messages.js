@@ -1,12 +1,11 @@
 import express from 'express'
 import { MessageModel } from '../models/Messages.js'
 import { ProjectModel } from '../models/Projects.js'
-import { verifyToken } from '../middleware/auth.js'
+import { verifyToken, preventDemoModification } from '../middleware/auth.js'
 
 const router = express.Router()
 
-// Create a new message
-router.post("/", verifyToken, async (req, res) => {
+router.post("/", verifyToken, preventDemoModification, async (req, res) => {
     try {
         const {
             projectId,
@@ -57,7 +56,6 @@ router.post("/", verifyToken, async (req, res) => {
     }
 })
 
-// Get thread messages
 router.get("/thread/:messageId", verifyToken, async (req, res) => {
     try {
         const rootMessage = await MessageModel.findById(req.params.messageId)
@@ -93,20 +91,17 @@ router.get("/thread/:messageId", verifyToken, async (req, res) => {
     }
 })
 
-// Get board messages
 router.get("/board/:projectId", verifyToken, async (req, res) => {
     try {
-        // First check if user has access to this project
         const project = await ProjectModel.findOne({
             _id: req.params.projectId,
             'team.user': req.userId
-        });
+        })
 
         if (!project) {
-            return res.status(403).json({ message: "Access denied" });
+            return res.status(403).json({ message: "Access denied" })
         }
 
-        // Fetch messages with populated user data
         const messages = await MessageModel.find({
             projectId: req.params.projectId,
             type: 'board'
@@ -114,16 +109,15 @@ router.get("/board/:projectId", verifyToken, async (req, res) => {
         .sort('-createdAt')
         .populate('sender', 'email firstName lastName')
         .populate('content.mentions.user', 'email firstName lastName')
-        .populate('metadata.reactions.user', 'email firstName lastName');  // Updated path
+        .populate('metadata.reactions.user', 'email firstName lastName')
 
-        res.json(messages);
+        res.json(messages)
     } catch (error) {
-        console.error("Error fetching board messages:", error);
-        res.status(500).json({ message: "Error fetching messages", error: error.message });
+        console.error("Error fetching board messages:", error)
+        res.status(500).json({ message: "Error fetching messages", error: error.message })
     }
-});
+})
 
-// Get dashboard messages summary
 router.get("/dashboard/:projectId", verifyToken, async (req, res) => {
     try {
         const project = await ProjectModel.findOne({
@@ -135,7 +129,6 @@ router.get("/dashboard/:projectId", verifyToken, async (req, res) => {
             return res.status(404).json({ message: "Project not found or access denied" })
         }
 
-        // Get latest direct messages
         const directMessages = await MessageModel.find({
             projectId: req.params.projectId,
             type: 'direct',
@@ -147,11 +140,10 @@ router.get("/dashboard/:projectId", verifyToken, async (req, res) => {
         .populate('recipients', 'email firstName lastName')
         .populate('content.mentions.user', 'email firstName lastName')
 
-        // Get latest board messages
         const boardMessages = await MessageModel.find({
             projectId: req.params.projectId,
             type: 'board',
-            parentMessage: null  // Only get root messages
+            parentMessage: null
         })
         .sort('-createdAt')
         .limit(4)
@@ -170,7 +162,6 @@ router.get("/dashboard/:projectId", verifyToken, async (req, res) => {
     }
 })
 
-// Get direct messages
 router.get("/direct/:projectId", verifyToken, async (req, res) => {
     try {
         const project = await ProjectModel.findOne({
@@ -182,12 +173,17 @@ router.get("/direct/:projectId", verifyToken, async (req, res) => {
             return res.status(404).json({ message: "Project not found or access denied" })
         }
 
+        const limit = parseInt(req.query.limit) || 50
+        const before = req.query.before ? new Date(req.query.before) : new Date()
+
         const messages = await MessageModel.find({
             projectId: req.params.projectId,
             type: 'direct',
-            $or: [{ sender: req.userId }, { recipients: req.userId }]
+            $or: [{ sender: req.userId }, { recipients: req.userId }],
+            createdAt: { $lt: before }
         })
         .sort('-createdAt')
+        .limit(limit)
         .populate('sender', 'email firstName lastName')
         .populate('recipients', 'email firstName lastName')
         .populate('content.mentions.user', 'email firstName lastName')
@@ -201,8 +197,7 @@ router.get("/direct/:projectId", verifyToken, async (req, res) => {
     }
 })
 
-// Add reaction to message
-router.post("/:messageId/reaction", verifyToken, async (req, res) => {
+router.post("/:messageId/reaction", verifyToken, preventDemoModification, async (req, res) => {
     try {
         const { emoji } = req.body
         const message = await MessageModel.findById(req.params.messageId)
@@ -220,12 +215,10 @@ router.post("/:messageId/reaction", verifyToken, async (req, res) => {
             return res.status(403).json({ message: "Access denied" })
         }
 
-        // Remove existing reaction from this user if any
         message.metadata.reactions = message.metadata.reactions.filter(
             reaction => reaction.user.toString() !== req.userId
         )
 
-        // Add new reaction
         message.metadata.reactions.push({
             user: req.userId,
             emoji
@@ -241,8 +234,7 @@ router.post("/:messageId/reaction", verifyToken, async (req, res) => {
     }
 })
 
-// Edit message
-router.put("/:messageId", verifyToken, async (req, res) => {
+router.put("/:messageId", verifyToken, preventDemoModification, async (req, res) => {
     try {
         const message = await MessageModel.findOne({
             _id: req.params.messageId,
@@ -255,13 +247,11 @@ router.put("/:messageId", verifyToken, async (req, res) => {
             })
         }
 
-        // Store current content in edit history
         message.editHistory.push({
             content: message.content.text,
             editedAt: new Date()
         })
 
-        // Update content
         message.content.text = req.body.content.text
         message.content.mentions = req.body.content.mentions || []
         message.status = 'edited'
@@ -276,7 +266,6 @@ router.put("/:messageId", verifyToken, async (req, res) => {
     }
 })
 
-// Mark message as read
 router.put("/:messageId/read", verifyToken, async (req, res) => {
     try {
         const message = await MessageModel.findById(req.params.messageId)
@@ -307,39 +296,36 @@ router.put("/:messageId/read", verifyToken, async (req, res) => {
     }
 })
 
-// Delete message (sender only)
-router.delete("/:messageId", verifyToken, async (req, res) => {
+router.delete("/:messageId", verifyToken, preventDemoModification, async (req, res) => {
     try {
-        // First, check if this message has any replies
         const hasReplies = await MessageModel.exists({
             parentMessage: req.params.messageId
-        });
+        })
 
         if (hasReplies) {
             return res.status(400).json({
                 message: "Cannot delete a message that has replies"
-            });
+            })
         }
 
-        // If no replies, proceed with deletion check and process
         const message = await MessageModel.findOneAndDelete({
             _id: req.params.messageId,
             sender: req.userId
-        });
+        })
 
         if (!message) {
             return res.status(404).json({
                 message: "Message not found or you're not the sender"
-            });
+            })
         }
 
-        res.json({ message: "Message permanently deleted" });
+        res.json({ message: "Message permanently deleted" })
     } catch (error) {
         res.status(500).json({
             message: "Error deleting message",
             error: error.message
-        });
+        })
     }
-});
+})
 
 export { router as messageRouter }

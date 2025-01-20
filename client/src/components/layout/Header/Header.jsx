@@ -10,7 +10,7 @@ const Header = () => {
             <div className={styles['welcome-container']}>Welcome back, {currentUser.firstName ? currentUser.firstName : (<Link to="/settings" className={styles['complete-profile-link']}>Click here to complete your profile</Link>)}!</div>
             <ProjectSlider className={styles['project-slider']} />
         </div>
-    );
-};
+    )
+}
 
-export default Header;
+export default Header

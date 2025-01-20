@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-import Modal from '../../../common/Modal/Modal';
-import styles from './KanbanSaveModal.module.css';
+import PropTypes from 'prop-types'
+import Modal from '../../../common/Modal/Modal'
+import styles from './KanbanSaveModal.module.css'
 
 const KanbanSaveModal = ({ isOpen, onClose, changes, onConfirm }) => {
     return (
@@ -42,8 +42,8 @@ const KanbanSaveModal = ({ isOpen, onClose, changes, onConfirm }) => {
                 </div>
             </div>
         </Modal>
-    );
-};
+    )
+}
 
 KanbanSaveModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -53,6 +53,6 @@ KanbanSaveModal.propTypes = {
         changes: PropTypes.object.isRequired
     })).isRequired,
     onConfirm: PropTypes.func.isRequired
-};
+}
 
-export default KanbanSaveModal;
+export default KanbanSaveModal

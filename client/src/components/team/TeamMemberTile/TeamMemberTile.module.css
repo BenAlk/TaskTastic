@@ -6,8 +6,14 @@
     flex-basis: calc(25% - 1rem);
     background-color: white;
     border-radius: 10px;
-    padding: 1rem;
-    transition: transform 0.2s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.member-tile-container:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+    scale: 1.01;
 }
 
 .member-tile-header {
@@ -78,8 +84,6 @@
     width: 100%;
 }
 
-
-
 .task-count {
     font-weight: bold;
     padding: 2px 8px;
@@ -93,7 +97,6 @@
     border-radius: 10px 10px 0 0;
 }
 
-
 .high-workload {
     background-color: #fef3c7;
     color: #d97706;
@@ -104,8 +107,6 @@
     color: #dc2626;
     animation: pulse 2s infinite;
 }
-
-
 
 @keyframes pulse {
     0% { background-color: #fee2e2;

@@ -1,89 +1,78 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
-import { format } from 'date-fns';
-import { useMessage } from '../../../context/MessageContext';
-import { useAuth } from '../../../context/AuthContext';
-import { MessageSquare, ThumbsUp, Edit2, Trash2 } from 'lucide-react';
-import styles from './BoardMessage.module.css';
+import PropTypes from 'prop-types'
+import { useState } from 'react'
+import { format } from 'date-fns'
+import { useMessage } from '../../../context/MessageContext'
+import { useAuth } from '../../../context/AuthContext'
+import { MessageSquare, ThumbsUp, Edit2, Trash2 } from 'lucide-react'
+import styles from './BoardMessage.module.css'
 
 const BoardMessage = ({ message, hasReplies, isReply = false, onReply, onDeleteSuccess }) => {
-    // Local state for editing
-    const [isEditing, setIsEditing] = useState(false);
-    const [editContent, setEditContent] = useState(message.content.text);
-    const { currentUser } = useAuth();
+    const [isEditing, setIsEditing] = useState(false)
+    const [editContent, setEditContent] = useState(message.content.text)
+    const { currentUser } = useAuth()
     const isReplyMessage = Boolean(message.parentMessage)
 
-    // Get message-related functions from context
-    const { editMessage, deleteMessage, addReaction } = useMessage();
+    const { editMessage, deleteMessage, addReaction } = useMessage()
 
-
-
-    console.log(message.parentMessage)
-
-    // Helper function to safely get user display name
     const getUserDisplayName = (user) => {
-        if (!user) return 'Unknown User';
-        if (typeof user === 'string') return 'Loading...';
-        return `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email || 'Unknown User';
-    };
+        if (!user) return 'Unknown User'
+        if (typeof user === 'string') return 'Loading...'
+        return `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email || 'Unknown User'
+    }
 
-    // Handle message edit
     const handleEdit = async () => {
         try {
-            await editMessage(message._id, editContent);
-            setIsEditing(false);
+            await editMessage(message._id, editContent)
+            setIsEditing(false)
         } catch (error) {
-            console.error('Failed to edit message:', error);
-            alert('Failed to edit message. Please try again.');
+            console.error('Failed to edit message:', error)
+            alert('Failed to edit message. Please try again.')
         }
     };
 
-    // Handle message delete
     const handleDelete = async () => {
         if (isReplyMessage) {
-            alert("Replies cannot be deleted. Please delete the entire thread if needed.");
-            return;
+            alert("Replies cannot be deleted. Please delete the entire thread if needed.")
+            return
         }
 
         if (hasReplies) {
-            alert("Cannot delete a message that has replies. Please delete the replies first.");
-            return;
+            alert("Cannot delete a message that has replies. Please delete the replies first.")
+            return
         }
 
         if (window.confirm('Are you sure you want to delete this message?')) {
             try {
-                await deleteMessage(message._id);
-                onDeleteSuccess?.(message._id);  // Call this after successful deletion
+                await deleteMessage(message._id)
+                onDeleteSuccess?.(message._id)
             } catch (error) {
                 if (error?.response?.status === 400) {
-                    alert(error.response.data.message || "Cannot delete this message");
+                    alert(error.response.data.message || "Cannot delete this message")
                 } else if (error?.response?.status === 403) {
-                    alert("You don't have permission to delete this message");
+                    alert("You don't have permission to delete this message")
                 } else {
-                    alert("Failed to delete message. Please try again.");
-                    console.error('Failed to delete message:', error);
+                    alert("Failed to delete message. Please try again.")
+                    console.error('Failed to delete message:', error)
                 }
             }
         }
-    };
+    }
 
-    // Handle adding reaction
     const handleReaction = async () => {
         try {
-            await addReaction(message._id, '👍');
+            await addReaction(message._id, '👍')
         } catch (error) {
-            console.error('Failed to add reaction:', error);
-            alert('Failed to add reaction. Please try again.');
+            console.error('Failed to add reaction:', error)
+            alert('Failed to add reaction. Please try again.')
         }
-    };
+    }
 
-    // Don't show deleted messages
     if (message.status === 'deleted') {
         return (
             <div className={`${styles.message} ${styles.deleted}`}>
                 <p>This message has been deleted</p>
             </div>
-        );
+        )
     }
 
     return (
@@ -105,7 +94,6 @@ const BoardMessage = ({ message, hasReplies, isReply = false, onReply, onDeleteS
                 )}
             </div>
 
-            {/* Message Content */}
             <div className={styles['message-content']}>
                 {isEditing ? (
                     <div className={styles['edit-container']}>
@@ -137,7 +125,6 @@ const BoardMessage = ({ message, hasReplies, isReply = false, onReply, onDeleteS
                 )}
             </div>
 
-            {/* Message Actions */}
             <div className={styles['message-actions']}>
                 <button
                     onClick={onReply}
@@ -157,7 +144,6 @@ const BoardMessage = ({ message, hasReplies, isReply = false, onReply, onDeleteS
                     {message.metadata?.reactions?.length || 0}
                 </button>
 
-                {/* Only show edit/delete for message owner */}
                 {message.sender._id === currentUser?._id && (
                     <>
                         <button
@@ -182,8 +168,8 @@ const BoardMessage = ({ message, hasReplies, isReply = false, onReply, onDeleteS
                 )}
             </div>
         </div>
-    );
-};
+    )
+}
 
 BoardMessage.propTypes = {
     message: PropTypes.shape({
@@ -210,7 +196,7 @@ BoardMessage.propTypes = {
             reactions: PropTypes.arrayOf(PropTypes.shape({
                 user: PropTypes.oneOfType([
                     PropTypes.string,
-                    PropTypes.object  // Now accepts both strings and ObjectId objects
+                    PropTypes.object
                 ]),
                 emoji: PropTypes.string
             }))
@@ -221,6 +207,6 @@ BoardMessage.propTypes = {
     isReply: PropTypes.bool,
     onReply: PropTypes.func.isRequired,
     onDeleteSuccess: PropTypes.func
-};
+}
 
-export default BoardMessage;
+export default BoardMessage

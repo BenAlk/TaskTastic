@@ -1,32 +1,38 @@
-import { useEffect } from 'react';
-import { useTaskContext } from '../../context/TaskContext';
-import { useProjectContext } from '../../context/ProjectContext';
-import styles from './Eisenhower.module.css';
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useTaskContext } from '../../context/TaskContext'
+import { useProjectContext } from '../../context/ProjectContext'
+import styles from './Eisenhower.module.css'
 
 const Eisenhower = () => {
-    const { tasks, loading, fetchTasks } = useTaskContext();
-    const { currentProject } = useProjectContext();
+    const { tasks, loading, fetchTasks } = useTaskContext()
+    const { currentProject } = useProjectContext()
+    const navigate = useNavigate()
+
+    const handleTaskClick = (taskId) => {
+        navigate(`/tasks?taskId=${taskId}`)
+    }
 
     useEffect(() => {
         if (currentProject?._id) {
-            fetchTasks(currentProject._id);
+            fetchTasks(currentProject._id)
         }
-    }, [currentProject?._id]);
+    }, [currentProject?._id])
 
     const quadrants = {
         urgentImportant: tasks.filter(task =>
-            task.eisenhowerStatus?.urgent && task.eisenhowerStatus?.important
+            task.eisenhowerStatus?.urgent && task.eisenhowerStatus?.important && task.completed?.isCompleted === false
         ),
         notUrgentImportant: tasks.filter(task =>
-            !task.eisenhowerStatus?.urgent && task.eisenhowerStatus?.important
+            !task.eisenhowerStatus?.urgent && task.eisenhowerStatus?.important && task.completed?.isCompleted === false
         ),
         urgentNotImportant: tasks.filter(task =>
-            task.eisenhowerStatus?.urgent && !task.eisenhowerStatus?.important
+            task.eisenhowerStatus?.urgent && !task.eisenhowerStatus?.important && task.completed?.isCompleted === false
         ),
         notUrgentNotImportant: tasks.filter(task =>
-            !task.eisenhowerStatus?.urgent && !task.eisenhowerStatus?.important
+            !task.eisenhowerStatus?.urgent && !task.eisenhowerStatus?.important && task.completed?.isCompleted === false
         )
-    };
+    }
 
     if (!currentProject) {
         return (
@@ -66,7 +72,12 @@ const Eisenhower = () => {
                                 <h3>Do First</h3>
                                 <ul>
                                     {quadrants.urgentImportant.map(task => (
-                                        <li key={task._id}>{task.title}</li>
+                                        <li
+                                            key={task._id}
+                                            onClick={() => handleTaskClick(task._id)}
+                                        >
+                                            {task.title}
+                                        </li>
                                     ))}
                                 </ul>
                             </div>
@@ -75,7 +86,12 @@ const Eisenhower = () => {
                                 <h3>Schedule</h3>
                                 <ul>
                                     {quadrants.notUrgentImportant.map(task => (
-                                        <li key={task._id}>{task.title}</li>
+                                        <li
+                                            key={task._id}
+                                            onClick={() => handleTaskClick(task._id)}
+                                        >
+                                            {task.title}
+                                        </li>
                                     ))}
                                 </ul>
                             </div>
@@ -84,7 +100,12 @@ const Eisenhower = () => {
                                 <h3>Delegate</h3>
                                 <ul>
                                     {quadrants.urgentNotImportant.map(task => (
-                                        <li key={task._id}>{task.title}</li>
+                                        <li
+                                            key={task._id}
+                                            onClick={() => handleTaskClick(task._id)}
+                                        >
+                                            {task.title}
+                                        </li>
                                     ))}
                                 </ul>
                             </div>
@@ -93,7 +114,12 @@ const Eisenhower = () => {
                                 <h3>Eliminate</h3>
                                 <ul>
                                     {quadrants.notUrgentNotImportant.map(task => (
-                                        <li key={task._id}>{task.title}</li>
+                                        <li
+                                            key={task._id}
+                                            onClick={() => handleTaskClick(task._id)}
+                                        >
+                                            {task.title}
+                                        </li>
                                     ))}
                                 </ul>
                             </div>
@@ -102,7 +128,7 @@ const Eisenhower = () => {
                 </div>
             )}
         </div>
-    );
-};
+    )
+}
 
-export default Eisenhower;
+export default Eisenhower

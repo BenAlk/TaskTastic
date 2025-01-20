@@ -2,9 +2,10 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
     padding: 1rem;
+    padding-bottom: 2rem;
     background-color: var(--primary-color);
     color: var(--white);
     width: 12.5vw;
@@ -12,8 +13,6 @@
     padding-top: 1.7rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
-
-/*-------- title --------*/
 
 .title-link {
     text-decoration: none;
@@ -26,16 +25,12 @@
     user-select: none;
 }
 
-/*--------- user --------*/
-
 .navbar-head {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     position: relative;
-    max-height: 10rem;
-    margin-top: 1rem;
 }
 
 .user-icon {
@@ -58,8 +53,6 @@
     user-select: none;
 }
 
-/*--------- navigation links --------*/
-
 a {
     text-decoration: none;
 }
@@ -69,20 +62,18 @@ a {
     flex-direction: column;
     align-items: start;
     gap: 2rem;
-    padding-top: 5rem;
     padding-left: 1rem;
-    top: 16rem;
-    left: 1.4rem;
+    padding-bottom: 7rem;
     transition: transform 0.5s ease-in-out;
 }
 
 .navbar-link-container {
-    color: var(--tertiary-color);
+    color: white;
     font-size: 1rem;
     display: flex;
     align-items: center;
     gap: 1rem;
-    cursor: pointer;
+
     width: 160px;
     height: 25px;
 }
@@ -110,4 +101,43 @@ a {
 .nav-link-icon {
     height: 20px;
     width: 20px;
+}
+
+.logout-button {
+    justify-self: flex-end;
+    color: white;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    color: yellow;
+}
+
+.inactive-nav-link {
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.tooltip-wrapper {
+    position: relative;
+}
+
+
+.tooltip-wrapper:hover::after {
+    content: "Feature coming soon!";
+    position: absolute;
+    background-color: yellow;
+    color: var(--primary-color);
+    border: 1px solid #d0d0d0;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: nowrap;
+    left: 50%;
+    top: 0%;
+    transform: translateY(-50%);
+    margin-left: 10px;
+    opacity: 1;
+    transition: opacity 0.2s;
 }

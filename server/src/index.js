@@ -14,6 +14,8 @@ const MONGO_DB_PASSWORD = process.env.MONGO_DB_PASSWORD
 const app = express()
 app.use(express.json())
 
+const PORT = process.env.PORT || 3001
+
 app.use(cors({
     origin: ['https://tasktastic-testing.netlify.app', 'http://localhost:5173'],
     credentials: true,
@@ -33,4 +35,6 @@ mongoose.connect(
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.log('Error connecting to MongoDB', err))
 
-// app.listen(3001, () => console.log('Server is running on port 3001'))
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Server is running on port ${PORT}`)
+    })

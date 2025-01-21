@@ -22,6 +22,10 @@ const WarningBanner = () => {
                     <p className={`${styles['warning-text']} ${styles['margin-top']}`}>
                         For a demo version please go to login and click the demo button.
                     </p>
+
+                    <p className={`${styles['warning-text']} ${styles['margin-top']}`}>
+                        Please also note, this website is not made with responsive design, it is tailored to a 1920x1080 screen size.
+                    </p>
                 </div>
             </div>
         </div>

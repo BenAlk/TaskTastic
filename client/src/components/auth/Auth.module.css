@@ -163,7 +163,7 @@
 
 .demo-btn {
     background-color: #718096;
-    width: 100%;
+    width:75%;
 }
 
 .demo-btn:hover:not(:disabled) {
@@ -174,4 +174,3 @@
     opacity: 0.7;
     cursor: not-allowed;
 }
-

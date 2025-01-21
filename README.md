@@ -52,6 +52,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 📧 **Contact**
 
-Ben Alkureishi
+Ben Alkureishi - benalkureishi@hotmail.co.uk
 
 Project Link: https://tasktastic-testing.netlify.app

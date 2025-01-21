@@ -22,7 +22,7 @@
 .task-content-container {
     margin: 1rem 1rem 0 1rem;
     width: 98%;
-    height: 100%;
+    height: 74vh;
     display: flex;
     flex-direction: row;
     align-items: flex-start;

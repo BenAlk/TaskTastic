@@ -1,3 +1,5 @@
+**I'm aware of an issue with loading times, this is due to hosting on Netlify/Render free services**
+
 **TaskTastic**
 
 TaskTastic is a comprehensive project management web application designed to streamline team collaboration and task organization. Built with functionality at its core, it offers a robust set of features for effective project management.

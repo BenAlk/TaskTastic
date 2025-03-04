@@ -1,4 +1,4 @@
-**I'm aware of an issue with loading times, this is due to hosting on Netlify/Render free services**
+**I'm aware of an issue with loading times, this is due to hosting on Netlify/Render free services spooling up**
 
 **TaskTastic**
 
